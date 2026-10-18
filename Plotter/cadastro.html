@@ -1,11 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Plotter</title>
+    <link rel="stylesheet" href="../css/login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700" rel="stylesheet" />
+  </head>
+  <body>
+
+    <main class="container_login">
+
+        <section class="container_login_esquerdo">
+            <article class="container_logo">
+                <img src="../Img/Login/Login-logo-completo.svg" alt="Logo_do_plotter" />
+                
+            </article>
+            
+            <article class="container_cabecalho_login_esquerdo">
+                <div class="titulo_cabecalho_login_esquerdo">
+                    <h2>Comece sua história.</h2>
+                </div>
+                <div>
+                    <p class="subtitulo_login">Crie sua conta grátis e organize tudo o que você precisa para escrever com calma.</p>
+                </div>
+            </article>
+            <article class="descricao_login_esquerdo">
+                <ul class="lista_login_esquerdo">
+                    <li>Mundos, personagens e plots no mesmo lugar</li>
+                    <li>Capítulos e cenas num único editor</li>
+                    <li>Prazos e progresso sempre à vista</li>
+                </ul>
+            </article>
+        </section>
+        <section>
+            <article class="Card_criar_conta">
+                <div class="Cabecalho_criar_conta">
+                    <h1>Crie sua conta</h1>
+                    <p>É grátis e leva menos de um minuto</p>
+                </div>
+                <form>
+                    <div class="info_nome_criar_conta">
+                        <label for="input_nome_cadastro" class="nome_cadastro">Nome</label>
+                        <img src="../Img/Cadastro/cadastro-icon-pessoa.svg" alt="">
+                        <input type="text" id="input_nome_cadastro" placeholder="Como podemos te chamar?">
+                    </div>
+                    <div class="info_email_criar_conta">
+                        <label for="input_email_cadastro">E-mail</label>
+                        <img src="../Img/Login/Login-icon-envelope-email.svg" alt="">
+                        <input type="email" id="input_email_cadastro" placeholder="voce@email.com">
+                    </div>
+                    <div class="info_senha_criar_conta">
+                        <label for="input_senha_cadastro">Senha</label>
+                        <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
+                        <input type="password" id="input_senha_cadastro" placeholder="senha">
+                        <button type="button"  aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
+                    </div>
+                    <div class="info_verificacao_senha_criar_conta">
+                        <div id="Verificacao_de_forca_da_senha"></div>
+                    </div>
+                    <div class="info_confimacao_senha_criar_conta">
+                        <label for="input_senha_cadastro_confirmacao">Confirme senha</label>
+                        <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
+                        <input type="password" id="input_senha_cadastro_confirmacao" placeholder="Repita a senha">
+                        <button type="button"  aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
+                    </div>
+                    <div class="checkbox_criar_conta">
+                        <input type="checkbox">
+                        <p>Li e aceito os <a href="termos_de_uso.html">Termos de uso</a> e a  <a href="politica_de_privacidade.html">política de privacidade</a> do Plotter</p>
+                    </div>
+                    <div class="botao_criar_conta">
+                        <button onclick="CriarConta()">Criar Conta</button>
+                    </div>
+                    <div>
+                        <p>ou</p>
+                    </div>
+                    <div class="cabecalho_possui_conta">
+                        <h2>Já tem uma conta?</h2>
+                    </div>
+                    <div class="botao_possui_conta">
+                        <a href="Plotter/login.html">Entrar</a>
+                    </div>
+                    
+                </form>
+                </article>
+        </section>
+    </main>
 </body>
 </html>
