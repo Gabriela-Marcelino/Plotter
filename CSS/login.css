@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+input,
+button {
+  font-family: inherit;
+}
+
+/* dividindo a tela em 2 */
+.container_login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* lado esquerdo: fundo e centralização */
+.container_login_esquerdo {
+  background-color: #4a2478;
+  background-image: url("../Img/Login/Login-Fundo.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* logo */
+.container_logo {
+  width: 480px;
+  max-width: 90%;
+  margin-bottom: 56px;
+}
+
+.container_logo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* título */
+.titulo_cabecalho_login_esquerdo h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* subtítulo */
+.subtitulo_login {
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 420px;
+  margin: 0 auto;
+  color: #d9d0ec;
+}
+
+/* espaço entre o cabeçalho e a lista */
+.container_cabecalho_login_esquerdo {
+  margin-bottom: 44px;
+}
+
+/* lista com estrelinhas */
+.lista_login_esquerdo {
+  list-style: none;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-size: 16px;
+}
+
+.lista_login_esquerdo li::before {
+  content: "✦";
+  color: #f6b73c;
+  margin-right: 12px;
+}
+
+/* lado direito (como já estava) */
+.container_login_direito {
+  background-color: #f4f2fa;
+}

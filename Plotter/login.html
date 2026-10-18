@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Plotter</title>
+    <link rel="stylesheet" href="../css/login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700" rel="stylesheet" />
+  </head>
+  <body>
+
+    <main class="container_login">
+
+        <section class="container_login_esquerdo">
+            <article class="container_logo">
+                <img src="../Img/Login/Login-logo-completo.svg" alt="Logo_do_plotter" />
+                
+            </article>
+            
+            <article class="container_cabecalho_login_esquerdo">
+                <div class="titulo_cabecalho_login_esquerdo">
+                    <h2>Que bom te ver de novo.</h2>
+                </div>
+                <div>
+                    <p class="subtitulo_login">Continue de onde parou: suas histórias, mundos e personagens estão esperando.</p>
+                </div>
+            </article>
+            <article class="descricao_login_esquerdo">
+                <ul class="lista_login_esquerdo">
+                    <li>Mundos, personagens e plots no mesmo lugar</li>
+                    <li>Capítulos e cenas num único editor</li>
+                    <li>Prazos e progresso sempre à vista</li>
+                </ul>
+            </article>
+        </section>
+        <section class="container_login_direito">
+            <div class="card_login">            
+                <article>
+                    <div>
+                        <h1>Entrar na sua conta</h1>
+                    </div>       
+                    <div>
+                        <p>Use seu e-mail e senha para continuar.</p>
+                    </div>
+                </article>    
+                <form>        
+                    <article>
+                        <label for="ipt_email_login" id="label_email">E-mail</label>
+                        <div class="campo_input">
+                            <img src="../Img/Login/Login-icon-envelope-email.svg" alt="">
+                            <input
+                            type="email"
+                            id="ipt_email_login"
+                            placeholder="voce@email.com"/>
+                        </div>            
+                        <div class="campo_senha">
+                            <label for="ipt_senha_login" id="label_senha">Senha</label>
+                            <a href="esqueci-senha.html">Esqueci a senha</a>            
+                        </div>
+                        <div class="campo_input">
+                            <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
+                            <input type="password" id="ipt_senha_login" />
+                            <button type="button"  aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
+                        </div>           
+                    </article>
+                    <article>
+                        <input type="checkbox" id="ManterConectado" />
+                        <label for="ManterConectado">Manter conectado neste dispositivo</label>
+                        <button type="submit" onclick="login()">Entrar</button>
+                        <div id="div_mensagem_login"></div>
+                    </article>
+                </form>
+                <article>
+                    <div>
+                        <p>ou</p>
+                    </div>        
+                    <div>
+                        <p>Ainda não tem conta?</p>
+                        <a href="cadastro.html" class="botao_cadastro">Cadastre-se</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
