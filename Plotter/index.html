@@ -4,22 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Plotter</title>
+
+    <link rel="stylesheet" href="../css/home.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700" rel="stylesheet" />
 </head>
 <body>
-    <main class="Container_Home"></main>
+
+    <main class="Container_Home">
+
+  
         <section class="Container_Inicial">
             <article class="Navbar">
                 <div>
                     <img src="../Img/Home/Login-logo-completo.svg" alt="Plotter">
                 </div>
                 <div>
-                    <a href="">Recursos</a>
-                    <a href="">Como funciona</a>
-                    <a href="">Pra quem é</a>
+                    <a href="#recursos">Recursos</a>
+                    <a href="#funcionamento">Como funciona</a>
                 </div>
                 <div>
-                    <a href="Plotter/login.html">Entrar</a>
-                    <a href="Plotter/cadastro.html">Criar Conta</a>
+                    <a href="login.html">Entrar</a>
+                    <a href="cadastro.html">Criar conta</a>
                 </div>
             </article>
             <article>
@@ -31,7 +36,7 @@
                 <div>
                     <p>Suas histórias,</p>
                     <p>do primeiro plot</p>
-                    <p>ao último capítulo</p>
+                    <p>ao último capítulo.</p>
                 </div>
                 <div class="linha_amarela">
                     <img src="../Img/Home/Home-traco-ondulado-amarelo.svg" alt="">
@@ -42,17 +47,21 @@
                     <p>escrever sem perder o fio da meada.</p>
                 </div>
                 <div>
-                    <a href="../Plotter/cadastro.html">Comece de graça</a>
-                    <a href="../Plotter/login.html">Já tenho conta</a>
+                    <a href="cadastro.html">Começar de graça</a>
+                    <a href="login.html">Já tenho conta</a>
                 </div>
-            </article>
+            </article>>
             <article>
                 <div>
                     <img src="../Img/Home/home-plotter-dashboard-exemplo.svg" alt="">
                 </div>
             </article>
         </section>
-        <section>
+
+        <!-- ========== RECURSOS: título + 6 cards ========== -->
+        <section id="recursos">
+
+            <!-- Título da seção -->
             <article>
                 <div>
                     <h2>Tudo o que sua história precisa</h2>
@@ -64,7 +73,7 @@
             <article>
                 <div>
                     <div>
-                        <img src="" alt="">
+                        <img src="../Img/Home/icone-1-livro.svg" alt="">
                     </div>
                     <div>
                         <h3>Histórias</h3>
@@ -75,7 +84,8 @@
                 </div>
                 <div>
                     <div>
-                        <img src="" alt="">
+                  
+                        <img src="../Img/Home/icone-2-texto.svg" alt="">
                     </div>
                     <div>
                         <h3>Mundos</h3>
@@ -86,7 +96,7 @@
                 </div>
                 <div>
                     <div>
-                        <img src="" alt="">
+                        <img src="../Img/Home/icone-5-usuario.svg" alt="">
                     </div>
                     <div>
                         <h3>Personagens</h3>
@@ -97,7 +107,7 @@
                 </div>
                 <div>
                     <div>
-                        <img src="" alt="">
+                        <img src="../Img/Home/icone-2-texto.svg" alt="">
                     </div>
                     <div>
                         <h3>
@@ -112,7 +122,7 @@
                 </div>
                 <div>
                     <div>
-                        <img src="" alt="">
+                        <img src="../Img/Home/icone-4-calendario.svg" alt="">
                     </div>
                     <div>
                         <h3>Prazos</h3>
@@ -125,7 +135,7 @@
                 </div>
                 <div>
                     <div>
-                        <img src="" alt="">
+                        <img src="../Img/Home/icone-6-grafico.svg" alt="">
                     </div>
                     <div>
                         <h3>
@@ -140,7 +150,10 @@
                 </div>
             </article>
         </section>
-        <section>
+
+   
+        <section id="funcionamento">
+
             <article>
                 <h2>Como funciona</h2>
             </article>
@@ -179,14 +192,14 @@
                         <h3>Escreva capítulo por capítulo</h3>
                     </div>
                     <div>
-                        Cenas num único editor, com o plot e as fichas à mão numa aba lateral.
+                        <p>Cenas num único editor, com o plot e as fichas à mão numa aba lateral.</p>
                     </div>
                 </div>
             </article>
         </section>
         <section>
             <article>
-                <img src="" alt="">
+                <img src="../Img/Home/banner-7-fundo.svg" alt="">
                 <div>
                     <div>
                         <h2>Pronto para escrever a sua?</h2>
@@ -198,7 +211,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="../Plotter/cadastro.html">Crie sua conta grátis</a>
+                    <a href="cadastro.html">Criar conta grátis</a>
                 </div>
             </article>
         </section>
@@ -210,14 +223,14 @@
             </article>
             <article>
                 <div>
-                    <a href="">Recursos</a>
-                    <a href="">Como funciona</a>
-                    <a href="">Termos de uso</a>
-                    <a href="">Privacidade</a>
+                    <a href="#recursos">Recursos</a>
+                    <a href="#funcionamento">Como funciona</a>
+                    <a href="termos_de_uso.html">Termos de uso</a>
+                    <a href="politica_de_privacidade.html">Privacidade</a>
                 </div>
             </article>
 
         </section>
-
+    </main>
 </body>
 </html>
