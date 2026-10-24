@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Plotter</title>
-    <link rel="stylesheet" href="../css/login.css" />
+    <title>Cadastro Plotter</title>
+    <link rel="stylesheet" href="../css/cadastro.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700" rel="stylesheet" />
   </head>
   <body>
@@ -33,7 +33,7 @@
                 </ul>
             </article>
         </section>
-        <section>
+        <section class="container_login_direito">
             <article class="Card_criar_conta">
                 <div class="Cabecalho_criar_conta">
                     <h1>Crie sua conta</h1>
@@ -42,8 +42,14 @@
                 <form>
                     <div class="info_nome_criar_conta">
                         <label for="input_nome_cadastro" class="nome_cadastro">Nome</label>
-                        <img src="../Img/Cadastro/cadastro-icon-pessoa.svg" alt="">
-                        <input type="text" id="input_nome_cadastro" placeholder="Como podemos te chamar?">
+                        <div class="div_input_nome">
+                            <div class="icon_nome">
+                                <img src="../Img/Cadastro/cadastro-icon-pessoa.svg" alt="">
+                            </div>
+                            <div class="input_do_nome">
+                                <input type="text" id="input_nome_cadastro" class="campo_nome" placeholder="Como podemos te chamar?">
+                            </div>
+                        </div>
                     </div>
                     <div class="info_email_criar_conta">
                         <label for="input_email_cadastro">E-mail</label>
