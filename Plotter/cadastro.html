@@ -40,6 +40,7 @@
                     <p>É grátis e leva menos de um minuto</p>
                 </div>
                 <form>
+                   
                     <div class="info_nome_criar_conta">
                         <label for="input_nome_cadastro" class="nome_cadastro">Nome</label>
                         <div class="div_input_nome">
@@ -51,26 +52,55 @@
                             </div>
                         </div>
                     </div>
+
+
+
                     <div class="info_email_criar_conta">
-                        <label for="input_email_cadastro">E-mail</label>
-                        <img src="../Img/Login/Login-icon-envelope-email.svg" alt="">
-                        <input type="email" id="input_email_cadastro" placeholder="voce@email.com">
+                            <label for="input_email_cadastro" class="email_cadastro">E-mail</label>
+                            <div class="div_input_email">
+                                <div class="icon_email">
+                                    <img src="../Img/Login/Login-icon-envelope-email.svg" alt="">
+                                </div>
+                                <div class="input_do_email">
+                                    <input type="email" id="input_email_cadastro" class="campo_email" placeholder="voce@email.com">
+                            </div>
+                        </div>
                     </div>
+
+
+
                     <div class="info_senha_criar_conta">
-                        <label for="input_senha_cadastro">Senha</label>
-                        <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
-                        <input type="password" id="input_senha_cadastro" placeholder="senha">
-                        <button type="button"  aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
+                        <label for="input_senha_cadastro" class="senha_cadastro">Senha</label>
+                        <div class="div_input_senha">
+                            <div class="icon_senha">
+                                <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
+                            </div>
+                            <div class="input_da_senha">
+                                <input type="password" id="input_senha_cadastro" class="campo_senha" placeholder="Senha">
+                            </div>
+                            <button type="button" class="botao_mostrar_senha" aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
+                        </div>
                     </div>
+
+
+
+
                     <div class="info_verificacao_senha_criar_conta">
-                        <div id="Verificacao_de_forca_da_senha"></div>
-                    </div>
-                    <div class="info_confimacao_senha_criar_conta">
-                        <label for="input_senha_cadastro_confirmacao">Confirme senha</label>
-                        <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
-                        <input type="password" id="input_senha_cadastro_confirmacao" placeholder="Repita a senha">
-                        <button type="button"  aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
-                    </div>
+                        <label for="input_senha_cadastro_confirmacao" class="confimacao_senha">Confirme senha</label>
+                            <div class="div_input_confimacao_senha">
+                                <div class="icon_senha">
+                                     <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
+                                </div>
+                                <div class="input_da_confirmacao_senha">
+                                     <input type="password" class="input_confirmacao_senha" id="input_senha_cadastro_confirmacao" placeholder="Repita a senha">
+                                </div>
+                        <button type="button" class="botao_confirmar_senha" aria-label="Mostrar senha">
+                            <img src="../Img/Login/Login-icon-olho-revelar.svg" alt="">
+                        </button>
+                            </div>
+                     </div>
+                
+                    
                     <div class="checkbox_criar_conta">
                         <input type="checkbox">
                         <p>Li e aceito os <a href="termos_de_uso.html">Termos de uso</a> e a  <a href="politica_de_privacidade.html">política de privacidade</a> do Plotter</p>
