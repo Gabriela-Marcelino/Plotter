@@ -13,14 +13,14 @@ button {
   font-family: inherit;
 }
 
-/* dividindo a tela em 2 */
+/* DIVISÃO DA TELA EM 2 */
 .container_login {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 100vh;
 }
 
-
+/*  LADO ESQUERDO */
 .container_login_esquerdo {
   background-color: #4a2478;
   background-image: url("../Img/Login/Login-Fundo.svg");
@@ -36,7 +36,6 @@ button {
   text-align: center;
 }
 
-/* logo */
 .container_logo {
   width: 480px;
   max-width: 90%;
@@ -49,7 +48,6 @@ button {
   display: block;
 }
 
-/* título */
 .titulo_cabecalho_login_esquerdo h2 {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 38px;
@@ -57,7 +55,6 @@ button {
   margin-bottom: 14px;
 }
 
-/* subtítulo */
 .subtitulo_login {
   font-size: 16px;
   line-height: 1.5;
@@ -66,12 +63,10 @@ button {
   color: #d9d0ec;
 }
 
-/* espaço entre o cabeçalho e a lista */
 .container_cabecalho_login_esquerdo {
   margin-bottom: 44px;
 }
 
-/* lista com estrelinhas */
 .lista_login_esquerdo {
   list-style: none;
   text-align: left;
@@ -87,68 +82,72 @@ button {
   margin-right: 12px;
 }
 
-/* lado direito (como já estava) */
+/*  LADO DIREITO */
 .container_login_direito {
+  background-color: #f4f2fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Card_criar_conta {
+  width: 450px;
+  min-height: 700px;
+  background-color: white;
+  border-radius: 20px;
+  border: 1px solid #e8e3f0;
+  padding: 30px;
+}
+
+/*  CABEÇALHO DO CARD  */
+.Cabecalho_criar_conta {
+  margin-top: 10px;
+}
+
+.Cabecalho_criar_conta h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f1a2e;
+}
+
+.Cabecalho_criar_conta p {
+  margin-top: 0;
+  font-size: 13px;
+  color: #5b5670;
+}
+
+/* CAMPO: NOME */
+.info_nome_criar_conta {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nome_cadastro {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b5670;
+}
+
+.div_input_nome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 45px;
+  padding: 0 14px;
+  border: 1px solid #e8e3f0;
+  border-radius: 10px;
   background-color: #f4f2fa;
 }
 
-.container_login_direito{
-    background-color: #F4F2FA;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;}
+.div_input_nome:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px #ddc4ff;
+}
 
-    .Card_criar_conta{
-       width: 450px;
-       min-height: 700px;
-       background-color: white;
-       border-radius: 20px;
-       border: 1px solid #e8e3f0;
-       padding: 30px;}
-
-       .Cabecalho_criar_conta{
-        margin-top: 10px;
-        margin-left: 10px;}
-
-            .Cabecalho_criar_conta p{
-            margin-top: 0px;
-            margin-left: 3px;
-            font-family: inter, sans-serif;
-            font-size: 15px;
-            color: #5B5670;}
-
-
-
-
-    .info_nome_criar_conta{
-        margin-top: 20px;
-        margin-left: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    .nome_cadastro{
-        font-size: 13px;
-        font-weight: 600;
-        color: #5B5670;
-    }
-
-    .div_input_nome{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        height: 45px;
-        padding: 0 14px;
-        border: 1px solid #e8e3f0;
-        border-radius: 10px;
-        background-color: #f4f2fa;
-    }
-    .div_input_nome:focus-within{
-        border-color: #8b5cf6;
-        box-shadow: 0 0 0 3px #ddc4ff
-    }
-    .icon_nome {
+.icon_nome {
   display: flex;
   align-items: center;
 }
@@ -158,7 +157,6 @@ button {
   height: 30px;
 }
 
-/* container do input ocupa o espaço que sobrar */
 .input_do_nome {
   flex: 1;
 }
@@ -177,36 +175,37 @@ button {
   color: #8a859c;
 }
 
+/* CAMPO: E-MAIL */
+.info_email_criar_conta {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
+.email_cadastro {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b5670;
+}
 
-    .info_email_criar_conta{
-        margin-top: 20px;
-        margin-left: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    .email_cadastro{
-        font-size: 13px;
-        font-weight: 600;
-        color: #5B5670;
-    }
+.div_input_email {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 45px;
+  padding: 0 14px;
+  border: 1px solid #e8e3f0;
+  border-radius: 10px;
+  background-color: #f4f2fa;
+}
 
-    .div_input_email{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        height: 45px;
-        padding: 0 14px;
-        border: 1px solid #e8e3f0;
-        border-radius: 10px;
-        background-color: #f4f2fa;
-    }
-    .div_input_email:focus-within{
-        border-color: #8b5cf6;
-        box-shadow: 0 0 0 3px #ddc4ff
-    }
-    .icon_email {
+.div_input_email:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px #ddc4ff;
+}
+
+.icon_email {
   display: flex;
   align-items: center;
 }
@@ -234,23 +233,21 @@ button {
   color: #8a859c;
 }
 
-
-
-.info_senha_criar_conta{
+/* CAMPO: SENHA */
+.info_senha_criar_conta {
   margin-top: 20px;
-  margin-left: 10px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
 }
 
-.senha_cadastro{
+.senha_cadastro {
   font-size: 13px;
-  color: #5B5670;
+  color: #5b5670;
   font-weight: 600;
 }
 
-.div_input_senha{
+.div_input_senha {
   display: flex;
   align-items: center;
   background-color: #f4f2fa;
@@ -260,6 +257,16 @@ button {
   border: 1px solid #e8e3f0;
   border-radius: 10px;
 }
+
+.div_input_senha:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px #ddc4ff;
+}
+
+.input_da_senha {
+  flex: 1;
+}
+
 .campo_senha {
   width: 100%;
   height: 100%;
@@ -270,6 +277,10 @@ button {
   outline: none;
 }
 
+.campo_senha::placeholder {
+  color: #8a859c;
+}
+
 .botao_mostrar_senha {
   background: transparent;
   border: none;
@@ -280,49 +291,63 @@ button {
   justify-content: center;
 }
 
-.input_da_senha {
-  flex: 1;
-}
-
 .botao_mostrar_senha img {
-  width: 40px;  
+  width: 40px;
   height: 20px;
   display: block;
 }
 
-.botao_mostrar_senha {
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* FORÇA DA SENHA */
+
+.forca_senha {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.botao_mostrar_senha img {
-  width: 40px;   
-  height: 20px;
-  display: block;}
+/* aparece quando o campo de senha deixa de estar vazio */
+.info_senha_criar_conta:has(.campo_senha:not(:placeholder-shown)) .forca_senha {
+  display: flex;
+}
 
+.barras_forca {
+  display: flex;
+  gap: 8px;
+}
 
+.barra {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background-color: #e8e3f0;
+}
 
+/* o JS só precisa adicionar a classe "ativa" nas barras */
+.barra.ativa:nth-child(1) { background-color: #ef4444; }
+.barra.ativa:nth-child(2) { background-color: #e9a824; }
+.barra.ativa:nth-child(3) { background-color: #22c55e; }
+.barra.ativa:nth-child(4) { background-color: #16a34a; }
 
-.info_verificacao_senha_criar_conta{
+.texto_forca_senha {
+  font-size: 11px;
+  color: #8a859c;
+}
+
+/* CONFIRMAR SENHA */
+.info_verificacao_senha_criar_conta {
   margin-top: 20px;
-  margin-left: 10px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
 }
 
-.confimacao_senha{
+.confimacao_senha {
   font-size: 13px;
-  color: #5B5670;
+  color: #5b5670;
   font-weight: 600;
 }
 
-.div_input_confimacao_senha{
+.div_input_confimacao_senha {
   display: flex;
   align-items: center;
   background-color: #f4f2fa;
@@ -333,7 +358,12 @@ button {
   border-radius: 10px;
 }
 
-.input_da_confirmacao_senha{
+.div_input_confimacao_senha:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px #ddc4ff;
+}
+
+.input_da_confirmacao_senha {
   flex: 1;
 }
 
@@ -345,6 +375,10 @@ button {
   color: #1f1a2e;
   border: none;
   outline: none;
+}
+
+.input_confirmacao_senha::placeholder {
+  color: #8a859c;
 }
 
 .div_input_confimacao_senha .botao_confirmar_senha {
@@ -360,4 +394,99 @@ button {
   width: 40px;
   height: 20px;
   display: block;
+}
+
+/* PARTE INFERIOR */
+.parte_inferior_login {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+/* checkbox + texto lado a lado */
+.checkbox_criar_conta {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checkbox_criar_conta input[type="checkbox"] {
+  margin: 1px 0 0 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #8b5cf6;
+}
+
+.checkbox_criar_conta p {
+  margin: 0;
+  font-size: 12px;
+  color: #5b5670;
+}
+
+.checkbox_criar_conta a {
+  color: #8b5cf6;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* botão criar conta */
+.botao_criar_conta button {
+  width: 100%;
+  height: 45px;
+  border: none;
+  border-radius: 10px;
+  background-color: #e9a824;
+  color: #1f1a2e;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.botao_criar_conta button:hover {
+  background-color: #d99a1b;
+}
+
+/* divisor "ou" */
+.divisor_ou {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #8a859c;
+}
+
+.divisor_ou::before,
+.divisor_ou::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #e8e3f0;
+}
+
+/* "Já tem uma conta?" */
+.cabecalho_possui_conta h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #5b5670;
+}
+
+/* botão entrar */
+.botao_possui_conta a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  border: 1px solid #8b5cf6;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #8b5cf6;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.botao_possui_conta a:hover {
+  background-color: #f4f2fa;
 }

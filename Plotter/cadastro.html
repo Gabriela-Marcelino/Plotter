@@ -37,7 +37,7 @@
             <article class="Card_criar_conta">
                 <div class="Cabecalho_criar_conta">
                     <h1>Crie sua conta</h1>
-                    <p>É grátis e leva menos de um minuto</p>
+                    <p>É grátis e leva menos de um minuto.</p>
                 </div>
                 <form>
                    
@@ -70,54 +70,67 @@
 
 
                     <div class="info_senha_criar_conta">
-                        <label for="input_senha_cadastro" class="senha_cadastro">Senha</label>
-                        <div class="div_input_senha">
-                            <div class="icon_senha">
-                                <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
-                            </div>
-                            <div class="input_da_senha">
-                                <input type="password" id="input_senha_cadastro" class="campo_senha" placeholder="Senha">
-                            </div>
-                            <button type="button" class="botao_mostrar_senha" aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
+                    <label for="input_senha_cadastro" class="senha_cadastro">Senha</label>
+                    <div class="div_input_senha">
+                        <div class="icon_senha">
+                            <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
                         </div>
+                        <div class="input_da_senha">
+                            <input type="password" id="input_senha_cadastro" class="campo_senha" placeholder="Senha">
+                        </div>
+                        <button type="button" class="botao_mostrar_senha" aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
                     </div>
 
+                    <div class="forca_senha">
+                        <div class="barras_forca">
+                            <span class="barra"></span>
+                            <span class="barra"></span>
+                            <span class="barra"></span>
+                            <span class="barra"></span>
+                        </div>
+                        <p class="texto_forca_senha">Força da senha: <span id="nivel_forca"></span> · use 8 ou mais caracteres, com letras e números.</p>
+                    </div>
+                </div>
 
-
-
-                    <div class="info_verificacao_senha_criar_conta">
-                        <label for="input_senha_cadastro_confirmacao" class="confimacao_senha">Confirme senha</label>
-                            <div class="div_input_confimacao_senha">
-                                <div class="icon_senha">
-                                     <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
-                                </div>
-                                <div class="input_da_confirmacao_senha">
-                                     <input type="password" class="input_confirmacao_senha" id="input_senha_cadastro_confirmacao" placeholder="Repita a senha">
-                                </div>
+                <div class="info_verificacao_senha_criar_conta">
+                    <label for="input_senha_cadastro_confirmacao" class="confimacao_senha">Confirmar senha</label>
+                    <div class="div_input_confimacao_senha">
+                        <div class="icon_senha">
+                            <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
+                        </div>
+                        <div class="input_da_confirmacao_senha">
+                            <input type="password" class="input_confirmacao_senha" id="input_senha_cadastro_confirmacao" placeholder="Repita a senha">
+                        </div>
                         <button type="button" class="botao_confirmar_senha" aria-label="Mostrar senha">
                             <img src="../Img/Login/Login-icon-olho-revelar.svg" alt="">
                         </button>
-                            </div>
-                     </div>
-                
-                    
+                    </div>
+                </div>
+
+                <div class="parte_inferior_login">
                     <div class="checkbox_criar_conta">
                         <input type="checkbox">
-                        <p>Li e aceito os <a href="termos_de_uso.html">Termos de uso</a> e a  <a href="politica_de_privacidade.html">política de privacidade</a> do Plotter</p>
+                        <div class="termo_de_politica">
+                            <p>Li e aceito os <a href="termos_de_uso.html">Termos de uso</a> e a <a href="politica_de_privacidade.html">Política de privacidade</a> do Plotter.</p>
+                        </div>
                     </div>
+
                     <div class="botao_criar_conta">
-                        <button onclick="CriarConta()">Criar Conta</button>
+                        <button type="button" onclick="CriarConta()">Criar conta</button>
                     </div>
-                    <div>
+
+                    <div class="divisor_ou">
                         <p>ou</p>
                     </div>
+
                     <div class="cabecalho_possui_conta">
                         <h2>Já tem uma conta?</h2>
                     </div>
+
                     <div class="botao_possui_conta">
-                        <a href="Plotter/login.html">Entrar</a>
+                        <a href="login.html">Entrar</a>
                     </div>
-                    
+                </div>
                 </form>
                 </article>
         </section>
