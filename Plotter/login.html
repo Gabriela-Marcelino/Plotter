@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Plotter</title>
     <link rel="stylesheet" href="../css/login.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
 
@@ -14,9 +14,8 @@
         <section class="container_login_esquerdo">
             <article class="container_logo">
                 <img src="../Img/Login/Login-logo-completo.svg" alt="Logo_do_plotter" />
-                
             </article>
-            
+
             <article class="container_cabecalho_login_esquerdo">
                 <div class="titulo_cabecalho_login_esquerdo">
                     <h2>Que bom te ver de novo.</h2>
@@ -33,54 +32,57 @@
                 </ul>
             </article>
         </section>
+
         <section class="container_login_direito">
-            <div class="card_login">            
+            <div class="card_login">
                 <article>
-                    <div>
+                    <div class="cabecalho_login">
                         <h1>Entrar na sua conta</h1>
-                    </div>       
-                    <div>
                         <p>Use seu e-mail e senha para continuar.</p>
                     </div>
-                </article>    
-                <form>        
-                    <article>
-                        <label for="ipt_email_login" id="label_email">E-mail</label>
+                </article>
+                <form>
+                    <article class="card_login_composto">
+                        <label for="ipt_email_login" class="label_email">E-mail</label>
                         <div class="campo_input">
                             <img src="../Img/Login/Login-icon-envelope-email.svg" alt="">
                             <input
                             type="email"
                             id="ipt_email_login"
-                            placeholder="voce@email.com"/>
-                        </div>            
+                            placeholder="voce@email.com" />
+                        </div>
                         <div class="campo_senha">
                             <label for="ipt_senha_login" id="label_senha">Senha</label>
-                            <a href="esqueci-senha.html">Esqueci a senha</a>            
+                            <a href="esqueci-senha.html">Esqueci a senha</a>
                         </div>
-                        <div class="campo_input">
+                        <div class="campo_input_senha">
                             <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
                             <input type="password" id="ipt_senha_login" />
-                            <button type="button"  aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
-                        </div>           
+                            <button type="button" aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
+                        </div>
                     </article>
-                    <article>
-                        <input type="checkbox" id="ManterConectado" />
-                        <label for="ManterConectado">Manter conectado neste dispositivo</label>
-                        <button type="submit" onclick="login()">Entrar</button>
+                    <article class="acoes_login">
+                        <div class="manter_conectado">
+                            <input type="checkbox" id="ManterConectado" />
+                            <label for="ManterConectado">Manter conectado neste dispositivo</label>
+                        </div>
+                        <button type="submit" class="botao_entrar" onclick="login()">Entrar</button>
                         <div id="div_mensagem_login"></div>
                     </article>
                 </form>
-                <article>
-                    <div>
+                <article class="rodape_login">
+                    <div class="divisor">
                         <p>ou</p>
-                    </div>        
-                    <div>
+                    </div>
+                    <a href="cadastro.html" class="botao_cadastro">Criar conta</a>
+                    <div class="texto_cadastro">
                         <p>Ainda não tem conta?</p>
-                        <a href="cadastro.html" class="botao_cadastro">Cadastre-se</a>
+                        <a href="cadastro.html" class="link_cadastro">Criar conta</a>
                     </div>
                 </article>
             </div>
         </section>
+
     </main>
 </body>
 </html>
