@@ -1,0 +1,950 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f4f2fa;
+  color: #1e1a2b;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+.container_personagem_formulario {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.conteudo_personagem_formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 16px 28px 32px;
+}
+
+.container_logo_personagem_formulario img {
+  display: block;
+  width: 150px;
+  height: auto;
+}
+
+.titulo_personagem_formulario h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.titulo_personagem_formulario p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #5b5670;
+}
+
+.corpo_personagem_formulario {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.painel_moodboard_personagem {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: calc(100vh - 190px);
+  min-height: 420px;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 16px;
+}
+
+.painel_moodboard_personagem h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.grade_moodboard_personagem {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.item_moodboard_personagem {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 10px;
+  background-color: #efecf7;
+  overflow: hidden;
+}
+
+.item_moodboard_personagem:nth-child(3n + 1) {
+  grid-column: span 2;
+  aspect-ratio: 4 / 3;
+}
+
+.img_item_moodboard {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.botao_remover_moodboard {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(30, 26, 43, 0.7);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.botao_remover_moodboard img {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.item_moodboard_personagem:hover .botao_remover_moodboard,
+.botao_remover_moodboard:focus-visible {
+  opacity: 1;
+}
+
+.mensagem_sem_moodboard {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #5b5670;
+}
+
+.legenda_painel_moodboard {
+  margin-top: auto;
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.form_personagem {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.barra_imagem_personagem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.barra_imagem_personagem p {
+  font-size: 12px;
+  color: #5b5670;
+}
+
+.botao_adicionar_imagem {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 10px;
+  background-color: #8b5cf6;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao_adicionar_imagem:hover {
+  background-color: #7646e0;
+}
+
+.botao_adicionar_imagem img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.info_foto_perfil_formulario_personagem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 10px;
+}
+
+.info_foto_perfil_formulario_personagem img {
+  width: 28px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.info_foto_perfil_formulario_personagem p {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  color: #5b5670;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info_foto_perfil_formulario_personagem span {
+  font-weight: 600;
+  color: #1e1a2b;
+}
+
+.botao_remover_foto_perfil_personagem {
+  margin-left: auto;
+  padding: 4px 8px;
+  border: none;
+  background: none;
+  color: #7a58c8;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao_remover_foto_perfil_personagem:hover {
+  text-decoration: underline;
+}
+
+.card_info_personagem {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 24px;
+  min-height: 92px;
+  padding: 18px 20px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 14px;
+}
+
+.label_info_personagem {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.campo_input_personagem {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 14px;
+  background-color: #f4f2fa;
+  border: 1px solid #e8e3f0;
+  border-radius: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.campo_input_personagem input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #1e1a2b;
+}
+
+.campo_input_personagem input::placeholder {
+  color: #5b5670;
+}
+
+.campo_input_personagem:focus-within {
+  background-color: #ffffff;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px #e6d9ff;
+}
+
+.linha_historias_aplicadas_personagem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.lista_chips_historias_personagem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip_historia_personagem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background-color: #efecf7;
+  font-size: 11px;
+  color: #1e1a2b;
+}
+
+.bolinha_historia {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--cor-historia, #8b5cf6);
+}
+
+.botao_adicionar_historia_personagem {
+  padding: 5px 12px;
+  border: 1px solid #8b5cf6;
+  border-radius: 999px;
+  background-color: #ffffff;
+  color: #8b5cf6;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao_adicionar_historia_personagem:hover {
+  background-color: #f4f2fa;
+}
+
+.secao_formulario_personagem {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.cabecalho_secao_personagem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.titulo_secao_personagem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.titulo_secao_personagem::before {
+  content: "";
+  width: 4px;
+  height: 20px;
+  border-radius: 2px;
+  background-color: #8b5cf6;
+}
+
+.contador_secao_personagem {
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.card_pergunta_personagem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 14px;
+}
+
+.titulo_pergunta_personagem {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #1e1a2b;
+}
+
+.campo_resposta_personagem {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #e8e3f0;
+  border-radius: 10px;
+  background-color: #f4f2fa;
+  outline: none;
+  resize: none;
+  overflow-y: hidden;
+  field-sizing: content;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1e1a2b;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s, opacity 0.2s;
+}
+
+.campo_resposta_personagem::placeholder {
+  color: #5b5670;
+}
+
+.campo_resposta_personagem:focus {
+  background-color: #ffffff;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px #e6d9ff;
+}
+
+.opcao_nao_se_aplica {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opcao_nao_se_aplica input {
+  width: 16px;
+  height: 16px;
+  accent-color: #8b5cf6;
+  cursor: pointer;
+}
+
+.opcao_nao_se_aplica label {
+  font-size: 12px;
+  color: #5b5670;
+  cursor: pointer;
+}
+
+.card_pergunta_personagem:has(.opcao_nao_se_aplica input:checked) .campo_resposta_personagem {
+  opacity: 0.5;
+}
+
+.card_pergunta_personagem:has(.opcao_nao_se_aplica input:checked) .titulo_pergunta_personagem {
+  color: #5b5670;
+}
+
+.acoes_formulario_personagem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+#div_mensagem_formulario_personagem {
+  flex: 1;
+  font-size: 13px;
+  color: #d93a3a;
+}
+
+#div_mensagem_formulario_personagem:empty {
+  display: none;
+}
+
+.botao_cancelar_personagem,
+.botao_salvar_personagem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao_cancelar_personagem {
+  background-color: #ede7fb;
+  color: #7a58c8;
+}
+
+.botao_cancelar_personagem:hover {
+  background-color: #ddd3f7;
+}
+
+.botao_salvar_personagem {
+  min-width: 150px;
+  background-color: #8b5cf6;
+  color: #ffffff;
+}
+
+.botao_salvar_personagem:hover {
+  background-color: #7646e0;
+}
+
+.modal_imagens_personagem,
+.modal_historias_personagem {
+  max-width: calc(100% - 32px);
+  max-height: calc(100vh - 48px);
+  margin: auto;
+  border: none;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #1e1a2b;
+  box-shadow: 0 20px 60px rgba(30, 26, 43, 0.3);
+  overflow-y: auto;
+}
+
+.modal_imagens_personagem {
+  width: 560px;
+  padding: 26px 28px;
+}
+
+.modal_historias_personagem {
+  width: 420px;
+  padding: 24px;
+}
+
+.modal_imagens_personagem::backdrop,
+.modal_historias_personagem::backdrop {
+  background-color: rgba(30, 26, 43, 0.5);
+}
+
+.cabecalho_modal_imagens {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cabecalho_modal_imagens h2,
+.cabecalho_modal_historias h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.cabecalho_modal_imagens p,
+.cabecalho_modal_historias p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #5b5670;
+}
+
+.botao_fechar_modal_imagens {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao_fechar_modal_imagens:hover {
+  background-color: #f4f2fa;
+}
+
+.botao_fechar_modal_imagens img {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.area_envio_imagens {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 100px;
+  margin-top: 18px;
+  border: 2px dashed #a98af7;
+  border-radius: 12px;
+  background-color: #f4f2fa;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.area_envio_imagens:hover,
+.area_envio_arrastando {
+  border-color: #8b5cf6;
+  background-color: #ebe4fb;
+}
+
+.area_envio_imagens:focus-within {
+  box-shadow: 0 0 0 3px #e6d9ff;
+}
+
+.area_envio_imagens img {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.titulo_area_envio_imagens {
+  font-size: 13px;
+  font-weight: 700;
+  color: #8b5cf6;
+}
+
+.subtitulo_area_envio_imagens {
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.ipt_arquivos_oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.grupo_imagens_adicionadas {
+  margin-top: 18px;
+}
+
+.grupo_imagens_adicionadas h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.lista_imagens_modal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 240px;
+  margin-top: 10px;
+  overflow-y: auto;
+}
+
+.item_imagem_modal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 12px;
+}
+
+.miniatura_imagem_modal {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.info_imagem_modal {
+  flex: 1;
+  min-width: 0;
+}
+
+.nome_arquivo_imagem {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e1a2b;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tamanho_arquivo_imagem {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.opcoes_destino_imagem {
+  display: flex;
+  gap: 8px;
+}
+
+.botao_destino_imagem {
+  height: 30px;
+  padding: 0 14px;
+  border: 1px solid #cfc9dc;
+  border-radius: 999px;
+  background-color: #ffffff;
+  color: #5b5670;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.botao_destino_imagem:hover {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+}
+
+.botao_destino_imagem[aria-pressed="true"] {
+  border-color: #8b5cf6;
+  background-color: #8b5cf6;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.textos_ajuda_modal_imagens {
+  margin-top: 18px;
+}
+
+.textos_ajuda_modal_imagens p {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #5b5670;
+}
+
+#div_mensagem_modal_imagens {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #d93a3a;
+}
+
+#div_mensagem_modal_imagens:empty {
+  display: none;
+}
+
+.acoes_modal_imagens,
+.acoes_modal_historias {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.botao_cancelar_modal_imagens,
+.botao_confirmar_modal_imagens,
+.botao_cancelar_modal_historias,
+.botao_confirmar_modal_historias {
+  height: 40px;
+  padding: 0 26px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao_cancelar_modal_imagens,
+.botao_cancelar_modal_historias {
+  background-color: #ede7fb;
+  color: #7a58c8;
+}
+
+.botao_cancelar_modal_imagens:hover,
+.botao_cancelar_modal_historias:hover {
+  background-color: #ddd3f7;
+}
+
+.botao_confirmar_modal_imagens,
+.botao_confirmar_modal_historias {
+  min-width: 114px;
+  background-color: #e9a824;
+  color: #1e1a2b;
+}
+
+.botao_confirmar_modal_imagens:hover,
+.botao_confirmar_modal_historias:hover {
+  background-color: #d99a1b;
+}
+
+.lista_historias_modal {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 280px;
+  margin-top: 16px;
+  overflow-y: auto;
+}
+
+.label_historia_modal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #1e1a2b;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.label_historia_modal:hover {
+  background-color: #f4f2fa;
+}
+
+.chk_historia_modal {
+  width: 16px;
+  height: 16px;
+  accent-color: #8b5cf6;
+  cursor: pointer;
+}
+
+.mensagem_sem_historias_modal {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #5b5670;
+}
+
+#ipt_observacoes_personagem {
+  min-height: 104px;
+}
+
+.campo_selecao_personagem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 42px;
+  background-color: #f4f2fa;
+  border: 1px solid #e8e3f0;
+  border-radius: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s, opacity 0.2s;
+}
+
+.campo_selecao_personagem::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid #5b5670;
+  border-bottom: 2px solid #5b5670;
+  transform: translateY(-75%) rotate(45deg);
+  pointer-events: none;
+}
+
+.campo_selecao_personagem select {
+  width: 100%;
+  height: 100%;
+  padding: 0 38px 0 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+  appearance: none;
+  font-size: 13px;
+  color: #1e1a2b;
+  cursor: pointer;
+}
+
+.campo_selecao_personagem select:has(option[value=""]:checked) {
+  color: #5b5670;
+}
+
+.campo_selecao_personagem:focus-within {
+  background-color: #ffffff;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px #e6d9ff;
+}
+
+.card_pergunta_personagem .campo_selecao_personagem {
+  max-width: 360px;
+}
+
+.card_pergunta_personagem:has(.opcao_nao_se_aplica input:checked) .campo_selecao_personagem {
+  opacity: 0.5;
+}
+
+@media (max-width: 1000px) {
+  .card_info_personagem {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grupo_pasta_personagem {
+    grid-column: 1 / -1;
+  }
+
+  .corpo_personagem_formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .painel_moodboard_personagem {
+    position: static;
+    height: auto;
+    min-height: 0;
+    max-height: 380px;
+  }
+}
+
+@media (max-width: 900px) {
+  .container_personagem_formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .conteudo_personagem_formulario {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  .barra_imagem_personagem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .card_info_personagem {
+    grid-template-columns: 1fr;
+  }
+
+  .acoes_formulario_personagem {
+    flex-wrap: wrap;
+  }
+
+  .item_imagem_modal {
+    flex-wrap: wrap;
+  }
+
+  .opcoes_destino_imagem {
+    width: 100%;
+  }
+
+  .modal_imagens_personagem {
+    padding: 20px;
+  }
+}
