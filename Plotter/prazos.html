@@ -1,11 +1,221 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prazos Plotter</title>
+    <link rel="stylesheet" href="../css/prazos.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_prazos">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="../Img/prazos/icon-prazos-roxo.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-historias.svg" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-plots.svg" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_prazos">
+
+            <header class="cabecalho_prazos">
+                <div class="container_logo_prazos">
+                    <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <section class="titulo_prazos">
+                <div class="texto_titulo_prazos">
+                    <h1>Prazos</h1>
+                    <p>Arraste uma história para um dia e defina o que entregar.</p>
+                </div>
+                <div class="controles_calendario_prazos">
+                    <button type="button" class="botao_hoje_prazos" id="botao_hoje_prazos">Hoje</button>
+                    <button type="button" class="botao_mes_prazos" id="botao_mes_anterior" aria-label="Mês anterior">
+                        <img src="../Img/prazos/icon-seta-esquerda.svg" alt="">
+                    </button>
+                    <h2 id="titulo_mes_prazos"></h2>
+                    <button type="button" class="botao_mes_prazos" id="botao_mes_seguinte" aria-label="Próximo mês">
+                        <img src="../Img/prazos/icon-seta-direita.svg" alt="">
+                    </button>
+                </div>
+            </section>
+
+            <section class="corpo_prazos">
+
+                <article class="card_calendario_prazos">
+                    <div class="dias_semana_prazos">
+                        <p>Seg</p>
+                        <p>Ter</p>
+                        <p>Qua</p>
+                        <p>Qui</p>
+                        <p>Sex</p>
+                        <p>Sáb</p>
+                        <p>Dom</p>
+                    </div>
+                    <div class="grade_calendario_prazos" id="grade_calendario_prazos"></div>
+                </article>
+
+                <aside class="painel_historias_prazos">
+                    <div class="cabecalho_painel_historias_prazos">
+                        <h2>Minhas histórias</h2>
+                        <p>Arraste para o calendário.</p>
+                    </div>
+                    <div class="campo_busca_historias_prazos">
+                        <img src="INSERIR LINK DA IMAGEM DO ÍCONE LUPA" alt="">
+                        <input
+                        type="search"
+                        id="ipt_busca_historias_prazos"
+                        placeholder="Buscar histórias..." />
+                    </div>
+                    <ul class="lista_historias_prazos" id="lista_historias_prazos"></ul>
+                    <p class="mensagem_sem_historias_prazos" id="mensagem_sem_historias_prazos" hidden>Nenhuma história encontrada.</p>
+                </aside>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <dialog class="modal_entrega_prazo" id="modal_entrega_prazo" aria-labelledby="titulo_modal_entrega">
+        <form class="form_entrega_prazo" id="form_entrega_prazo">
+
+            <div class="cabecalho_modal_entrega">
+                <div class="capa_modal_entrega">
+                    <img id="img_capa_modal_entrega" alt="">
+                    <span id="iniciais_capa_modal_entrega" hidden></span>
+                </div>
+                <div class="info_modal_entrega">
+                    <h2 id="titulo_modal_entrega"></h2>
+                    <p id="data_modal_entrega"></p>
+                </div>
+            </div>
+
+            <fieldset class="grupo_tipo_entrega">
+                <legend>O que entregar neste dia?</legend>
+                <div class="opcoes_tipo_entrega">
+                    <label class="opcao_tipo_entrega" for="ipt_tipo_cena">
+                        <input type="radio" name="tipo_entrega" id="ipt_tipo_cena" value="cena" checked />
+                        <span>Cena</span>
+                    </label>
+                    <label class="opcao_tipo_entrega" for="ipt_tipo_capitulo">
+                        <input type="radio" name="tipo_entrega" id="ipt_tipo_capitulo" value="capitulo" />
+                        <span>Capítulo</span>
+                    </label>
+                    <label class="opcao_tipo_entrega" for="ipt_tipo_revisao">
+                        <input type="radio" name="tipo_entrega" id="ipt_tipo_revisao" value="revisao" />
+                        <span>Revisão</span>
+                    </label>
+                    <label class="opcao_tipo_entrega" for="ipt_tipo_historia_completa">
+                        <input type="radio" name="tipo_entrega" id="ipt_tipo_historia_completa" value="historia_completa" />
+                        <span>História completa</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="grupo_observacao_entrega">
+                <label for="ipt_observacao_entrega" class="label_observacao_entrega">Observação</label>
+                <textarea
+                id="ipt_observacao_entrega"
+                class="campo_observacao_entrega"
+                rows="3"
+                maxlength="300"
+                placeholder="Ex.: terminar a cena do confronto"></textarea>
+            </div>
+
+            <div id="div_mensagem_entrega_prazo"></div>
+
+            <div class="acoes_modal_entrega">
+                <button type="button" class="botao_cancelar_entrega" id="botao_cancelar_entrega">Cancelar</button>
+                <button type="submit" class="botao_concluir_entrega" id="botao_concluir_entrega">Concluir</button>
+            </div>
+
+        </form>
+    </dialog>
+
+    <template id="template_dia_prazo">
+        <div class="dia_prazo">
+            <span class="numero_dia_prazo"></span>
+            <div class="entregas_dia_prazo" hidden>
+                <span class="contador_entregas_dia" hidden></span>
+                <div class="capa_entrega_dia">
+                    <img class="img_capa_entrega_dia" alt="">
+                    <span class="iniciais_entrega_dia" hidden></span>
+                    <span class="tipo_entrega_dia"></span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template_item_historia_prazo">
+        <li class="item_historia_prazo" draggable="true">
+            <div class="capa_item_historia_prazo">
+                <img class="img_capa_historia_prazo" alt="" draggable="false">
+                <span class="iniciais_capa_historia_prazo" hidden></span>
+            </div>
+            <div class="info_item_historia_prazo">
+                <p class="nome_historia_prazo"></p>
+                <p class="capitulos_historia_prazo"></p>
+                <div class="barra_progresso_historia">
+                    <div class="preenchimento_progresso_historia"></div>
+                </div>
+            </div>
+        </li>
+    </template>
+
+    <script src="../js/prazos.js"></script>
 </body>
 </html>
