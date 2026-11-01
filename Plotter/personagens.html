@@ -1,11 +1,180 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personagens Plotter</title>
+    <link rel="stylesheet" href="../css/menu_lateral.css" />
+    <link rel="stylesheet" href="../css/personagens.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_personagens">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE DASHBOARD" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE PRAZOS" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE MUNDOS" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE PERSONAGENS" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE HISTÓRIAS" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE PLOTS" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_personagens">
+
+            <header class="cabecalho_personagens">
+                <div class="container_logo_personagens">
+                    <img src="INSERIR LINK DA IMAGEM DO LOGO PLOTTER" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <section class="titulo_personagens">
+                <div class="texto_titulo_personagens">
+                    <h1>Personagens</h1>
+                    <p>Todos os personagens que você criou e em quais histórias cada um aparece.</p>
+                </div>
+                <div class="acoes_titulo_personagens">
+                    <button type="button" class="botao_criar_pasta" id="botao_criar_pasta">
+                        <img src="INSERIR LINK DA IMAGEM DO ÍCONE PASTA" alt="">
+                        <span>Criar pasta</span>
+                    </button>
+                    <a href="personagem-form.html" class="botao_criar_personagem">
+                        <img src="INSERIR LINK DA IMAGEM DO ÍCONE MAIS" alt="">
+                        <span>Criar novo personagem</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="secao_pastas_personagens" id="secao_pastas_personagens">
+                <h2 class="titulo_secao_personagens">Pastas</h2>
+                <div class="grade_pastas_personagens" id="grade_pastas_personagens"></div>
+            </section>
+
+            <section class="secao_sem_pasta_personagens">
+                <h2 class="titulo_secao_personagens">Sem pasta</h2>
+                <div class="grade_personagens" id="grade_personagens">
+                <a href="personagem-form.html" class="card_novo_personagem" id="card_novo_personagem">
+                    <div class="icone_card_novo_personagem">
+                        <img src="INSERIR LINK DA IMAGEM DO ÍCONE MAIS" alt="">
+                    </div>
+                    <p>Criar novo personagem</p>
+                </a>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <dialog class="modal_pasta_personagem" id="modal_pasta_personagem" aria-labelledby="titulo_modal_pasta">
+        <form id="form_pasta_personagem">
+            <div class="cabecalho_modal_pasta">
+                <h2 id="titulo_modal_pasta">Criar pasta</h2>
+                <p>Organize seus personagens em grupos do jeito que preferir.</p>
+            </div>
+
+            <div class="grupo_nome_pasta">
+                <label for="ipt_nome_pasta" class="label_nome_pasta">Nome da pasta</label>
+                <div class="campo_input_pasta">
+                    <input
+                    type="text"
+                    id="ipt_nome_pasta"
+                    maxlength="60"
+                    placeholder="Ex.: Família Real" />
+                </div>
+            </div>
+
+            <div id="div_mensagem_pasta"></div>
+
+            <div class="acoes_modal_pasta">
+                <button type="button" class="botao_cancelar_pasta" id="botao_cancelar_pasta">Cancelar</button>
+                <button type="submit" class="botao_confirmar_pasta" id="botao_confirmar_pasta">Criar pasta</button>
+            </div>
+        </form>
+    </dialog>
+
+    <template id="template_card_pasta_personagem">
+        <a href="personagem-pasta.html" class="card_pasta_personagem">
+            <div class="icone_card_pasta_personagem">
+                <img src="INSERIR LINK DA IMAGEM DO ÍCONE PASTA" alt="">
+            </div>
+            <div class="info_card_pasta_personagem">
+                <h3 class="nome_card_pasta_personagem"></h3>
+                <p class="contador_card_pasta_personagem"></p>
+            </div>
+        </a>
+    </template>
+
+    <template id="template_card_personagem">
+        <a href="personagem-ficha.html" class="card_personagem">
+            <div class="capa_card_personagem">
+                <img class="img_capa_card_personagem" alt="">
+                <span class="iniciais_card_personagem" hidden></span>
+            </div>
+            <div class="info_card_personagem">
+                <h2 class="nome_card_personagem"></h2>
+                <p class="rotulo_historias_card_personagem">Aplicado em:</p>
+                <ul class="lista_chips_card_personagem"></ul>
+            </div>
+        </a>
+    </template>
+
+    <template id="template_chip_historia_personagem">
+        <li class="chip_historia_personagem">
+            <span class="bolinha_historia"></span>
+            <span class="nome_chip_historia"></span>
+        </li>
+    </template>
+
+    <script src="../js/personagens.js"></script>
 </body>
 </html>

@@ -1,135 +1,268 @@
-.menu_lateral {
-  position: sticky;
-  top: 0;
-  align-self: start;
-  height: 100vh;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f4f2fa;
+  color: #1e1a2b;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+.container_mundos {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.conteudo_mundos {
   display: flex;
   flex-direction: column;
-  padding: 24px 14px;
-  background-color: #4a2478;
+  gap: 16px;
+  min-width: 0;
+  padding: 16px 28px 28px;
 }
 
-.cabecalho_menu_lateral {
-  padding: 0 14px;
-  margin-bottom: 28px;
+.container_logo_mundos img {
+  display: block;
+  width: 150px;
+  height: auto;
 }
 
-.cabecalho_menu_lateral p {
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.lista_menu_lateral {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.item_menu_lateral {
+.titulo_mundos {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  border-radius: 8px;
-  color: #e9e1f5;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.texto_titulo_mundos h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.texto_titulo_mundos p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #5b5670;
+}
+
+.botao_criar_mundo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 10px;
+  background-color: #8b5cf6;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
   transition: background-color 0.2s;
 }
 
-.item_menu_lateral img {
+.botao_criar_mundo:hover {
+  background-color: #7646e0;
+}
+
+.botao_criar_mundo img {
   width: 16px;
   height: 16px;
-  flex-shrink: 0;
+  display: block;
 }
 
-.item_menu_lateral:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.grade_mundos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 8px;
 }
 
-.item_menu_ativo,
-.item_menu_ativo:hover {
-  background-color: #ffffff;
-  color: #4a2478;
-  font-weight: 600;
-}
-
-.perfil_menu_lateral {
+.card_mundo {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
-  padding: 16px 14px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 16px;
+  color: inherit;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.avatar_usuario {
+.card_mundo:hover {
+  border-color: #cdbdf0;
+  box-shadow: 0 6px 18px rgba(74, 36, 120, 0.1);
+}
+
+.capa_card_mundo {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background-color: var(--cor-mundo, #6b4bc0);
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(30, 26, 43, 0.14));
+  overflow: hidden;
+}
+
+.img_capa_card_mundo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img_capa_card_mundo:not([src]) {
+  display: none;
+}
+
+.iniciais_card_mundo {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.info_card_mundo {
+  flex: 1;
+  padding: 16px 18px 20px;
+}
+
+.nome_card_mundo {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.rotulo_historias_card_mundo {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.lista_chips_card_mundo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chip_historia_mundo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background-color: #efecf7;
+  font-size: 11px;
+  color: #1e1a2b;
+}
+
+.bolinha_historia {
+  width: 8px;
+  height: 8px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: #f8b542;
-  color: #1e1a2b;
+  background-color: var(--cor-historia, #8b5cf6);
+}
+
+.card_novo_mundo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 260px;
+  border: 2px dashed #a98af7;
+  border-radius: 16px;
+  background-color: #f1eef9;
+  color: #8b5cf6;
   font-size: 13px;
   font-weight: 700;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
-.info_perfil_menu {
-  min-width: 0;
+.card_novo_mundo:hover {
+  border-color: #8b5cf6;
+  background-color: #ebe4fb;
 }
 
-.info_perfil_menu p {
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 600;
+.icone_card_novo_mundo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #e4dbf8;
 }
 
-.link_configuracoes_menu {
+.icone_card_novo_mundo img {
+  width: 18px;
+  height: 18px;
   display: block;
-  margin-top: 2px;
-  color: #cdbfe3;
-  font-size: 11px;
-  text-decoration: none;
-  transition: color 0.2s;
 }
 
-.link_configuracoes_menu:hover {
-  color: #ffffff;
+@media (max-width: 1100px) {
+  .grade_mundos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 900px) {
-  .menu_lateral {
-    position: static;
-    height: auto;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 16px;
-    overflow-x: auto;
+  .container_mundos {
+    grid-template-columns: 1fr;
   }
 
-  .cabecalho_menu_lateral {
-    margin-bottom: 0;
-    padding: 0;
+  .conteudo_mundos {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  .grade_mundos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .titulo_mundos {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .lista_menu_lateral {
-    flex-direction: row;
-  }
-
-  .item_menu_lateral {
-    padding: 9px 12px;
-  }
-
-  .perfil_menu_lateral {
-    margin-top: 0;
-    margin-left: auto;
-    padding: 0;
-    border-top: none;
+  .grade_mundos {
+    grid-template-columns: 1fr;
   }
 }
