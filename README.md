@@ -1,6 +1,4 @@
-from pathlib import Path
-
-readme = r'''<div align="center">
+<div align="center">
 
 # ✦ Plotter
 
@@ -132,7 +130,3 @@ Este repositório é destinado a:
 
 </div>
 '''
-
-path = Path("/mnt/data/README.md")
-path.write_text(readme, encoding="utf-8")
-print(f"Arquivo criado: {path}")
