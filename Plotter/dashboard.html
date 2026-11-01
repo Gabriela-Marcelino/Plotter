@@ -1,51 +1,299 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <main>
-        <Section class="barra_lateral_fixa">
-            <Article class="cabecalho">
-                <div>
-                    <P>Plotter</P>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Plotter</title>
+    <link rel="stylesheet" href="../CSS/dashboard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_dashboard">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="../Img/Dashboard/icon-dash.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-historias.svg" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-plots.svg" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
                 </div>
-            </Article>
-                <article class="botoes">
-                    <div>
-                        <img src="" alt="">
-                        <a href="">Dashboard</a>
-                        <img src="" alt="">
-                        <a href="">Prazos</a>
-                        <img src="" alt="">
-                        <a href="">Mundos</a>
-                        <img src="" alt="">
-                        <a href="">Personagens</a>
-                        <img src="" alt="">
-                        <a href="">Histórias</a>
-                        <img src="" alt="">
-                        <a href="">Plots</a>
+                <p id="nome_usuario_menu"></p>
+            </div>
+        </aside>
+
+        <main class="conteudo_dashboard">
+
+            <header class="cabecalho_dashboard">
+                <div class="container_logo_dashboard">
+                    <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo_do_plotter" />
+                </div>
+                <div class="campo_busca_dashboard">
+                    <img src="../Img/Dashboard/icon-lupa.svg" alt="">
+                    <input type="search" id="ipt_busca_dashboard" placeholder="Buscar por histórias, personagens, capítulos..." />
+                </div>
+            </header>
+
+            <section class="boas_vindas_dashboard">
+                <h1>Bem-vinda de volta, <span id="nome_usuario_dashboard"></span>!</h1>
+                <p id="texto_resumo_meta_dashboard"></p>
+            </section>
+
+            <section class="linha_indicadores_dashboard">
+
+                <article class="card_indicador">
+                    <div class="cabecalho_card_indicador">
+                        <div class="icone_card_indicador">
+                            <img src="../Img/Dashboard/icon-palavras-mes.svg" alt="">
+                        </div>
+                        <p>Palavras no mês</p>
+                    </div>
+                    <h2 id="valor_palavras_mes"></h2>
+                    <div class="rodape_card_indicador">
+                        <span class="etiqueta_variacao" id="variacao_palavras_mes"></span>
+                        <p id="comparativo_palavras_mes"></p>
                     </div>
                 </article>
-                <article>
-                    <div class="foto_perfil">
-                        <img src="" alt=""> <!-- Perguntar como posso armazenar essa foto de perfil -->
+
+                <article class="card_indicador">
+                    <div class="cabecalho_card_indicador">
+                        <div class="icone_card_indicador">
+                            <img src="../Img/Dashboard/icon-melhor-dia-escrita.svg" alt="">
+                        </div>
+                        <p>Melhor dia de escrita</p>
                     </div>
-                    <div>
-                        <strong id="nome-usuario">Gabi</strong> <!-- Aguardando resposta sobre melhor forma de armazenar os dados -->
+                    <h2 id="valor_melhor_dia"></h2>
+                    <div class="rodape_card_indicador">
+                        <p id="detalhe_melhor_dia"></p>
                     </div>
                 </article>
-        </Section>
-        <section>
-           
-            </article>
 
+                <article class="card_indicador">
+                    <div class="cabecalho_card_indicador">
+                        <div class="icone_card_indicador">
+                            <img src="../Img/Dashboard/icon-meta-mensal.svg" alt="">
+                        </div>
+                        <p>Meta mensal</p>
+                    </div>
+                    <div class="valor_meta_mensal">
+                        <h2 id="valor_meta_mensal"></h2>
+                        <p>palavras</p>
+                    </div>
+                    <div class="rodape_card_indicador">
+                        <div class="barra_progresso_meta">
+                            <div class="preenchimento_progresso_meta" id="preenchimento_progresso_meta"></div>
+                        </div>
+                        <p id="porcentagem_meta_mensal"></p>
+                    </div>
+                </article>
 
-        </section>
+                <article class="card_indicador">
+                    <div class="cabecalho_card_indicador">
+                        <div class="icone_card_indicador">
+                            <img src="../Img/Dashboard/icon-media-diaria.svg" alt="">
+                        </div>
+                        <p>Média diária</p>
+                    </div>
+                    <div class="valor_media_diaria">
+                        <h2 id="valor_media_diaria"></h2>
+                        <p>palavras/dia</p>
+                    </div>
+                    <div class="rodape_card_indicador">
+                        <p id="detalhe_media_diaria"></p>
+                    </div>
+                </article>
 
-    </main>
-    
+                <article class="card_continuar_escrita">
+                    <div class="capa_continuar_escrita">
+                        <img id="img_capa_continuar_escrita" alt="Capa da história">
+                    </div>
+                    <div class="info_continuar_escrita">
+                        <div class="cabecalho_continuar_escrita">
+                            <p>Continue de onde parou</p>
+                            <p>Sequência</p>
+                        </div>
+                        <h2 id="titulo_continuar_escrita"></h2>
+                        <p id="detalhe_continuar_escrita"></p>
+                        <div class="rodape_continuar_escrita">
+                            <a href="editor.html" class="botao_abrir_capitulo" id="botao_abrir_capitulo"></a>
+                            <p class="sequencia_dias" id="valor_sequencia_dias"></p>
+                        </div>
+                    </div>
+                </article>
+
+            </section>
+
+            <section class="linha_graficos_dashboard">
+
+                <article class="card_cadencia_mes">
+                    <div class="cabecalho_card_dashboard">
+                        <h3>Cadência de <span id="nome_mes_cadencia"></span></h3>
+                        <p>Palavras acumuladas no mês</p>
+                    </div>
+                    <div class="container_grafico_cadencia">
+                        <canvas id="grafico_cadencia_mes" aria-label="Gráfico de palavras acumuladas no mês"></canvas>
+                    </div>
+                    <div class="legenda_grafico_cadencia">
+                        <div class="item_legenda_cadencia">
+                            <span class="linha_legenda_escrito"></span>
+                            <p>Escrito</p>
+                        </div>
+                        <div class="item_legenda_cadencia">
+                            <span class="linha_legenda_meta"></span>
+                            <p>Meta do mês</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card_progresso_historias">
+                    <div class="cabecalho_card_dashboard">
+                        <h3>Progresso em cada história</h3>
+                        <a href="historias.html" class="link_ver_todas_historias">Ver todas</a>
+                    </div>
+                    <ul class="lista_progresso_historias" id="lista_progresso_historias"></ul>
+                </article>
+
+            </section>
+
+            <section class="linha_inferior_dashboard">
+
+                <article class="card_proximo_prazo">
+                    <div class="cabecalho_card_indicador">
+                        <div class="icone_card_indicador">
+                            <img src="../Img/Dashboard/icon-proximo-prazo.svg" alt="">
+                        </div>
+                        <p>Próximo prazo</p>
+                    </div>
+                    <h2 id="valor_proximo_prazo"></h2>
+                    <div class="rodape_proximo_prazo">
+                        <div class="barra_progresso_prazo">
+                            <div class="preenchimento_progresso_prazo" id="preenchimento_progresso_prazo"></div>
+                        </div>
+                        <p id="dias_restantes_prazo"></p>
+                    </div>
+                </article>
+
+                <article class="card_projetos_ativos">
+                    <div class="cabecalho_card_indicador">
+                        <div class="icone_card_indicador">
+                            <img src="../Img/Dashboard/icon-projetos-ativos.svg" alt="">
+                        </div>
+                        <p>Projetos ativos</p>
+                    </div>
+                    <h2 id="valor_projetos_ativos"></h2>
+                    <ul class="lista_projetos_ativos" id="lista_projetos_ativos"></ul>
+                </article>
+
+                <article class="card_calendario_escrita">
+                    <div class="container_calendario_escrita">
+                        <div class="cabecalho_card_dashboard">
+                            <h3>Calendário de escrita</h3>
+                            <p>Últimas 26 semanas</p>
+                        </div>
+
+                        <div class="corpo_calendario_escrita">
+                            <div class="dias_semana_calendario">
+                                <p>seg</p>
+                                <p>qua</p>
+                                <p>sex</p>
+                                <p>dom</p>
+                            </div>
+                            <div class="area_grade_calendario">
+                                <div class="meses_calendario" id="meses_calendario"></div>
+                                <div class="grade_calendario_escrita" id="grade_calendario_escrita"></div>
+                            </div>
+                        </div>
+
+                        <div class="legenda_calendario_escrita">
+                            <p>Menos</p>
+                            <span class="dia_calendario" data-nivel="0"></span>
+                            <span class="dia_calendario" data-nivel="1"></span>
+                            <span class="dia_calendario" data-nivel="2"></span>
+                            <span class="dia_calendario" data-nivel="3"></span>
+                            <span class="dia_calendario" data-nivel="4"></span>
+                            <p>Mais</p>
+                        </div>
+                    </div>
+
+                    <div class="container_ideia_do_dia">
+                        <p class="titulo_ideia_do_dia">Ideia para hoje</p>
+                        <p class="texto_ideia_do_dia" id="texto_ideia_do_dia"></p>
+                        <button type="button" class="botao_gerar_ideia" id="botao_gerar_ideia">Gerar outra ideia</button>
+                    </div>
+                </article>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <template id="template_item_progresso_historia">
+        <li class="item_progresso_historia">
+            <div class="cabecalho_item_progresso_historia">
+                <div class="nome_item_progresso_historia">
+                    <span class="bolinha_historia"></span>
+                    <p class="nome_historia_progresso"></p>
+                </div>
+                <p class="capitulos_historia_progresso"></p>
+            </div>
+            <div class="barra_progresso_historia">
+                <div class="preenchimento_progresso_historia"></div>
+            </div>
+        </li>
+    </template>
+
+    <template id="template_item_projeto_ativo">
+        <li class="item_projeto_ativo">
+            <span class="bolinha_historia"></span>
+            <p class="nome_projeto_ativo"></p>
+        </li>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="../js/dashboard.js"></script>
 </body>
 </html>
