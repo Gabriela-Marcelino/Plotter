@@ -1,11 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Histórias Plotter</title>
+    <link rel="stylesheet" href="../css/menu_lateral.css" />
+    <link rel="stylesheet" href="../css/historias.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_historias">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE PERSONAGENS" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE HISTÓRIAS" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE PLOTS" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_historias">
+
+            <header class="cabecalho_historias">
+                <div class="container_logo_historias">
+                    <img src="INSERIR LINK DA IMAGEM DO LOGO PLOTTER" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <section class="titulo_historias">
+                <div class="texto_titulo_historias">
+                    <h1>Histórias</h1>
+                    <p>Todas as suas histórias, com classificação, gênero, personagens e mundo.</p>
+                </div>
+                <a href="historia-formulario.html" class="botao_criar_historia">
+                    <img src="INSERIR LINK DA IMAGEM DO ÍCONE MAIS" alt="">
+                    <span>Nova história</span>
+                </a>
+            </section>
+
+            <section class="grade_historias" id="grade_historias">
+                <a href="historia-formulario.html" class="card_nova_historia" id="card_nova_historia">
+                    <div class="icone_card_nova_historia">
+                        <img src="INSERIR LINK DA IMAGEM DO ÍCONE MAIS" alt="">
+                    </div>
+                    <p>Nova história</p>
+                </a>
+            </section>
+
+        </main>
+
+    </div>
+
+    <template id="template_card_historia">
+        <a href="historia.html" class="card_historia">
+            <div class="capa_card_historia">
+                <img class="img_capa_card_historia" alt="">
+                <span class="iniciais_card_historia" hidden></span>
+                <span class="selo_classificacao_historia"></span>
+            </div>
+            <div class="info_card_historia">
+                <h2 class="nome_card_historia"></h2>
+                <ul class="lista_generos_card_historia"></ul>
+                <div class="grupo_personagens_card_historia">
+                    <p class="rotulo_card_historia">Personagens principais</p>
+                    <div class="linha_personagens_card_historia">
+                        <ul class="lista_avatares_card_historia"></ul>
+                        <span class="contador_personagens_card_historia" hidden></span>
+                        <p class="nomes_personagens_card_historia"></p>
+                    </div>
+                </div>
+                <div class="grupo_mundo_card_historia">
+                    <p class="rotulo_card_historia">Mundo onde se passa</p>
+                    <div class="linha_mundo_card_historia">
+                        <img src="INSERIR LINK DA IMAGEM DO ÍCONE MUNDO" alt="">
+                        <p class="nome_mundo_card_historia"></p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </template>
+
+    <template id="template_tag_genero_historia">
+        <li class="tag_genero_historia"></li>
+    </template>
+
+    <template id="template_avatar_personagem_historia">
+        <li class="avatar_personagem_historia">
+            <img class="img_avatar_personagem_historia" alt="">
+            <span class="iniciais_avatar_personagem_historia" hidden></span>
+        </li>
+    </template>
+
+    <script src="../js/historias.js"></script>
 </body>
 </html>

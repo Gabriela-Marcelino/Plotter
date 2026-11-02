@@ -129,4 +129,3 @@ Este repositório é destinado a:
 **Plotter** · Dê forma às suas histórias.
 
 </div>
-'''
