@@ -6,7 +6,9 @@
     <title>Cadastro Plotter</title>
     <link rel="stylesheet" href="../css/cadastro.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700" rel="stylesheet" />
-  </head>
+    
+</head>
+<script src="../js/cadastro.js"></script>
   <body>
 
     <main class="container_cadastro">
@@ -46,7 +48,7 @@
                                 <img src="../Img/Cadastro/cadastro-icon-pessoa.svg" alt="">
                             </div>
                             <div class="input_do_nome">
-                                <input type="text" id="input_nome_cadastro" class="campo_nome" placeholder="Como podemos te chamar?">
+                                <input type="text" value="Gabi" id="input_nome_cadastro" class="campo_nome" placeholder="Como podemos te chamar?">
                             </div>
                         </div>
                     </div>
@@ -58,7 +60,7 @@
                                     <img src="../Img/Login/Login-icon-envelope-email.svg" alt="">
                                 </div>
                                 <div class="input_do_email">
-                                    <input type="email" id="input_email_cadastro" class="campo_email" placeholder="voce@email.com">
+                                    <input type="email" value="gabi@gmail.com" id="input_email_cadastro" class="campo_email" placeholder="voce@email.com">
                             </div>
                         </div>
                     </div>
@@ -72,14 +74,14 @@
                             <img src="../Img/Login/Login-icon-cadeado-senha.svg" alt="">
                         </div>
                         <div class="input_da_senha">
-                            <input type="password" id="input_senha_cadastro" class="campo_senha" placeholder="Senha">
+                            <input type="password" value="Sous@3sousa" id="input_senha_cadastro" class="campo_senha" placeholder="Senha">
                         </div>
                         <button type="button" class="botao_mostrar_senha" aria-label="Mostrar senha"><img src="../Img/Login/Login-icon-olho-revelar.svg" alt=""></button>
                     </div>
 
                     <div class="forca_senha">
                         <div class="barras_forca">
-                            <span class="barra"></span>
+                            <span id="barra01" class="barra"></span>
                             <span class="barra"></span>
                             <span class="barra"></span>
                             <span class="barra"></span>
