@@ -1,0 +1,288 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f4f2fa;
+  color: #1e1a2b;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+.container_mundo_ficha {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.conteudo_mundo_ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 16px 28px 32px;
+}
+
+.container_logo_mundo_ficha img {
+  display: block;
+  width: 150px;
+  height: auto;
+}
+
+.titulo_mundo_ficha {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.texto_titulo_mundo_ficha {
+  min-width: 0;
+}
+
+.texto_titulo_mundo_ficha h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e1a2b;
+  overflow-wrap: anywhere;
+}
+
+.lista_chips_ficha_mundo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chip_historia_mundo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background-color: #efecf7;
+  font-size: 11px;
+  color: #1e1a2b;
+}
+
+.bolinha_historia {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--cor-historia, #8b5cf6);
+}
+
+.botao_editar_mundo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 26px;
+  border: 1px solid #8b5cf6;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #8b5cf6;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.botao_editar_mundo:hover {
+  background-color: #f4f2fa;
+}
+
+.corpo_mundo_ficha {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.painel_moodboard_mundo {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: calc(100vh - 190px);
+  min-height: 420px;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 16px;
+}
+
+.painel_moodboard_mundo h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.grade_moodboard_mundo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.item_moodboard_mundo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 10px;
+  background-color: #efecf7;
+  overflow: hidden;
+}
+
+.item_moodboard_mundo:nth-child(3n + 1) {
+  grid-column: span 2;
+  aspect-ratio: 4 / 3;
+}
+
+.img_item_moodboard {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mensagem_sem_moodboard {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #5b5670;
+}
+
+.legenda_painel_moodboard {
+  margin-top: auto;
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.conteudo_respostas_ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.secao_ficha_mundo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.titulo_secao_mundo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.titulo_secao_mundo::before {
+  content: "";
+  width: 4px;
+  height: 20px;
+  border-radius: 2px;
+  background-color: #8b5cf6;
+}
+
+.lista_respostas_ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card_resposta_ficha {
+  padding: 14px 18px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 12px;
+}
+
+.pergunta_ficha_mundo {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #5b5670;
+}
+
+.resposta_ficha_mundo {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1e1a2b;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.mensagem_ficha_vazia {
+  padding: 32px 20px;
+  background-color: #ffffff;
+  border: 1px dashed #cdbdf0;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #5b5670;
+}
+
+@media (max-width: 1000px) {
+  .corpo_mundo_ficha {
+    grid-template-columns: 1fr;
+  }
+
+  .painel_moodboard_mundo {
+    position: static;
+    height: auto;
+    min-height: 0;
+    max-height: 380px;
+  }
+}
+
+@media (max-width: 900px) {
+  .container_mundo_ficha {
+    grid-template-columns: 1fr;
+  }
+
+  .conteudo_mundo_ficha {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .titulo_mundo_ficha {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

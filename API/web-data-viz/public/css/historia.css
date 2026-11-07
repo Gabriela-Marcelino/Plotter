@@ -1,0 +1,596 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f4f2fa;
+  color: #1e1a2b;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+[data-status="nao_escrito"] {
+  --cor-status: #9b97a8;
+}
+
+[data-status="escrevendo"] {
+  --cor-status: #3b82f6;
+}
+
+[data-status="a_revisar"] {
+  --cor-status: #e9a824;
+}
+
+[data-status="revisado"] {
+  --cor-status: #8b5cf6;
+}
+
+[data-status="concluido"] {
+  --cor-status: #22a35a;
+}
+
+[data-status="publicado"] {
+  --cor-status: #4a2478;
+}
+
+.container_historia {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.conteudo_historia {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 28px 28px;
+}
+
+.container_logo_historia img {
+  display: block;
+  width: 150px;
+  height: auto;
+}
+
+.link_voltar_historias {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 4px;
+  margin-top: -8px;
+  color: #8b5cf6;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.link_voltar_historias:hover {
+  text-decoration: underline;
+}
+
+.link_voltar_historias img {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.card_cabecalho_historia {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(220px, 340px);
+  align-items: start;
+  gap: 20px;
+  padding: 16px 20px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 16px;
+}
+
+.capa_cabecalho_historia {
+  position: relative;
+  width: 76px;
+  aspect-ratio: 2 / 3;
+  border-radius: 8px;
+  background-color: var(--cor-historia, #6b4bc0);
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(30, 26, 43, 0.14));
+  overflow: hidden;
+}
+
+.capa_cabecalho_historia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.capa_cabecalho_historia img:not([src]) {
+  display: none;
+}
+
+.iniciais_cabecalho_historia {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.info_cabecalho_historia {
+  min-width: 0;
+}
+
+.info_cabecalho_historia h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e1a2b;
+  overflow-wrap: anywhere;
+}
+
+.linha_tags_cabecalho_historia {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.selo_classificacao_historia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 7px;
+  background-color: #9b97a8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.selo_classificacao_historia[data-classificacao="livre"] {
+  background-color: #22a35a;
+}
+
+.selo_classificacao_historia[data-classificacao="10"] {
+  background-color: #f4c430;
+  color: #1e1a2b;
+}
+
+.selo_classificacao_historia[data-classificacao="12"] {
+  background-color: #f59e0b;
+}
+
+.selo_classificacao_historia[data-classificacao="16"] {
+  background-color: #ef4444;
+}
+
+.selo_classificacao_historia[data-classificacao="18"] {
+  background-color: #1e1a2b;
+}
+
+.lista_generos_cabecalho_historia {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag_genero_historia {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: #ede7fb;
+  color: #7a58c8;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.mundo_cabecalho_historia {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mundo_cabecalho_historia img {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.mundo_cabecalho_historia p {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e1a2b;
+}
+
+.grupo_personagens_cabecalho_historia {
+  margin-top: 14px;
+}
+
+.rotulo_card_historia {
+  font-size: 10px;
+  color: #5b5670;
+}
+
+.lista_avatares_cabecalho_historia {
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.avatar_personagem_historia {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: -6px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background-color: var(--cor-personagem, #4a2478);
+  overflow: hidden;
+}
+
+.avatar_personagem_historia:first-child {
+  margin-left: 0;
+}
+
+.img_avatar_personagem_historia {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img_avatar_personagem_historia:not([src]) {
+  display: none;
+}
+
+.iniciais_avatar_personagem_historia {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.progresso_cabecalho_historia {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.valor_progresso_historia {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.barra_progresso_historia {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background-color: #e8e3f0;
+  overflow: hidden;
+}
+
+.preenchimento_progresso_historia {
+  height: 100%;
+  width: var(--progresso, 0%);
+  border-radius: inherit;
+  background-color: #8b5cf6;
+}
+
+.detalhe_progresso_historia {
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.botao_editar_historia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  margin-top: 6px;
+  padding: 0 28px;
+  border: 1.5px solid #8b5cf6;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #8b5cf6;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background-color 0.2s;
+}
+
+.botao_editar_historia:hover {
+  background-color: #f4f2fa;
+}
+
+.barra_filtros_capitulos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.filtros_status_capitulos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filtro_status_capitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid #e8e3f0;
+  border-radius: 999px;
+  background-color: #ffffff;
+  color: #1e1a2b;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.filtro_status_capitulo:hover {
+  border-color: #cdbdf0;
+}
+
+.filtro_status_capitulo[aria-pressed="true"] {
+  border-color: #8b5cf6;
+  background-color: #ede7fb;
+}
+
+.bolinha_status {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--cor-status, #9b97a8);
+}
+
+.contador_filtro_status::before {
+  content: "· ";
+}
+
+.contador_filtro_status:empty {
+  display: none;
+}
+
+.botao_novo_capitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #8b5cf6;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao_novo_capitulo:hover {
+  background-color: #7646e0;
+}
+
+.botao_novo_capitulo img {
+  width: 12px;
+  height: 12px;
+  display: block;
+}
+
+.grade_capitulos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card_capitulo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 14px 20px;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 12px;
+  color: inherit;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card_capitulo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  background-color: var(--cor-status, #9b97a8);
+}
+
+.card_capitulo:hover {
+  border-color: #cdbdf0;
+  box-shadow: 0 6px 18px rgba(74, 36, 120, 0.1);
+}
+
+.cabecalho_card_capitulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.etiqueta_status_capitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: #efecf7;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.numero_card_capitulo {
+  font-size: 11px;
+  color: #5b5670;
+  white-space: nowrap;
+}
+
+.titulo_card_capitulo {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1e1a2b;
+  overflow-wrap: anywhere;
+}
+
+.rodape_card_capitulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.rodape_card_capitulo img {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.contagem_cenas_card_capitulo {
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.mensagem_sem_capitulos {
+  padding: 32px 20px;
+  background-color: #ffffff;
+  border: 1px dashed #cdbdf0;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #5b5670;
+}
+
+.rodape_capitulos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.botao_ver_todos_capitulos {
+  padding: 2px 4px;
+  border: none;
+  background: none;
+  color: #8b5cf6;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao_ver_todos_capitulos:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1300px) {
+  .grade_capitulos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  .card_cabecalho_historia {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .progresso_cabecalho_historia {
+    grid-column: 1 / -1;
+    align-items: stretch;
+  }
+
+  .botao_editar_historia {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .container_historia {
+    grid-template-columns: 1fr;
+  }
+
+  .conteudo_historia {
+    padding: 16px;
+  }
+
+  .grade_capitulos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .barra_filtros_capitulos {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .botao_novo_capitulo {
+    align-self: flex-start;
+  }
+
+  .grade_capitulos {
+    grid-template-columns: 1fr;
+  }
+}

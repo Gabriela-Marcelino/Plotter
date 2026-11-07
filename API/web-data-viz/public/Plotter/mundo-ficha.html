@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha do mundo Plotter</title>
+    <link rel="stylesheet" href="../css/menu_lateral.css" />
+    <link rel="stylesheet" href="../css/mundo-ficha.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_mundo_ficha">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="../Img/Mundo/icon-mundo-roxo.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-historias.svg" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-plots.svg" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_mundo_ficha">
+
+            <header class="cabecalho_mundo_ficha">
+                <div class="container_logo_mundo_ficha">
+                    <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <section class="titulo_mundo_ficha">
+                <div class="texto_titulo_mundo_ficha">
+                    <h1 id="titulo_ficha_mundo"></h1>
+                    <ul class="lista_chips_ficha_mundo" id="lista_chips_ficha_mundo"></ul>
+                </div>
+                <a href="mundo-form.html" class="botao_editar_mundo" id="botao_editar_mundo">Editar mundo</a>
+            </section>
+
+            <section class="corpo_mundo_ficha">
+
+                <aside class="painel_moodboard_mundo">
+                    <h2>Moodboard</h2>
+                    <div class="grade_moodboard_mundo" id="grade_moodboard_mundo"></div>
+                    <p class="mensagem_sem_moodboard" id="mensagem_sem_moodboard" hidden>Nenhuma imagem de moodboard.</p>
+                    <p class="legenda_painel_moodboard">Fixo enquanto você rola as respostas.</p>
+                </aside>
+
+                <div class="conteudo_respostas_ficha" id="conteudo_respostas_ficha"></div>
+                <p class="mensagem_ficha_vazia" id="mensagem_ficha_vazia" hidden>Nenhuma pergunta respondida ainda. Clique em “Editar mundo” para preencher.</p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <template id="template_item_moodboard_ficha">
+        <div class="item_moodboard_mundo">
+            <img class="img_item_moodboard" alt="">
+        </div>
+    </template>
+
+    <template id="template_secao_ficha_mundo">
+        <section class="secao_ficha_mundo">
+            <h2 class="titulo_secao_mundo"></h2>
+            <div class="lista_respostas_ficha"></div>
+        </section>
+    </template>
+
+    <template id="template_resposta_ficha_mundo">
+        <article class="card_resposta_ficha">
+            <p class="pergunta_ficha_mundo"></p>
+            <p class="resposta_ficha_mundo"></p>
+        </article>
+    </template>
+
+    <template id="template_chip_historia_mundo">
+        <li class="chip_historia_mundo">
+            <span class="bolinha_historia"></span>
+            <span class="nome_chip_historia"></span>
+        </li>
+    </template>
+
+    <script src="../js/mundo-ficha.js"></script>
+</body>
+</html>

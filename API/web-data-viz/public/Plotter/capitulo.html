@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Capítulo Plotter</title>
+    <link rel="stylesheet" href="../css/menu_lateral.css" />
+    <link rel="stylesheet" href="../css/capitulo.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_capitulo">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="../Img/Dashboard/icon-historias.svg" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-plots.svg" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_capitulo">
+
+            <header class="cabecalho_capitulo">
+                <div class="container_logo_capitulo">
+                    <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <a href="historia.html" class="link_voltar_historia" id="link_voltar_historia">
+                <img src="../Img/prazos/icon-seta-esquerda.svg" alt="">
+                <span id="nome_historia_voltar"></span>
+            </a>
+
+            <section class="barra_acoes_capitulo">
+                <div class="seletor_status_capitulo">
+                    <button type="button" class="botao_status_capitulo" id="botao_status_capitulo" data-status="nao_escrito" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="bolinha_status"></span>
+                        <span class="texto_botao_status" id="texto_status_capitulo"></span>
+                        <span class="seta_botao_status"></span>
+                    </button>
+                    <ul class="menu_status_capitulo" id="menu_status_capitulo" role="listbox" hidden>
+                            <li role="option">
+                                <button type="button" class="opcao_status_capitulo" data-status="nao_escrito">
+                                    <span class="bolinha_status"></span>
+                                    <span class="texto_opcao_status">Não escrito</span>
+                                    <img class="icone_check_status" src="../Img/Historia/check-roxo.svg" alt="">
+                                </button>
+                            </li>
+                            <li role="option">
+                                <button type="button" class="opcao_status_capitulo" data-status="escrevendo">
+                                    <span class="bolinha_status"></span>
+                                    <span class="texto_opcao_status">Escrevendo</span>
+                                    <img class="icone_check_status" src="../Img/Historia/check-roxo.svg" alt="">
+                                </button>
+                            </li>
+                            <li role="option">
+                                <button type="button" class="opcao_status_capitulo" data-status="a_revisar">
+                                    <span class="bolinha_status"></span>
+                                    <span class="texto_opcao_status">A revisar</span>
+                                    <img class="icone_check_status" src="../Img/Historia/check-roxo.svg" alt="">
+                                </button>
+                            </li>
+                            <li role="option">
+                                <button type="button" class="opcao_status_capitulo" data-status="revisado">
+                                    <span class="bolinha_status"></span>
+                                    <span class="texto_opcao_status">Revisado</span>
+                                    <img class="icone_check_status" src="../Img/Historia/check-roxo.svg" alt="">
+                                </button>
+                            </li>
+                            <li role="option">
+                                <button type="button" class="opcao_status_capitulo" data-status="concluido">
+                                    <span class="bolinha_status"></span>
+                                    <span class="texto_opcao_status">Concluído</span>
+                                    <img class="icone_check_status" src="../Img/Historia/check-roxo.svg" alt="">
+                                </button>
+                            </li>
+                            <li role="option">
+                                <button type="button" class="opcao_status_capitulo" data-status="publicado">
+                                    <span class="bolinha_status"></span>
+                                    <span class="texto_opcao_status">Publicado</span>
+                                    <img class="icone_check_status" src="../Img/Historia/check-roxo.svg" alt="">
+                                </button>
+                            </li>
+                    </ul>
+                </div>
+                <div class="acoes_salvar_capitulo">
+                    <button type="button" class="botao_salvar_capitulo" id="botao_salvar_capitulo">Salvar</button>
+                    <button type="button" class="botao_finalizar_capitulo" id="botao_finalizar_capitulo">Salvar e finalizar capítulo</button>
+                </div>
+            </section>
+
+            <section class="titulo_capitulo">
+                <div class="texto_titulo_capitulo">
+                    <p class="numero_capitulo" id="numero_capitulo"></p>
+                    <div class="linha_titulo_capitulo">
+                        <div class="campo_titulo_capitulo">
+                            <input
+                            type="text"
+                            id="ipt_titulo_capitulo"
+                            maxlength="120"
+                            aria-label="Título do capítulo"
+                            placeholder="Título do capítulo" />
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE LÁPIS" alt="">
+                        </div>
+                        <span class="etiqueta_plot_capitulo" id="etiqueta_plot_capitulo" hidden>
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE LOSANGO" alt="">
+                            <span id="texto_etiqueta_plot_capitulo"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="acoes_cenas_capitulo">
+                    <p class="contador_cenas_capitulo" id="contador_cenas_capitulo"></p>
+                    <button type="button" class="botao_nova_cena" id="botao_nova_cena">
+                        <img src="../Img/Historia/icon-mais-roxo.svg" alt="">
+                        <span>Cena</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="corpo_capitulo" id="corpo_capitulo">
+
+                <article class="card_editor_capitulo">
+                    <div class="barra_ferramentas_editor">
+                        <div class="grupo_formatacao_editor">
+                            <button type="button" class="botao_formatacao_editor" data-comando="bold" aria-label="Negrito"><strong>B</strong></button>
+                            <button type="button" class="botao_formatacao_editor" data-comando="italic" aria-label="Itálico"><em>I</em></button>
+                            <button type="button" class="botao_formatacao_editor" data-comando="underline" aria-label="Sublinhado"><u>U</u></button>
+                        </div>
+                        <p class="status_editor_capitulo" id="status_editor_capitulo"></p>
+                    </div>
+                    <div class="area_editor_capitulo">
+                        <div
+                        class="editor_texto_capitulo"
+                        id="editor_texto_capitulo"
+                        contenteditable="true"
+                        role="textbox"
+                        aria-multiline="true"
+                        aria-label="Texto do capítulo"
+                        data-placeholder="Comece a escrever..."></div>
+                    </div>
+                </article>
+
+                <aside class="painel_apoio_capitulo" id="painel_apoio_capitulo" hidden>
+                    <div class="cabecalho_painel_apoio">
+                        <div class="abas_painel_apoio" role="tablist">
+                            <button type="button" class="aba_painel_apoio aba_painel_apoio_ativa" role="tab" data-aba="plot" aria-selected="true">Plot</button>
+                            <button type="button" class="aba_painel_apoio" role="tab" data-aba="personagens" aria-selected="false">Personagens</button>
+                            <button type="button" class="aba_painel_apoio" role="tab" data-aba="mundo" aria-selected="false">Mundo</button>
+                        </div>
+                        <button type="button" class="botao_recolher_painel_apoio" id="botao_recolher_painel_apoio" aria-label="Recolher painel">
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE SETA DUPLA" alt="">
+                        </button>
+                    </div>
+
+                    <div class="conteudo_aba_painel_apoio" id="aba_painel_plot" role="tabpanel">
+                        <p class="etiqueta_ato_plot" id="etiqueta_ato_plot"></p>
+                        <p class="aviso_plot_twist" id="aviso_plot_twist" hidden>
+                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE LOSANGO" alt="">
+                            <span>Capítulo marcado como plot twist</span>
+                        </p>
+                        <div class="grupo_sinopse_capitulo">
+                            <p class="rotulo_painel_apoio">Sinopse</p>
+                            <p class="texto_sinopse_capitulo" id="texto_sinopse_capitulo"></p>
+                        </div>
+                        <div class="grupo_cenas_planejadas">
+                            <div class="cabecalho_cenas_planejadas">
+                                <p class="rotulo_painel_apoio">Cenas planejadas</p>
+                                <p class="contador_cenas_planejadas" id="contador_cenas_planejadas"></p>
+                            </div>
+                            <div class="barra_progresso_historia">
+                                <div class="preenchimento_progresso_historia" id="preenchimento_cenas_planejadas"></div>
+                            </div>
+                            <ul class="lista_cenas_planejadas" id="lista_cenas_planejadas"></ul>
+                        </div>
+                        <p class="rodape_painel_apoio">Somente leitura <a href="plots.html" id="link_editar_plot">Editar no plot</a></p>
+                    </div>
+
+                    <div class="conteudo_aba_painel_apoio" id="aba_painel_personagens" role="tabpanel" hidden>
+                        <ul class="lista_personagens_painel_apoio" id="lista_personagens_painel_apoio"></ul>
+                        <p class="mensagem_vazia_painel_apoio" id="mensagem_sem_personagens_painel" hidden>Nenhum personagem principal nesta história.</p>
+                    </div>
+
+                    <div class="conteudo_aba_painel_apoio" id="aba_painel_mundo" role="tabpanel" hidden>
+                        <div class="resumo_mundo_painel_apoio" id="resumo_mundo_painel_apoio">
+                            <h3 id="nome_mundo_painel_apoio"></h3>
+                            <a href="mundo-ficha.html" class="link_abrir_mundo_painel_apoio" id="link_abrir_mundo_painel_apoio">Abrir ficha do mundo</a>
+                        </div>
+                        <p class="mensagem_vazia_painel_apoio" id="mensagem_sem_mundo_painel" hidden>Nenhum mundo vinculado a esta história.</p>
+                    </div>
+                </aside>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <template id="template_marcador_cena">
+        <div class="marcador_cena" contenteditable="false">
+            <span class="rotulo_marcador_cena"></span>
+            <span class="linha_marcador_cena"></span>
+        </div>
+    </template>
+
+    <template id="template_item_cena_planejada">
+        <li class="item_cena_planejada" data-estado="pendente">
+            <span class="indicador_cena_planejada"></span>
+            <div class="texto_cena_planejada">
+                <p class="titulo_cena_planejada"></p>
+                <p class="descricao_cena_planejada"></p>
+            </div>
+        </li>
+    </template>
+
+    <template id="template_item_personagem_painel">
+        <li class="item_personagem_painel">
+            <span class="avatar_item_personagem_painel">
+                <img class="img_avatar_personagem_painel" alt="">
+                <span class="iniciais_avatar_personagem_painel" hidden></span>
+            </span>
+            <p class="nome_personagem_painel"></p>
+        </li>
+    </template>
+
+    <script src="../js/capitulo.js"></script>
+</body>
+</html>

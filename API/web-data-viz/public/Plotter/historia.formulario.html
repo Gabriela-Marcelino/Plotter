@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nova história Plotter</title>
+    <link rel="stylesheet" href="../css/menu_lateral.css" />
+    <link rel="stylesheet" href="../css/historia-formulario.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_historia_formulario">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="../Img/Historia/icon-historias-roxo.svg" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-plots.svg" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_historia_formulario">
+
+            <header class="cabecalho_historia_formulario">
+                <div class="container_logo_historia_formulario">
+                    <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <section class="titulo_historia_formulario">
+                <h1 id="titulo_formulario_historia">Nova história</h1>
+                <p>Só o nome é obrigatório. O resto pode ser completado depois.</p>
+            </section>
+
+            <section class="corpo_historia_formulario">
+
+                <aside class="painel_midia_historia">
+                    <h2>Capa da história</h2>
+                    <div class="preview_capa_historia" id="preview_capa_historia">
+                        <img id="img_preview_capa_historia" alt="Capa da história">
+                        <button type="button" class="botao_remover_capa_historia" id="botao_remover_capa_historia" aria-label="Remover capa" hidden>
+                            <img src="../Img/Historia/icon-fechar.svg" alt="">
+                        </button>
+                    </div>
+                    <h2>Moodboard</h2>
+                    <div class="grade_moodboard_historia" id="grade_moodboard_historia"></div>
+                    <p class="mensagem_sem_moodboard" id="mensagem_sem_moodboard" hidden>Nenhuma imagem de moodboard ainda.</p>
+                    <p class="legenda_painel_moodboard">Fixo enquanto você preenche a história.</p>
+                </aside>
+
+                <form class="form_historia" id="form_historia">
+
+                    <div class="barra_imagem_historia">
+                        <button type="button" class="botao_adicionar_imagem" id="botao_adicionar_imagem">
+                            <img src="../Img/Historia/icon-mais.svg" alt="">
+                            <span>Adicionar imagem</span>
+                        </button>
+                        <p>Capa e moodboard · PNG, JPG ou WebP</p>
+                    </div>
+
+                    <article class="card_campo_historia">
+                        <div class="cabecalho_card_campo_historia">
+                            <label for="ipt_nome_historia" class="titulo_card_campo_historia">Nome da história <span class="asterisco_obrigatorio">*</span></label>
+                            <span class="rotulo_obrigatorio">Obrigatório</span>
+                        </div>
+                        <div class="campo_input_historia">
+                            <input
+                            type="text"
+                            id="ipt_nome_historia"
+                            maxlength="120"
+                            required
+                            placeholder="Ex.: Dentro da Muralha" />
+                        </div>
+                    </article>
+
+                    <article class="card_campo_historia">
+                        <h2 class="titulo_card_campo_historia">Classificação indicativa</h2>
+                        <p class="descricao_card_campo_historia">Clique na opção que mais combina com a história.</p>
+                        <ul class="lista_classificacoes_historia">
+                            <li>
+                                <label class="opcao_classificacao_historia" for="ipt_classificacao_livre">
+                                    <input type="radio" name="classificacao" id="ipt_classificacao_livre" value="livre" />
+                                    <span class="selo_classificacao_historia" data-classificacao="livre">L</span>
+                                    <span class="texto_opcao_classificacao">
+                                        <span class="titulo_opcao_classificacao">L (K)</span>
+                                        <span class="descricao_opcao_classificacao">Livre para todos. Sem violência, linguagem imprópria ou temas adultos.</span>
+                                    </span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="opcao_classificacao_historia" for="ipt_classificacao_10">
+                                    <input type="radio" name="classificacao" id="ipt_classificacao_10" value="10" />
+                                    <span class="selo_classificacao_historia" data-classificacao="10">10</span>
+                                    <span class="texto_opcao_classificacao">
+                                        <span class="titulo_opcao_classificacao">+10 (K+)</span>
+                                        <span class="descricao_opcao_classificacao">Violência menor e sem gravidade, linguagem levemente madura.</span>
+                                    </span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="opcao_classificacao_historia" for="ipt_classificacao_12">
+                                    <input type="radio" name="classificacao" id="ipt_classificacao_12" value="12" />
+                                    <span class="selo_classificacao_historia" data-classificacao="12">12</span>
+                                    <span class="texto_opcao_classificacao">
+                                        <span class="titulo_opcao_classificacao">+12 (T)</span>
+                                        <span class="descricao_opcao_classificacao">Adequado para adolescentes. Pode conter violência moderada e palavrões sutis.</span>
+                                    </span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="opcao_classificacao_historia" for="ipt_classificacao_16">
+                                    <input type="radio" name="classificacao" id="ipt_classificacao_16" value="16" />
+                                    <span class="selo_classificacao_historia" data-classificacao="16">16</span>
+                                    <span class="texto_opcao_classificacao">
+                                        <span class="titulo_opcao_classificacao">+16 (M)</span>
+                                        <span class="descricao_opcao_classificacao">Conteúdo maduro. Temas mais densos, violência acentuada e linguagem forte.</span>
+                                    </span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="opcao_classificacao_historia" for="ipt_classificacao_18">
+                                    <input type="radio" name="classificacao" id="ipt_classificacao_18" value="18" />
+                                    <span class="selo_classificacao_historia" data-classificacao="18">18</span>
+                                    <span class="texto_opcao_classificacao">
+                                        <span class="titulo_opcao_classificacao">+18 anos (MA)</span>
+                                        <span class="descricao_opcao_classificacao">Restrito para adultos. Conteúdo explícito, violência gráfica ou temas pesados.</span>
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article class="card_campo_historia">
+                        <h2 class="titulo_card_campo_historia">Gênero textual</h2>
+                        <p class="descricao_card_campo_historia">Gêneros novos viram tags e ficam disponíveis nas próximas histórias.</p>
+                        <div class="linha_generos_formulario_historia">
+                            <ul class="lista_generos_formulario_historia" id="lista_generos_formulario_historia"></ul>
+                            <button type="button" class="botao_novo_genero" id="botao_novo_genero">+ Novo gênero</button>
+                        </div>
+                        <div class="campo_input_historia campo_novo_genero">
+                            <input
+                            type="text"
+                            id="ipt_novo_genero"
+                            maxlength="40"
+                            placeholder="Digite um novo gênero e tecle Enter" />
+                        </div>
+                    </article>
+
+                    <article class="card_campo_historia">
+                        <h2 class="titulo_card_campo_historia">Personagens principais</h2>
+                        <p class="descricao_card_campo_historia">Escolha entre os personagens que você já criou.</p>
+                        <ul class="lista_opcoes_historia" id="lista_personagens_formulario_historia"></ul>
+                        <p class="mensagem_sem_opcoes_historia" id="mensagem_sem_personagens_historia" hidden>Você ainda não criou nenhum personagem. <a href="personagem-formulario.html">Criar personagem</a></p>
+                    </article>
+
+                    <article class="card_campo_historia">
+                        <h2 class="titulo_card_campo_historia">Mundo onde se passa</h2>
+                        <p class="descricao_card_campo_historia">Escolha entre os mundos que você já criou.</p>
+                        <ul class="lista_opcoes_historia" id="lista_mundos_formulario_historia"></ul>
+                        <p class="mensagem_sem_opcoes_historia" id="mensagem_sem_mundos_historia" hidden>Você ainda não criou nenhum mundo. <a href="mundo-formulario.html">Criar mundo</a></p>
+                    </article>
+
+                    <article class="card_campo_historia">
+                        <h2 class="titulo_card_campo_historia">Plot (opcional)</h2>
+                        <p class="descricao_card_campo_historia">Define quantos capítulos a história terá e, se você quiser, quantas cenas por capítulo.</p>
+                        <div class="plot_selecionado_historia" id="plot_selecionado_historia" hidden>
+                            <div class="icone_plot_historia">
+                                <img src="../Img/Historia/icon-estrutura-plot.svg" alt="">
+                            </div>
+                            <div class="info_plot_historia">
+                                <p class="nome_plot_historia" id="nome_plot_historia"></p>
+                                <p class="resumo_plot_historia" id="resumo_plot_historia"></p>
+                            </div>
+                            <button type="button" class="botao_trocar_plot_historia" id="botao_trocar_plot_historia">Trocar plot</button>
+                        </div>
+                        <button type="button" class="botao_escolher_plot_historia" id="botao_escolher_plot_historia">Escolher plot</button>
+                    </article>
+
+                    <div class="acoes_formulario_historia">
+                        <div id="div_mensagem_formulario_historia"></div>
+                        <a href="historias.html" class="botao_cancelar_historia">Cancelar</a>
+                        <button type="submit" class="botao_salvar_historia" id="botao_salvar_historia">Criar história</button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <dialog class="modal_imagens_historia" id="modal_imagens_historia" aria-labelledby="titulo_modal_imagens">
+        <div class="cabecalho_modal_imagens">
+            <div>
+                <h2 id="titulo_modal_imagens">Adicionar imagens</h2>
+                <p>Escolha uma ou mais imagens do seu computador.</p>
+            </div>
+            <button type="button" class="botao_fechar_modal_imagens" id="botao_fechar_modal_imagens" aria-label="Fechar">
+                <img src="../Img/Historia/icon-fechar.svg" alt="">
+            </button>
+        </div>
+
+        <label class="area_envio_imagens" id="area_envio_imagens" for="ipt_arquivos_imagens">
+            <img src="../Img/Historia/icon-seta-cima.svg" alt="">
+            <p class="titulo_area_envio_imagens">Escolher imagens</p>
+            <p class="subtitulo_area_envio_imagens">ou arraste para cá</p>
+            <input
+            type="file"
+            id="ipt_arquivos_imagens"
+            class="ipt_arquivos_oculto"
+            accept="image/png,image/jpeg,image/webp"
+            multiple />
+        </label>
+
+        <div class="grupo_imagens_adicionadas">
+            <h3>Imagens adicionadas (<span id="contador_imagens_modal">0</span>)</h3>
+            <ul class="lista_imagens_modal" id="lista_imagens_modal"></ul>
+        </div>
+
+        <div class="textos_ajuda_modal_imagens">
+            <p>A capa vira a imagem do card. Sem capa, o card usa uma cor aleatória.</p>
+            <p>Você pode adicionar várias imagens de moodboard nesta mesma janela.</p>
+        </div>
+
+        <div id="div_mensagem_modal_imagens"></div>
+
+        <div class="acoes_modal_imagens">
+            <button type="button" class="botao_cancelar_modal_imagens" id="botao_cancelar_modal_imagens">Cancelar</button>
+            <button type="button" class="botao_confirmar_modal_imagens" id="botao_confirmar_modal_imagens">Adicionar (<span id="contador_botao_imagens">0</span>)</button>
+        </div>
+    </dialog>
+
+    <dialog class="modal_plots_historia" id="modal_plots_historia" aria-labelledby="titulo_modal_plots">
+        <div class="cabecalho_modal_plots">
+            <h2 id="titulo_modal_plots">Escolher plot</h2>
+            <p>O plot define quantos capítulos a história terá.</p>
+        </div>
+        <ul class="lista_plots_modal" id="lista_plots_modal">
+            <li class="item_plot_modal">
+                <label class="label_plot_modal" for="ipt_plot_nenhum">
+                    <input type="radio" name="plot" id="ipt_plot_nenhum" value="" checked />
+                    <span class="texto_plot_modal">
+                        <span class="nome_plot_modal">Sem plot</span>
+                        <span class="resumo_plot_modal">Os capítulos são criados manualmente.</span>
+                    </span>
+                </label>
+            </li>
+        </ul>
+        <p class="mensagem_sem_plots_modal" id="mensagem_sem_plots_modal" hidden>Você ainda não criou nenhum plot.</p>
+        <div class="acoes_modal_plots">
+            <button type="button" class="botao_cancelar_modal_plots" id="botao_cancelar_modal_plots">Cancelar</button>
+            <button type="button" class="botao_confirmar_modal_plots" id="botao_confirmar_modal_plots">Aplicar</button>
+        </div>
+    </dialog>
+
+    <template id="template_item_moodboard_formulario">
+        <div class="item_moodboard_historia">
+            <img class="img_item_moodboard" alt="">
+            <button type="button" class="botao_remover_moodboard" aria-label="Remover imagem">
+                <img src="../Img/Historia/icon-fechar.svg" alt="">
+            </button>
+        </div>
+    </template>
+
+    <template id="template_item_imagem_modal">
+        <li class="item_imagem_modal">
+            <img class="miniatura_imagem_modal" alt="">
+            <div class="info_imagem_modal">
+                <p class="nome_arquivo_imagem"></p>
+                <p class="tamanho_arquivo_imagem"></p>
+            </div>
+            <div class="opcoes_destino_imagem">
+                <button type="button" class="botao_destino_imagem" data-destino="capa" aria-pressed="false">Capa da história</button>
+                <button type="button" class="botao_destino_imagem" data-destino="moodboard" aria-pressed="false">Moodboard</button>
+            </div>
+        </li>
+    </template>
+
+    <template id="template_opcao_genero_historia">
+        <li>
+            <label class="opcao_genero_historia">
+                <input type="checkbox" class="chk_genero_historia" />
+                <span class="nome_opcao_genero"></span>
+            </label>
+        </li>
+    </template>
+
+    <template id="template_opcao_personagem_historia">
+        <li>
+            <label class="opcao_personagem_historia">
+                <input type="checkbox" class="chk_personagem_historia" />
+                <span class="avatar_opcao_personagem">
+                    <img class="img_avatar_opcao_personagem" alt="">
+                    <span class="iniciais_avatar_opcao_personagem" hidden></span>
+                </span>
+                <span class="nome_opcao_personagem"></span>
+            </label>
+        </li>
+    </template>
+
+    <template id="template_opcao_mundo_historia">
+        <li>
+            <label class="opcao_mundo_historia">
+                <input type="radio" name="mundo" class="rdo_mundo_historia" />
+                <span class="miniatura_opcao_mundo">
+                    <img class="img_miniatura_opcao_mundo" alt="">
+                    <span class="iniciais_miniatura_opcao_mundo" hidden></span>
+                </span>
+                <span class="nome_opcao_mundo"></span>
+            </label>
+        </li>
+    </template>
+
+    <template id="template_item_plot_modal">
+        <li class="item_plot_modal">
+            <label class="label_plot_modal">
+                <input type="radio" name="plot" class="rdo_plot_modal" />
+                <span class="texto_plot_modal">
+                    <span class="nome_plot_modal"></span>
+                    <span class="resumo_plot_modal"></span>
+                </span>
+            </label>
+        </li>
+    </template>
+
+    <script src="../js/historia-formulario.js"></script>
+</body>
+</html>

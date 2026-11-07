@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundo Plotter</title>
+    <link rel="stylesheet" href="../css/menu_lateral.css" />
+    <link rel="stylesheet" href="../css/mundo-form.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_mundo_formulario">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="../Img/Mundo/icon-mundo-roxo.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-historias.svg" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-plots.svg" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_mundo_formulario">
+
+            <header class="cabecalho_mundo_formulario">
+                <div class="container_logo_mundo_formulario">
+                    <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <section class="titulo_mundo_formulario">
+                <h1 id="titulo_formulario_mundo">Criar novo mundo</h1>
+                <p>Responda o que fizer sentido. O que você marcar como “Não se aplica” não aparece na ficha.</p>
+            </section>
+
+            <section class="corpo_mundo_formulario">
+
+                <aside class="painel_moodboard_mundo">
+                    <h2>Moodboard</h2>
+                    <div class="grade_moodboard_mundo" id="grade_moodboard_mundo"></div>
+                    <p class="mensagem_sem_moodboard" id="mensagem_sem_moodboard" hidden>Nenhuma imagem de moodboard ainda.</p>
+                    <p class="legenda_painel_moodboard">Fixo enquanto você rola as respostas.</p>
+                </aside>
+
+                <form class="form_mundo" id="form_mundo">
+
+                    <div class="barra_imagem_mundo">
+                        <button type="button" class="botao_adicionar_imagem" id="botao_adicionar_imagem">
+                            <img src="../Img/Historia/icon-mais.svg" alt="">
+                            <span>Adicionar imagem</span>
+                        </button>
+                        <p>Capa ou moodboard · PNG, JPG ou WebP</p>
+                    </div>
+
+                    <div class="info_capa_formulario_mundo" id="info_capa_formulario_mundo" hidden>
+                        <img id="img_miniatura_capa_mundo" alt="">
+                        <p>Capa: <span id="nome_arquivo_capa_mundo"></span></p>
+                        <button type="button" class="botao_remover_capa_mundo" id="botao_remover_capa_mundo">Remover capa</button>
+                    </div>
+
+                    <article class="card_info_mundo">
+                        <div class="grupo_nome_mundo">
+                            <label for="ipt_nome_mundo" class="label_info_mundo">Nome do mundo</label>
+                            <div class="campo_input_mundo">
+                                <input
+                                type="text"
+                                id="ipt_nome_mundo"
+                                maxlength="80"
+                                placeholder="Ex.: Muralha de Vael" />
+                            </div>
+                        </div>
+                        <div class="grupo_historias_mundo">
+                            <p class="label_info_mundo">Aplicado nas histórias</p>
+                            <div class="linha_historias_aplicadas_mundo">
+                                <ul class="lista_chips_historias_mundo" id="lista_chips_historias_mundo"></ul>
+                                <button type="button" class="botao_adicionar_historia_mundo" id="botao_adicionar_historia_mundo">+ Adicionar</button>
+                            </div>
+                        </div>
+                    </article>
+
+                <section class="secao_formulario_mundo" id="secao_geografia">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Geografia</h2>
+                        <p class="contador_secao_mundo">Seção 1 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_geografia_1" class="titulo_pergunta_mundo">1. Descreva como é a geografia do mundo.</label>
+                        <textarea
+                        id="ipt_resposta_geografia_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Ex.: Cidade populosa cercada por montanhas e um único rio atravessando a cidade."
+                        data-pergunta="geografia_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_geografia_1" data-pergunta="geografia_1" />
+                            <label for="chk_nao_se_aplica_geografia_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_geografia_2" class="titulo_pergunta_mundo">2. Quais são as principais regiões, cidades ou territórios desse mundo?</label>
+                        <textarea
+                        id="ipt_resposta_geografia_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="geografia_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_geografia_2" data-pergunta="geografia_2" />
+                            <label for="chk_nao_se_aplica_geografia_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_geografia_3" class="titulo_pergunta_mundo">3. Como são o clima, a vegetação e os recursos naturais?</label>
+                        <textarea
+                        id="ipt_resposta_geografia_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="geografia_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_geografia_3" data-pergunta="geografia_3" />
+                            <label for="chk_nao_se_aplica_geografia_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_geografia_4" class="titulo_pergunta_mundo">4. Existem lugares proibidos, misteriosos ou perigosos? Por quê?</label>
+                        <textarea
+                        id="ipt_resposta_geografia_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="geografia_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_geografia_4" data-pergunta="geografia_4" />
+                            <label for="chk_nao_se_aplica_geografia_4">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_historia">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">História e origem do mundo</h2>
+                        <p class="contador_secao_mundo">Seção 2 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_historia_1" class="titulo_pergunta_mundo">1. Quando a história se passa?</label>
+                        <textarea
+                        id="ipt_resposta_historia_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="historia_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_historia_1" data-pergunta="historia_1" />
+                            <label for="chk_nao_se_aplica_historia_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_historia_2" class="titulo_pergunta_mundo">2. Há algum aspecto cultural relevante?</label>
+                        <textarea
+                        id="ipt_resposta_historia_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="historia_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_historia_2" data-pergunta="historia_2" />
+                            <label for="chk_nao_se_aplica_historia_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_historia_3" class="titulo_pergunta_mundo">3. Há algum fato histórico importante para a história?</label>
+                        <textarea
+                        id="ipt_resposta_historia_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="historia_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_historia_3" data-pergunta="historia_3" />
+                            <label for="chk_nao_se_aplica_historia_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_historia_4" class="titulo_pergunta_mundo">4. Existe algum acontecimento histórico cuja verdadeira versão foi escondida ou distorcida?</label>
+                        <textarea
+                        id="ipt_resposta_historia_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="historia_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_historia_4" data-pergunta="historia_4" />
+                            <label for="chk_nao_se_aplica_historia_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_historia_5" class="titulo_pergunta_mundo">5. Quais termos ou frases são utilizados nesse mundo?</label>
+                        <textarea
+                        id="ipt_resposta_historia_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="historia_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_historia_5" data-pergunta="historia_5" />
+                            <label for="chk_nao_se_aplica_historia_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_politica">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Política</h2>
+                        <p class="contador_secao_mundo">Seção 3 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_politica_1" class="titulo_pergunta_mundo">1. Como a política desse mundo se organiza? Quem governa?</label>
+                        <textarea
+                        id="ipt_resposta_politica_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="politica_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_politica_1" data-pergunta="politica_1" />
+                            <label for="chk_nao_se_aplica_politica_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_politica_2" class="titulo_pergunta_mundo">2. Como alguém chega ao poder nesse mundo? Por eleição, força, herança ou outro meio?</label>
+                        <textarea
+                        id="ipt_resposta_politica_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="politica_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_politica_2" data-pergunta="politica_2" />
+                            <label for="chk_nao_se_aplica_politica_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_politica_3" class="titulo_pergunta_mundo">3. Quais grupos, instituições ou famílias possuem maior influência?</label>
+                        <textarea
+                        id="ipt_resposta_politica_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="politica_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_politica_3" data-pergunta="politica_3" />
+                            <label for="chk_nao_se_aplica_politica_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_politica_4" class="titulo_pergunta_mundo">4. Como as leis são criadas e aplicadas?</label>
+                        <textarea
+                        id="ipt_resposta_politica_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="politica_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_politica_4" data-pergunta="politica_4" />
+                            <label for="chk_nao_se_aplica_politica_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_politica_5" class="titulo_pergunta_mundo">5. O que acontece com quem desafia o governo ou a ordem estabelecida?</label>
+                        <textarea
+                        id="ipt_resposta_politica_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="politica_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_politica_5" data-pergunta="politica_5" />
+                            <label for="chk_nao_se_aplica_politica_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_economia">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Economia</h2>
+                        <p class="contador_secao_mundo">Seção 4 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_economia_1" class="titulo_pergunta_mundo">1. Qual é a principal fonte de riqueza desse mundo?</label>
+                        <textarea
+                        id="ipt_resposta_economia_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="economia_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_economia_1" data-pergunta="economia_1" />
+                            <label for="chk_nao_se_aplica_economia_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_economia_2" class="titulo_pergunta_mundo">2. Como as pessoas ganham a vida?</label>
+                        <textarea
+                        id="ipt_resposta_economia_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="economia_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_economia_2" data-pergunta="economia_2" />
+                            <label for="chk_nao_se_aplica_economia_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_economia_3" class="titulo_pergunta_mundo">3. Existe uma moeda? Como ela funciona e quanto vale?</label>
+                        <textarea
+                        id="ipt_resposta_economia_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="economia_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_economia_3" data-pergunta="economia_3" />
+                            <label for="chk_nao_se_aplica_economia_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_economia_4" class="titulo_pergunta_mundo">4. Quais recursos são escassos e disputados?</label>
+                        <textarea
+                        id="ipt_resposta_economia_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="economia_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_economia_4" data-pergunta="economia_4" />
+                            <label for="chk_nao_se_aplica_economia_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_economia_5" class="titulo_pergunta_mundo">5. Como a riqueza é distribuída entre as diferentes classes sociais?</label>
+                        <textarea
+                        id="ipt_resposta_economia_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="economia_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_economia_5" data-pergunta="economia_5" />
+                            <label for="chk_nao_se_aplica_economia_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_sociedade">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Sociedade e relações humanas</h2>
+                        <p class="contador_secao_mundo">Seção 5 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_sociedade_1" class="titulo_pergunta_mundo">1. Quais são as principais classes sociais e suas divisões?</label>
+                        <textarea
+                        id="ipt_resposta_sociedade_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="sociedade_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_sociedade_1" data-pergunta="sociedade_1" />
+                            <label for="chk_nao_se_aplica_sociedade_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_sociedade_2" class="titulo_pergunta_mundo">2. Quais características fazem alguém ser respeitado ou desprezado?</label>
+                        <textarea
+                        id="ipt_resposta_sociedade_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="sociedade_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_sociedade_2" data-pergunta="sociedade_2" />
+                            <label for="chk_nao_se_aplica_sociedade_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_sociedade_3" class="titulo_pergunta_mundo">3. Existem preconceitos, discriminações ou rivalidades entre grupos e pessoas?</label>
+                        <textarea
+                        id="ipt_resposta_sociedade_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="sociedade_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_sociedade_3" data-pergunta="sociedade_3" />
+                            <label for="chk_nao_se_aplica_sociedade_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_sociedade_4" class="titulo_pergunta_mundo">4. Como funcionam as famílias, os casamentos e as relações amorosas?</label>
+                        <textarea
+                        id="ipt_resposta_sociedade_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="sociedade_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_sociedade_4" data-pergunta="sociedade_4" />
+                            <label for="chk_nao_se_aplica_sociedade_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_sociedade_5" class="titulo_pergunta_mundo">5. Quais oportunidades e direitos as pessoas possuem? Quem não tem acesso a eles?</label>
+                        <textarea
+                        id="ipt_resposta_sociedade_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="sociedade_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_sociedade_5" data-pergunta="sociedade_5" />
+                            <label for="chk_nao_se_aplica_sociedade_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_cultura">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Cultura, costumes e religião</h2>
+                        <p class="contador_secao_mundo">Seção 6 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_cultura_1" class="titulo_pergunta_mundo">1. Quais são os costumes mais importantes desse mundo?</label>
+                        <textarea
+                        id="ipt_resposta_cultura_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="cultura_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_cultura_1" data-pergunta="cultura_1" />
+                            <label for="chk_nao_se_aplica_cultura_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_cultura_2" class="titulo_pergunta_mundo">2. Quais festas, cerimônias e tradições são celebradas?</label>
+                        <textarea
+                        id="ipt_resposta_cultura_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="cultura_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_cultura_2" data-pergunta="cultura_2" />
+                            <label for="chk_nao_se_aplica_cultura_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_cultura_3" class="titulo_pergunta_mundo">3. Quais religiões, crenças ou sistemas de valores existem?</label>
+                        <textarea
+                        id="ipt_resposta_cultura_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="cultura_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_cultura_3" data-pergunta="cultura_3" />
+                            <label for="chk_nao_se_aplica_cultura_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_cultura_4" class="titulo_pergunta_mundo">4. O que é considerado moralmente certo ou errado?</label>
+                        <textarea
+                        id="ipt_resposta_cultura_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="cultura_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_cultura_4" data-pergunta="cultura_4" />
+                            <label for="chk_nao_se_aplica_cultura_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_cultura_5" class="titulo_pergunta_mundo">5. Quais são os maiores tabus sociais e o que acontece quando alguém os quebra?</label>
+                        <textarea
+                        id="ipt_resposta_cultura_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="cultura_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_cultura_5" data-pergunta="cultura_5" />
+                            <label for="chk_nao_se_aplica_cultura_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_magia">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Magia, ciência e tecnologia</h2>
+                        <p class="contador_secao_mundo">Seção 7 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_magia_1" class="titulo_pergunta_mundo">1. Existe magia, tecnologia avançada ou algum fenômeno sobrenatural?</label>
+                        <textarea
+                        id="ipt_resposta_magia_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="magia_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_magia_1" data-pergunta="magia_1" />
+                            <label for="chk_nao_se_aplica_magia_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_magia_2" class="titulo_pergunta_mundo">2. Quais são as regras e limitações desses poderes ou tecnologias?</label>
+                        <textarea
+                        id="ipt_resposta_magia_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="magia_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_magia_2" data-pergunta="magia_2" />
+                            <label for="chk_nao_se_aplica_magia_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_magia_3" class="titulo_pergunta_mundo">3. Quem pode utilizá-los e como alguém aprende a dominá-los?</label>
+                        <textarea
+                        id="ipt_resposta_magia_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="magia_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_magia_3" data-pergunta="magia_3" />
+                            <label for="chk_nao_se_aplica_magia_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_magia_4" class="titulo_pergunta_mundo">4. Como eles afetam a medicina, a guerra, o trabalho e a vida cotidiana?</label>
+                        <textarea
+                        id="ipt_resposta_magia_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="magia_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_magia_4" data-pergunta="magia_4" />
+                            <label for="chk_nao_se_aplica_magia_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_magia_5" class="titulo_pergunta_mundo">5. Quais são os riscos, os custos e as consequências de seu uso?</label>
+                        <textarea
+                        id="ipt_resposta_magia_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="magia_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_magia_5" data-pergunta="magia_5" />
+                            <label for="chk_nao_se_aplica_magia_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_conflitos">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Conflitos e ameaças</h2>
+                        <p class="contador_secao_mundo">Seção 8 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_conflitos_1" class="titulo_pergunta_mundo">1. Quais são os maiores conflitos existentes nesse mundo?</label>
+                        <textarea
+                        id="ipt_resposta_conflitos_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="conflitos_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_conflitos_1" data-pergunta="conflitos_1" />
+                            <label for="chk_nao_se_aplica_conflitos_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_conflitos_2" class="titulo_pergunta_mundo">2. Quais países, povos, organizações ou grupos são inimigos?</label>
+                        <textarea
+                        id="ipt_resposta_conflitos_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="conflitos_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_conflitos_2" data-pergunta="conflitos_2" />
+                            <label for="chk_nao_se_aplica_conflitos_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_conflitos_3" class="titulo_pergunta_mundo">3. O que cada lado acredita estar defendendo?</label>
+                        <textarea
+                        id="ipt_resposta_conflitos_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="conflitos_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_conflitos_3" data-pergunta="conflitos_3" />
+                            <label for="chk_nao_se_aplica_conflitos_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_conflitos_4" class="titulo_pergunta_mundo">4. Existe alguma ameaça capaz de destruir ou transformar toda a sociedade?</label>
+                        <textarea
+                        id="ipt_resposta_conflitos_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="conflitos_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_conflitos_4" data-pergunta="conflitos_4" />
+                            <label for="chk_nao_se_aplica_conflitos_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_conflitos_5" class="titulo_pergunta_mundo">5. Quem se beneficia da manutenção dos conflitos atuais?</label>
+                        <textarea
+                        id="ipt_resposta_conflitos_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="conflitos_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_conflitos_5" data-pergunta="conflitos_5" />
+                            <label for="chk_nao_se_aplica_conflitos_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_povos">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Povos, espécies e personagens</h2>
+                        <p class="contador_secao_mundo">Seção 9 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_povos_1" class="titulo_pergunta_mundo">1. Quais povos, espécies ou grupos inteligentes habitam esse mundo?</label>
+                        <textarea
+                        id="ipt_resposta_povos_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="povos_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_povos_1" data-pergunta="povos_1" />
+                            <label for="chk_nao_se_aplica_povos_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_povos_2" class="titulo_pergunta_mundo">2. O que diferencia esses grupos física, cultural ou socialmente?</label>
+                        <textarea
+                        id="ipt_resposta_povos_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="povos_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_povos_2" data-pergunta="povos_2" />
+                            <label for="chk_nao_se_aplica_povos_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_povos_3" class="titulo_pergunta_mundo">3. Como eles convivem: em harmonia, competição, segregação ou guerra?</label>
+                        <textarea
+                        id="ipt_resposta_povos_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="povos_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_povos_3" data-pergunta="povos_3" />
+                            <label for="chk_nao_se_aplica_povos_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_povos_4" class="titulo_pergunta_mundo">4. Como o lugar onde alguém nasce determina seu destino?</label>
+                        <textarea
+                        id="ipt_resposta_povos_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="povos_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_povos_4" data-pergunta="povos_4" />
+                            <label for="chk_nao_se_aplica_povos_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_povos_5" class="titulo_pergunta_mundo">5. Quais são as possibilidades de alguém mudar de posição social ou desafiar o próprio papel na sociedade?</label>
+                        <textarea
+                        id="ipt_resposta_povos_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="povos_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_povos_5" data-pergunta="povos_5" />
+                            <label for="chk_nao_se_aplica_povos_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_segredos">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Segredos, mistérios e narrativa</h2>
+                        <p class="contador_secao_mundo">Seção 10 de 10</p>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_segredos_1" class="titulo_pergunta_mundo">1. Qual é o maior segredo desse mundo?</label>
+                        <textarea
+                        id="ipt_resposta_segredos_1"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="segredos_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_segredos_1" data-pergunta="segredos_1" />
+                            <label for="chk_nao_se_aplica_segredos_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_segredos_2" class="titulo_pergunta_mundo">2. Que mentira a maioria das pessoas acredita ser verdade?</label>
+                        <textarea
+                        id="ipt_resposta_segredos_2"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="segredos_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_segredos_2" data-pergunta="segredos_2" />
+                            <label for="chk_nao_se_aplica_segredos_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_segredos_3" class="titulo_pergunta_mundo">3. O que aconteceria se a população descobrisse a verdade sobre sua própria história?</label>
+                        <textarea
+                        id="ipt_resposta_segredos_3"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="segredos_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_segredos_3" data-pergunta="segredos_3" />
+                            <label for="chk_nao_se_aplica_segredos_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_segredos_4" class="titulo_pergunta_mundo">4. Qual mudança poderia alterar completamente o equilíbrio de poder?</label>
+                        <textarea
+                        id="ipt_resposta_segredos_4"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="segredos_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_segredos_4" data-pergunta="segredos_4" />
+                            <label for="chk_nao_se_aplica_segredos_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_resposta_segredos_5" class="titulo_pergunta_mundo">5. Por que essa história precisa acontecer neste mundo específico, e não em qualquer outro?</label>
+                        <textarea
+                        id="ipt_resposta_segredos_5"
+                        class="campo_resposta_mundo"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="segredos_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_segredos_5" data-pergunta="segredos_5" />
+                            <label for="chk_nao_se_aplica_segredos_5">Não se aplica</label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="secao_formulario_mundo" id="secao_observacoes">
+                    <div class="cabecalho_secao_mundo">
+                        <h2 class="titulo_secao_mundo">Observações</h2>
+                    </div>
+                    <article class="card_pergunta_mundo">
+                        <label for="ipt_observacoes_mundo" class="titulo_pergunta_mundo">Algo que não se encaixou nas categorias acima?</label>
+                        <textarea
+                        id="ipt_observacoes_mundo"
+                        class="campo_resposta_mundo"
+                        rows="4"
+                        placeholder="Escreva aqui..."></textarea>
+                    </article>
+                </section>
+
+                    <div class="acoes_formulario_mundo">
+                        <div id="div_mensagem_formulario_mundo"></div>
+                        <a href="mundos.html" class="botao_cancelar_mundo">Cancelar</a>
+                        <button type="submit" class="botao_salvar_mundo" id="botao_salvar_mundo">Salvar mundo</button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <dialog class="modal_imagens_mundo" id="modal_imagens_mundo" aria-labelledby="titulo_modal_imagens">
+        <div class="cabecalho_modal_imagens">
+            <div>
+                <h2 id="titulo_modal_imagens">Adicionar imagens</h2>
+                <p>Escolha uma ou mais imagens do seu computador.</p>
+            </div>
+            <button type="button" class="botao_fechar_modal_imagens" id="botao_fechar_modal_imagens" aria-label="Fechar">
+                <img src="../Img/Historia/icon-fechar.svg" alt="">
+            </button>
+        </div>
+
+        <label class="area_envio_imagens" id="area_envio_imagens" for="ipt_arquivos_imagens">
+            <img src="../Img/Historia/icon-seta-cima.svg" alt="">
+            <p class="titulo_area_envio_imagens">Escolher imagens</p>
+            <p class="subtitulo_area_envio_imagens">ou arraste para cá</p>
+            <input
+            type="file"
+            id="ipt_arquivos_imagens"
+            class="ipt_arquivos_oculto"
+            accept="image/png,image/jpeg,image/webp"
+            multiple />
+        </label>
+
+        <div class="grupo_imagens_adicionadas">
+            <h3>Imagens adicionadas (<span id="contador_imagens_modal">0</span>)</h3>
+            <ul class="lista_imagens_modal" id="lista_imagens_modal"></ul>
+        </div>
+
+        <div class="textos_ajuda_modal_imagens">
+            <p>A foto de capa vira a imagem do card. Sem foto, o card usa uma cor aleatória.</p>
+            <p>Você pode adicionar várias imagens de moodboard nesta mesma janela.</p>
+        </div>
+
+        <div id="div_mensagem_modal_imagens"></div>
+
+        <div class="acoes_modal_imagens">
+            <button type="button" class="botao_cancelar_modal_imagens" id="botao_cancelar_modal_imagens">Cancelar</button>
+            <button type="button" class="botao_confirmar_modal_imagens" id="botao_confirmar_modal_imagens">Adicionar (<span id="contador_botao_imagens">0</span>)</button>
+        </div>
+    </dialog>
+
+    <dialog class="modal_historias_mundo" id="modal_historias_mundo" aria-labelledby="titulo_modal_historias">
+        <div class="cabecalho_modal_historias">
+            <h2 id="titulo_modal_historias">Aplicado nas histórias</h2>
+            <p>Escolha as histórias em que este mundo é usado.</p>
+        </div>
+        <ul class="lista_historias_modal" id="lista_historias_modal"></ul>
+        <p class="mensagem_sem_historias_modal" id="mensagem_sem_historias_modal" hidden>Você ainda não criou nenhuma história.</p>
+        <div class="acoes_modal_historias">
+            <button type="button" class="botao_cancelar_modal_historias" id="botao_cancelar_modal_historias">Cancelar</button>
+            <button type="button" class="botao_confirmar_modal_historias" id="botao_confirmar_modal_historias">Aplicar</button>
+        </div>
+    </dialog>
+
+    <template id="template_item_moodboard_formulario">
+        <div class="item_moodboard_mundo">
+            <img class="img_item_moodboard" alt="">
+            <button type="button" class="botao_remover_moodboard" aria-label="Remover imagem">
+                <img src="../Img/Historia/icon-fechar.svg" alt="">
+            </button>
+        </div>
+    </template>
+
+    <template id="template_item_imagem_modal">
+        <li class="item_imagem_modal">
+            <img class="miniatura_imagem_modal" alt="">
+            <div class="info_imagem_modal">
+                <p class="nome_arquivo_imagem"></p>
+                <p class="tamanho_arquivo_imagem"></p>
+            </div>
+            <div class="opcoes_destino_imagem">
+                <button type="button" class="botao_destino_imagem" data-destino="capa" aria-pressed="false">Foto de capa</button>
+                <button type="button" class="botao_destino_imagem" data-destino="moodboard" aria-pressed="false">Moodboard</button>
+            </div>
+        </li>
+    </template>
+
+    <template id="template_item_historia_modal">
+        <li class="item_historia_modal">
+            <label class="label_historia_modal">
+                <input type="checkbox" class="chk_historia_modal" />
+                <span class="bolinha_historia"></span>
+                <span class="nome_historia_modal"></span>
+            </label>
+        </li>
+    </template>
+
+    <template id="template_chip_historia_mundo">
+        <li class="chip_historia_mundo">
+            <span class="bolinha_historia"></span>
+            <span class="nome_chip_historia"></span>
+        </li>
+    </template>
+
+    <script src="../js/mundo-form.js"></script>
+</body>
+</html>

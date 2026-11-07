@@ -1,0 +1,268 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f4f2fa;
+  color: #1e1a2b;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+.container_mundos {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.conteudo_mundos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 16px 28px 28px;
+}
+
+.container_logo_mundos img {
+  display: block;
+  width: 150px;
+  height: auto;
+}
+
+.titulo_mundos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.texto_titulo_mundos h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.texto_titulo_mundos p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #5b5670;
+}
+
+.botao_criar_mundo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 10px;
+  background-color: #8b5cf6;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.botao_criar_mundo:hover {
+  background-color: #7646e0;
+}
+
+.botao_criar_mundo img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.grade_mundos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.card_mundo {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e8e3f0;
+  border-radius: 16px;
+  color: inherit;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card_mundo:hover {
+  border-color: #cdbdf0;
+  box-shadow: 0 6px 18px rgba(74, 36, 120, 0.1);
+}
+
+.capa_card_mundo {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background-color: var(--cor-mundo, #6b4bc0);
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(30, 26, 43, 0.14));
+  overflow: hidden;
+}
+
+.img_capa_card_mundo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img_capa_card_mundo:not([src]) {
+  display: none;
+}
+
+.iniciais_card_mundo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.info_card_mundo {
+  flex: 1;
+  padding: 16px 18px 20px;
+}
+
+.nome_card_mundo {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.rotulo_historias_card_mundo {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #5b5670;
+}
+
+.lista_chips_card_mundo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chip_historia_mundo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background-color: #efecf7;
+  font-size: 11px;
+  color: #1e1a2b;
+}
+
+.bolinha_historia {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--cor-historia, #8b5cf6);
+}
+
+.card_novo_mundo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 260px;
+  border: 2px dashed #a98af7;
+  border-radius: 16px;
+  background-color: #f1eef9;
+  color: #8b5cf6;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.card_novo_mundo:hover {
+  border-color: #8b5cf6;
+  background-color: #ebe4fb;
+}
+
+.icone_card_novo_mundo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #e4dbf8;
+}
+
+.icone_card_novo_mundo img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+@media (max-width: 1100px) {
+  .grade_mundos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .container_mundos {
+    grid-template-columns: 1fr;
+  }
+
+  .conteudo_mundos {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  .grade_mundos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .titulo_mundos {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .grade_mundos {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,1343 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personagem Plotter</title>
+    <link rel="stylesheet" href="../css/menu_lateral.css" />
+    <link rel="stylesheet" href="../css/personagem-formulario.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container_personagem_formulario">
+
+        <aside class="menu_lateral">
+            <div class="cabecalho_menu_lateral">
+                <p>Plotter</p>
+            </div>
+
+            <nav class="navegacao_menu_lateral">
+                <ul class="lista_menu_lateral">
+                    <li>
+                        <a href="dashboard.html" class="item_menu_lateral">
+                            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prazos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
+                            <span>Prazos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mundos.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
+                            <span>Mundos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="personagens.html" class="item_menu_lateral item_menu_ativo">
+                            <img src="../Img/Personagens/icon-personagens-roxo.svg" alt="">
+                            <span>Personagens</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historias.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-historias.svg" alt="">
+                            <span>Histórias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="plots.html" class="item_menu_lateral">
+                            <img src="../Img/Dashboard/icon-plots.svg" alt="">
+                            <span>Plots</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="perfil_menu_lateral">
+                <div class="avatar_usuario">
+                    <span id="inicial_usuario_menu"></span>
+                </div>
+                <div class="info_perfil_menu">
+                    <p id="nome_usuario_menu"></p>
+                    <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo_personagem_formulario">
+
+            <header class="cabecalho_personagem_formulario">
+                <div class="container_logo_personagem_formulario">
+                    <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo_do_plotter" />
+                </div>
+            </header>
+
+            <section class="titulo_personagem_formulario">
+                <h1 id="titulo_formulario_personagem">Criar novo personagem</h1>
+                <p>Responda o que fizer sentido. O que você marcar como “Não se aplica” não aparece na ficha.</p>
+            </section>
+
+            <section class="corpo_personagem_formulario">
+
+                <aside class="painel_moodboard_personagem">
+                    <h2>Moodboard</h2>
+                    <div class="grade_moodboard_personagem" id="grade_moodboard_personagem"></div>
+                    <p class="mensagem_sem_moodboard" id="mensagem_sem_moodboard" hidden>Nenhuma imagem de moodboard ainda.</p>
+                    <p class="legenda_painel_moodboard">Fixo enquanto você rola as respostas.</p>
+                </aside>
+
+                <form class="form_personagem" id="form_personagem">
+
+                    <div class="barra_imagem_personagem">
+                        <button type="button" class="botao_adicionar_imagem" id="botao_adicionar_imagem">
+                            <img src="../Img/Historia/icon-mais.svg" alt="">
+                            <span>Adicionar imagem</span>
+                        </button>
+                        <p>Foto de perfil ou moodboard · PNG, JPG ou WebP</p>
+                    </div>
+
+                    <div class="info_foto_perfil_formulario_personagem" id="info_foto_perfil_formulario_personagem" hidden>
+                        <img id="img_miniatura_foto_perfil_personagem" alt="">
+                        <p>Foto de perfil: <span id="nome_arquivo_foto_perfil_personagem"></span></p>
+                        <button type="button" class="botao_remover_foto_perfil_personagem" id="botao_remover_foto_perfil_personagem">Remover foto</button>
+                    </div>
+
+                    <article class="card_info_personagem">
+                        <div class="grupo_nome_personagem">
+                            <label for="ipt_nome_personagem" class="label_info_personagem">Nome do personagem</label>
+                            <div class="campo_input_personagem">
+                                <input
+                                type="text"
+                                id="ipt_nome_personagem"
+                                maxlength="80"
+                                placeholder="Ex.: Lyra Vance" />
+                            </div>
+                        </div>
+                        <div class="grupo_historias_personagem">
+                            <p class="label_info_personagem">Aplicado nas histórias</p>
+                            <div class="linha_historias_aplicadas_personagem">
+                                <ul class="lista_chips_historias_personagem" id="lista_chips_historias_personagem"></ul>
+                                <button type="button" class="botao_adicionar_historia_personagem" id="botao_adicionar_historia_personagem">+ Adicionar</button>
+                            </div>
+                        </div>
+                        <div class="grupo_pasta_personagem">
+                            <label for="ipt_pasta_personagem" class="label_info_personagem">Pasta</label>
+                            <div class="campo_selecao_personagem">
+                                <select id="ipt_pasta_personagem">
+                                    <option value="">Sem pasta</option>
+                                </select>
+                            </div>
+                        </div>
+                    </article>
+
+                    <section class="secao_formulario_personagem" id="secao_informacoes">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Informações gerais e arquétipo</h2>
+                            <p class="contador_secao_personagem">Seção 1 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_1" class="titulo_pergunta_personagem">1. Arquétipo</label>
+                        <div class="campo_selecao_personagem">
+                            <select id="ipt_resposta_informacoes_1" data-pergunta="informacoes_1">
+                                <option value="">Selecione um arquétipo</option>
+                                <option value="protagonista">Protagonista</option>
+                                <option value="antagonista">Antagonista</option>
+                                <option value="co_protagonista">Co-protagonista</option>
+                                <option value="sidekick">Sidekick</option>
+                                <option value="tritagonista">Tritagonista</option>
+                                <option value="mentor">Mentor</option>
+                                <option value="contraste">Contraste</option>
+                                <option value="interesse_romantico">Interesse romântico</option>
+                                <option value="cetico">Cético</option>
+                                <option value="traidor">Traidor</option>
+                            </select>
+                        </div>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_1" data-pergunta="informacoes_1" />
+                            <label for="chk_nao_se_aplica_informacoes_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_2" class="titulo_pergunta_personagem">2. Qual é o papel desse personagem na história?</label>
+                        <textarea
+                        id="ipt_resposta_informacoes_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Ex.: Trazer conflitos para a história, deixar o personagem principal confuso, fazer o leitor se sentir ansioso, etc."
+                        data-pergunta="informacoes_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_2" data-pergunta="informacoes_2" />
+                            <label for="chk_nao_se_aplica_informacoes_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_3" class="titulo_pergunta_personagem">3. Qual é o gênero do personagem?</label>
+                        <textarea
+                        id="ipt_resposta_informacoes_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="informacoes_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_3" data-pergunta="informacoes_3" />
+                            <label for="chk_nao_se_aplica_informacoes_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_4" class="titulo_pergunta_personagem">4. Qual é a idade do personagem?</label>
+                        <textarea
+                        id="ipt_resposta_informacoes_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="informacoes_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_4" data-pergunta="informacoes_4" />
+                            <label for="chk_nao_se_aplica_informacoes_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_5" class="titulo_pergunta_personagem">5. Como esse personagem fala?</label>
+                        <textarea
+                        id="ipt_resposta_informacoes_5"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="informacoes_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_5" data-pergunta="informacoes_5" />
+                            <label for="chk_nao_se_aplica_informacoes_5">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_6" class="titulo_pergunta_personagem">6. Quais pronomes esse personagem utiliza?</label>
+                        <textarea
+                        id="ipt_resposta_informacoes_6"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="informacoes_6"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_6" data-pergunta="informacoes_6" />
+                            <label for="chk_nao_se_aplica_informacoes_6">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_7" class="titulo_pergunta_personagem">7. Quais são os apelidos desse personagem e qual é a origem deles?</label>
+                        <textarea
+                        id="ipt_resposta_informacoes_7"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="informacoes_7"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_7" data-pergunta="informacoes_7" />
+                            <label for="chk_nao_se_aplica_informacoes_7">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_informacoes_8" class="titulo_pergunta_personagem">8. Quais são os hábitos e as peculiaridades desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_informacoes_8"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="informacoes_8"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_informacoes_8" data-pergunta="informacoes_8" />
+                            <label for="chk_nao_se_aplica_informacoes_8">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_personalidade">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Personalidade e comportamento</h2>
+                            <p class="contador_secao_personagem">Seção 2 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_1" class="titulo_pergunta_personagem">9. Como é a personalidade desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_1" data-pergunta="personalidade_1" />
+                            <label for="chk_nao_se_aplica_personalidade_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_2" class="titulo_pergunta_personagem">10. Qual episódio ajudou a moldar essa personalidade?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_2" data-pergunta="personalidade_2" />
+                            <label for="chk_nao_se_aplica_personalidade_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_3" class="titulo_pergunta_personagem">11. Como foi a educação desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_3" data-pergunta="personalidade_3" />
+                            <label for="chk_nao_se_aplica_personalidade_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_4" class="titulo_pergunta_personagem">12. Como ou por que as pessoas conhecem esse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Descreva a reputação que esse personagem possui perante outras pessoas."
+                        data-pergunta="personalidade_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_4" data-pergunta="personalidade_4" />
+                            <label for="chk_nao_se_aplica_personalidade_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_5" class="titulo_pergunta_personagem">13. Existe algum episódio que contribuiu para a reputação desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_5"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_5" data-pergunta="personalidade_5" />
+                            <label for="chk_nao_se_aplica_personalidade_5">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_6" class="titulo_pergunta_personagem">14. Quais coisas são mais importantes para esse personagem do que a lei ou a ética?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_6"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="O que faria seu personagem matar alguém, se fosse necessário?"
+                        data-pergunta="personalidade_6"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_6" data-pergunta="personalidade_6" />
+                            <label for="chk_nao_se_aplica_personalidade_6">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_7" class="titulo_pergunta_personagem">15. Qual foi a maior dificuldade que esse personagem já enfrentou? Como ele superou essa dificuldade? Por que não a superou, caso ainda não tenha conseguido?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_7"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_7"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_7" data-pergunta="personalidade_7" />
+                            <label for="chk_nao_se_aplica_personalidade_7">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_8" class="titulo_pergunta_personagem">16. Quais são os pontos fortes desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_8"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_8"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_8" data-pergunta="personalidade_8" />
+                            <label for="chk_nao_se_aplica_personalidade_8">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_9" class="titulo_pergunta_personagem">17. Quais são as fraquezas desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_9"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_9"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_9" data-pergunta="personalidade_9" />
+                            <label for="chk_nao_se_aplica_personalidade_9">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_10" class="titulo_pergunta_personagem">18. Existe algum acontecimento relevante que tenha exposto as fraquezas ou os pontos fortes desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_10"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_10"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_10" data-pergunta="personalidade_10" />
+                            <label for="chk_nao_se_aplica_personalidade_10">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_11" class="titulo_pergunta_personagem">19. Que emoções esse personagem desperta nos leitores? Como eles podem se conectar com ele?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_11"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_11"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_11" data-pergunta="personalidade_11" />
+                            <label for="chk_nao_se_aplica_personalidade_11">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_12" class="titulo_pergunta_personagem">20. Quais são as dualidades, lacunas ou contradições desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_12"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Ex.: É muito grosseiro e mal-humorado, mas ama crianças e as trata bem."
+                        data-pergunta="personalidade_12"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_12" data-pergunta="personalidade_12" />
+                            <label for="chk_nao_se_aplica_personalidade_12">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_personalidade_13" class="titulo_pergunta_personagem">21. O que causou essas lacunas, dualidades ou contradições?</label>
+                        <textarea
+                        id="ipt_resposta_personalidade_13"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="personalidade_13"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_personalidade_13" data-pergunta="personalidade_13" />
+                            <label for="chk_nao_se_aplica_personalidade_13">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_objetivos">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Objetivos e desenvolvimento narrativo</h2>
+                            <p class="contador_secao_personagem">Seção 3 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_objetivos_1" class="titulo_pergunta_personagem">22. Qual é o objetivo e a motivação desse personagem dentro da história?</label>
+                        <textarea
+                        id="ipt_resposta_objetivos_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="objetivos_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_objetivos_1" data-pergunta="objetivos_1" />
+                            <label for="chk_nao_se_aplica_objetivos_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_objetivos_2" class="titulo_pergunta_personagem">23. Quais são os obstáculos que o impedem de alcançar seus objetivos?</label>
+                        <textarea
+                        id="ipt_resposta_objetivos_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="objetivos_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_objetivos_2" data-pergunta="objetivos_2" />
+                            <label for="chk_nao_se_aplica_objetivos_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_objetivos_3" class="titulo_pergunta_personagem">24. O que ele faz para superar esses obstáculos e alcançar seus objetivos?</label>
+                        <textarea
+                        id="ipt_resposta_objetivos_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="objetivos_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_objetivos_3" data-pergunta="objetivos_3" />
+                            <label for="chk_nao_se_aplica_objetivos_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_objetivos_4" class="titulo_pergunta_personagem">25. Como esse personagem muda ao longo da história?</label>
+                        <textarea
+                        id="ipt_resposta_objetivos_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="objetivos_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_objetivos_4" data-pergunta="objetivos_4" />
+                            <label for="chk_nao_se_aplica_objetivos_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_objetivos_5" class="titulo_pergunta_personagem">26. Como ele se relaciona com eventos importantes do passado?</label>
+                        <textarea
+                        id="ipt_resposta_objetivos_5"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="objetivos_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_objetivos_5" data-pergunta="objetivos_5" />
+                            <label for="chk_nao_se_aplica_objetivos_5">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_fisico">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Características físicas e aparência</h2>
+                            <p class="contador_secao_personagem">Seção 4 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_1" class="titulo_pergunta_personagem">27. A qual raça, espécie, clã ou família esse personagem pertence?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_1" data-pergunta="fisico_1" />
+                            <label for="chk_nao_se_aplica_fisico_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_2" class="titulo_pergunta_personagem">28. Qual é o tom de pele desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_2" data-pergunta="fisico_2" />
+                            <label for="chk_nao_se_aplica_fisico_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_3" class="titulo_pergunta_personagem">29. Qual é a cor dos olhos desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_3" data-pergunta="fisico_3" />
+                            <label for="chk_nao_se_aplica_fisico_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_4" class="titulo_pergunta_personagem">30. Qual é a cor e o estilo do cabelo desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_4" data-pergunta="fisico_4" />
+                            <label for="chk_nao_se_aplica_fisico_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_5" class="titulo_pergunta_personagem">31. Qual é o tamanho, a altura e o peso do personagem?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_5"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_5" data-pergunta="fisico_5" />
+                            <label for="chk_nao_se_aplica_fisico_5">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_6" class="titulo_pergunta_personagem">32. Quais características físicas marcantes esse personagem possui?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_6"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_6"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_6" data-pergunta="fisico_6" />
+                            <label for="chk_nao_se_aplica_fisico_6">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_7" class="titulo_pergunta_personagem">33. Qual é a primeira impressão que as pessoas têm ao vê-lo?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_7"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_7"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_7" data-pergunta="fisico_7" />
+                            <label for="chk_nao_se_aplica_fisico_7">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_8" class="titulo_pergunta_personagem">34. Como esse personagem costuma se vestir?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_8"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_8"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_8" data-pergunta="fisico_8" />
+                            <label for="chk_nao_se_aplica_fisico_8">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_fisico_9" class="titulo_pergunta_personagem">35. Esse personagem utiliza algum acessório?</label>
+                        <textarea
+                        id="ipt_resposta_fisico_9"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="fisico_9"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_fisico_9" data-pergunta="fisico_9" />
+                            <label for="chk_nao_se_aplica_fisico_9">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_social">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Comportamento social e valores pessoais</h2>
+                            <p class="contador_secao_personagem">Seção 5 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_social_1" class="titulo_pergunta_personagem">36. Qual comportamento desse personagem é considerado socialmente correto, mas pessoalmente errado ou inadequado dentro da família?</label>
+                        <textarea
+                        id="ipt_resposta_social_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="social_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_social_1" data-pergunta="social_1" />
+                            <label for="chk_nao_se_aplica_social_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_trabalho">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Trabalho e vida profissional</h2>
+                            <p class="contador_secao_personagem">Seção 6 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_1" class="titulo_pergunta_personagem">37. O que essa pessoa faz para viver?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_1" data-pergunta="trabalho_1" />
+                            <label for="chk_nao_se_aplica_trabalho_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_2" class="titulo_pergunta_personagem">38. O que causou ou motivou essa escolha profissional?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_2" data-pergunta="trabalho_2" />
+                            <label for="chk_nao_se_aplica_trabalho_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_3" class="titulo_pergunta_personagem">39. Qual é o maior objetivo dessa pessoa no trabalho?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_3" data-pergunta="trabalho_3" />
+                            <label for="chk_nao_se_aplica_trabalho_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_4" class="titulo_pergunta_personagem">40. O que causou ou motivou esse objetivo?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_4" data-pergunta="trabalho_4" />
+                            <label for="chk_nao_se_aplica_trabalho_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_5" class="titulo_pergunta_personagem">41. O que essa pessoa pensa sobre o próprio trabalho?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_5"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_5" data-pergunta="trabalho_5" />
+                            <label for="chk_nao_se_aplica_trabalho_5">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_6" class="titulo_pergunta_personagem">42. Por que ela pensa dessa forma sobre o trabalho?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_6"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_6"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_6" data-pergunta="trabalho_6" />
+                            <label for="chk_nao_se_aplica_trabalho_6">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_7" class="titulo_pergunta_personagem">43. Essa pessoa está satisfeita com seu salário?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_7"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_7"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_7" data-pergunta="trabalho_7" />
+                            <label for="chk_nao_se_aplica_trabalho_7">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_8" class="titulo_pergunta_personagem">44. Por que ela pensa dessa forma sobre o salário?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_8"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_8"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_8" data-pergunta="trabalho_8" />
+                            <label for="chk_nao_se_aplica_trabalho_8">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_9" class="titulo_pergunta_personagem">45. Como é a relação dessa pessoa com seus superiores, colegas e subordinados?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_9"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_9"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_9" data-pergunta="trabalho_9" />
+                            <label for="chk_nao_se_aplica_trabalho_9">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_10" class="titulo_pergunta_personagem">46. Por que essas relações são dessa forma?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_10"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_10"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_10" data-pergunta="trabalho_10" />
+                            <label for="chk_nao_se_aplica_trabalho_10">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_11" class="titulo_pergunta_personagem">47. Onde essa pessoa trabalha?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_11"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_11"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_11" data-pergunta="trabalho_11" />
+                            <label for="chk_nao_se_aplica_trabalho_11">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_trabalho_12" class="titulo_pergunta_personagem">48. Essa pessoa tem alguma preocupação com o futuro profissional?</label>
+                        <textarea
+                        id="ipt_resposta_trabalho_12"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="trabalho_12"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_trabalho_12" data-pergunta="trabalho_12" />
+                            <label for="chk_nao_se_aplica_trabalho_12">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_familia">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Família e relações pessoais</h2>
+                            <p class="contador_secao_personagem">Seção 7 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_1" class="titulo_pergunta_personagem">49. Qual comportamento dessa pessoa é considerado correto para sua família, mas errado para a sociedade?</label>
+                        <textarea
+                        id="ipt_resposta_familia_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_1" data-pergunta="familia_1" />
+                            <label for="chk_nao_se_aplica_familia_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_2" class="titulo_pergunta_personagem">50. Qual é a estrutura da família desse personagem?</label>
+                        <textarea
+                        id="ipt_resposta_familia_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_2" data-pergunta="familia_2" />
+                            <label for="chk_nao_se_aplica_familia_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_3" class="titulo_pergunta_personagem">51. Qual é a posição desse personagem dentro da família?</label>
+                        <textarea
+                        id="ipt_resposta_familia_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_3" data-pergunta="familia_3" />
+                            <label for="chk_nao_se_aplica_familia_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_4" class="titulo_pergunta_personagem">52. Qual é o estado civil dessa pessoa?</label>
+                        <textarea
+                        id="ipt_resposta_familia_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_4" data-pergunta="familia_4" />
+                            <label for="chk_nao_se_aplica_familia_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_5" class="titulo_pergunta_personagem">53. Como ou por que ela está nesse estado civil?</label>
+                        <textarea
+                        id="ipt_resposta_familia_5"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_5" data-pergunta="familia_5" />
+                            <label for="chk_nao_se_aplica_familia_5">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_6" class="titulo_pergunta_personagem">54. Essa pessoa tem algum ex-namorado ou ex-namorada?</label>
+                        <textarea
+                        id="ipt_resposta_familia_6"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_6"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_6" data-pergunta="familia_6" />
+                            <label for="chk_nao_se_aplica_familia_6">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_7" class="titulo_pergunta_personagem">55. O que causou o término?</label>
+                        <textarea
+                        id="ipt_resposta_familia_7"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_7"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_7" data-pergunta="familia_7" />
+                            <label for="chk_nao_se_aplica_familia_7">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_8" class="titulo_pergunta_personagem">56. Como está o relacionamento dessa pessoa atualmente?</label>
+                        <textarea
+                        id="ipt_resposta_familia_8"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_8"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_8" data-pergunta="familia_8" />
+                            <label for="chk_nao_se_aplica_familia_8">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_9" class="titulo_pergunta_personagem">57. Essa pessoa tem um bom relacionamento com seus pais ou figuras paternas?</label>
+                        <textarea
+                        id="ipt_resposta_familia_9"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_9"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_9" data-pergunta="familia_9" />
+                            <label for="chk_nao_se_aplica_familia_9">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_10" class="titulo_pergunta_personagem">58. Essa pessoa tem irmãos ou irmãs? Se sim, como é o relacionamento com eles?</label>
+                        <textarea
+                        id="ipt_resposta_familia_10"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_10"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_10" data-pergunta="familia_10" />
+                            <label for="chk_nao_se_aplica_familia_10">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_11" class="titulo_pergunta_personagem">59. Qual é a relação dessa pessoa com seus próprios filhos?</label>
+                        <textarea
+                        id="ipt_resposta_familia_11"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_11"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_11" data-pergunta="familia_11" />
+                            <label for="chk_nao_se_aplica_familia_11">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_familia_12" class="titulo_pergunta_personagem">60. Essa pessoa tem boas relações com seus parentes?</label>
+                        <textarea
+                        id="ipt_resposta_familia_12"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="familia_12"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_familia_12" data-pergunta="familia_12" />
+                            <label for="chk_nao_se_aplica_familia_12">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_amizades">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Amizades e inimizades</h2>
+                            <p class="contador_secao_personagem">Seção 8 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_amizades_1" class="titulo_pergunta_personagem">61. Como é a relação dessa pessoa com seu melhor amigo?</label>
+                        <textarea
+                        id="ipt_resposta_amizades_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="amizades_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_amizades_1" data-pergunta="amizades_1" />
+                            <label for="chk_nao_se_aplica_amizades_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_amizades_2" class="titulo_pergunta_personagem">62. Como essa pessoa e seu melhor amigo se conheceram?</label>
+                        <textarea
+                        id="ipt_resposta_amizades_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="amizades_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_amizades_2" data-pergunta="amizades_2" />
+                            <label for="chk_nao_se_aplica_amizades_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_amizades_3" class="titulo_pergunta_personagem">63. Por que essa pessoa e seu melhor amigo se tornaram melhores amigos?</label>
+                        <textarea
+                        id="ipt_resposta_amizades_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="amizades_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_amizades_3" data-pergunta="amizades_3" />
+                            <label for="chk_nao_se_aplica_amizades_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_amizades_4" class="titulo_pergunta_personagem">64. Como essa pessoa e seus amigos costumam passar o tempo juntos?</label>
+                        <textarea
+                        id="ipt_resposta_amizades_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="amizades_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_amizades_4" data-pergunta="amizades_4" />
+                            <label for="chk_nao_se_aplica_amizades_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_amizades_5" class="titulo_pergunta_personagem">65. Como é a relação dessa pessoa com seu inimigo?</label>
+                        <textarea
+                        id="ipt_resposta_amizades_5"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="amizades_5"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_amizades_5" data-pergunta="amizades_5" />
+                            <label for="chk_nao_se_aplica_amizades_5">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_amizades_6" class="titulo_pergunta_personagem">66. Como e por que essa pessoa se tornou inimiga da outra?</label>
+                        <textarea
+                        id="ipt_resposta_amizades_6"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="amizades_6"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_amizades_6" data-pergunta="amizades_6" />
+                            <label for="chk_nao_se_aplica_amizades_6">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_valores">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Valores pessoais e comportamento individual</h2>
+                            <p class="contador_secao_personagem">Seção 9 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_valores_1" class="titulo_pergunta_personagem">67. O que é considerado certo por esse personagem, mas errado pelo restante das pessoas?</label>
+                        <textarea
+                        id="ipt_resposta_valores_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="valores_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_valores_1" data-pergunta="valores_1" />
+                            <label for="chk_nao_se_aplica_valores_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_valores_2" class="titulo_pergunta_personagem">68. O que essa pessoa costuma fazer quando está sozinha?</label>
+                        <textarea
+                        id="ipt_resposta_valores_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="valores_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_valores_2" data-pergunta="valores_2" />
+                            <label for="chk_nao_se_aplica_valores_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_valores_3" class="titulo_pergunta_personagem">69. Por que essa pessoa começou a fazer isso?</label>
+                        <textarea
+                        id="ipt_resposta_valores_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="valores_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_valores_3" data-pergunta="valores_3" />
+                            <label for="chk_nao_se_aplica_valores_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_valores_4" class="titulo_pergunta_personagem">70. O que essa pessoa faz nos finais de semana?</label>
+                        <textarea
+                        id="ipt_resposta_valores_4"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="valores_4"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_valores_4" data-pergunta="valores_4" />
+                            <label for="chk_nao_se_aplica_valores_4">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_habitos">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Hábitos e rotina</h2>
+                            <p class="contador_secao_personagem">Seção 10 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_habitos_1" class="titulo_pergunta_personagem">71. Qual hábito é o mais importante para essa pessoa no seu dia a dia?</label>
+                        <textarea
+                        id="ipt_resposta_habitos_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="habitos_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_habitos_1" data-pergunta="habitos_1" />
+                            <label for="chk_nao_se_aplica_habitos_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_habitos_2" class="titulo_pergunta_personagem">72. Como ela adquiriu esse hábito?</label>
+                        <textarea
+                        id="ipt_resposta_habitos_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="habitos_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_habitos_2" data-pergunta="habitos_2" />
+                            <label for="chk_nao_se_aplica_habitos_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_habitos_3" class="titulo_pergunta_personagem">73. Qual é o hobby dessa pessoa?</label>
+                        <textarea
+                        id="ipt_resposta_habitos_3"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="habitos_3"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_habitos_3" data-pergunta="habitos_3" />
+                            <label for="chk_nao_se_aplica_habitos_3">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_medos">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Medos e inseguranças</h2>
+                            <p class="contador_secao_personagem">Seção 11 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_medos_1" class="titulo_pergunta_personagem">74. Do que essa pessoa tem medo?</label>
+                        <textarea
+                        id="ipt_resposta_medos_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="medos_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_medos_1" data-pergunta="medos_1" />
+                            <label for="chk_nao_se_aplica_medos_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_medos_2" class="titulo_pergunta_personagem">75. Qual evento causou esse medo nela?</label>
+                        <textarea
+                        id="ipt_resposta_medos_2"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="medos_2"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_medos_2" data-pergunta="medos_2" />
+                            <label for="chk_nao_se_aplica_medos_2">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_futuro">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Futuro e aspirações</h2>
+                            <p class="contador_secao_personagem">Seção 12 de 12</p>
+                        </div>
+                    <article class="card_pergunta_personagem">
+                        <label for="ipt_resposta_futuro_1" class="titulo_pergunta_personagem">76. O que essa pessoa quer ser no futuro?</label>
+                        <textarea
+                        id="ipt_resposta_futuro_1"
+                        class="campo_resposta_personagem"
+                        rows="2"
+                        placeholder="Escreva aqui..."
+                        data-pergunta="futuro_1"></textarea>
+                        <div class="opcao_nao_se_aplica">
+                            <input type="checkbox" id="chk_nao_se_aplica_futuro_1" data-pergunta="futuro_1" />
+                            <label for="chk_nao_se_aplica_futuro_1">Não se aplica</label>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="secao_formulario_personagem" id="secao_observacoes">
+                        <div class="cabecalho_secao_personagem">
+                            <h2 class="titulo_secao_personagem">Observações</h2>
+                        </div>
+                        <article class="card_pergunta_personagem">
+                            <label for="ipt_observacoes_personagem" class="titulo_pergunta_personagem">Algo que não se encaixou nas categorias acima?</label>
+                            <textarea
+                            id="ipt_observacoes_personagem"
+                            class="campo_resposta_personagem"
+                            rows="4"
+                            placeholder="Escreva aqui..."></textarea>
+                        </article>
+                    </section>
+
+                    <div class="acoes_formulario_personagem">
+                        <div id="div_mensagem_formulario_personagem"></div>
+                        <a href="personagens.html" class="botao_cancelar_personagem">Cancelar</a>
+                        <button type="submit" class="botao_salvar_personagem" id="botao_salvar_personagem">Salvar personagem</button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <dialog class="modal_imagens_personagem" id="modal_imagens_personagem" aria-labelledby="titulo_modal_imagens">
+        <div class="cabecalho_modal_imagens">
+            <div>
+                <h2 id="titulo_modal_imagens">Adicionar imagens</h2>
+                <p>Escolha uma ou mais imagens do seu computador.</p>
+            </div>
+            <button type="button" class="botao_fechar_modal_imagens" id="botao_fechar_modal_imagens" aria-label="Fechar">
+                <img src="../Img/Historia/icon-fechar.svg" alt="">
+            </button>
+        </div>
+
+        <label class="area_envio_imagens" id="area_envio_imagens" for="ipt_arquivos_imagens">
+            <img src="../Img/Historia/icon-seta-cima.svg" alt="">
+            <p class="titulo_area_envio_imagens">Escolher imagens</p>
+            <p class="subtitulo_area_envio_imagens">ou arraste para cá</p>
+            <input
+            type="file"
+            id="ipt_arquivos_imagens"
+            class="ipt_arquivos_oculto"
+            accept="image/png,image/jpeg,image/webp"
+            multiple />
+        </label>
+
+        <div class="grupo_imagens_adicionadas">
+            <h3>Imagens adicionadas (<span id="contador_imagens_modal">0</span>)</h3>
+            <ul class="lista_imagens_modal" id="lista_imagens_modal"></ul>
+        </div>
+
+        <div class="textos_ajuda_modal_imagens">
+            <p>A foto de perfil vira a imagem do card. Sem foto, o card usa uma cor aleatória.</p>
+            <p>Você pode adicionar várias imagens de moodboard nesta mesma janela.</p>
+        </div>
+
+        <div id="div_mensagem_modal_imagens"></div>
+
+        <div class="acoes_modal_imagens">
+            <button type="button" class="botao_cancelar_modal_imagens" id="botao_cancelar_modal_imagens">Cancelar</button>
+            <button type="button" class="botao_confirmar_modal_imagens" id="botao_confirmar_modal_imagens">Adicionar (<span id="contador_botao_imagens">0</span>)</button>
+        </div>
+    </dialog>
+
+    <dialog class="modal_historias_personagem" id="modal_historias_personagem" aria-labelledby="titulo_modal_historias">
+        <div class="cabecalho_modal_historias">
+            <h2 id="titulo_modal_historias">Aplicado nas histórias</h2>
+            <p>Escolha as histórias em que este personagem aparece.</p>
+        </div>
+        <ul class="lista_historias_modal" id="lista_historias_modal"></ul>
+        <p class="mensagem_sem_historias_modal" id="mensagem_sem_historias_modal" hidden>Você ainda não criou nenhuma história.</p>
+        <div class="acoes_modal_historias">
+            <button type="button" class="botao_cancelar_modal_historias" id="botao_cancelar_modal_historias">Cancelar</button>
+            <button type="button" class="botao_confirmar_modal_historias" id="botao_confirmar_modal_historias">Aplicar</button>
+        </div>
+    </dialog>
+
+    <template id="template_item_moodboard_formulario">
+        <div class="item_moodboard_personagem">
+            <img class="img_item_moodboard" alt="">
+            <button type="button" class="botao_remover_moodboard" aria-label="Remover imagem">
+                <img src="../Img/Historia/icon-fechar.svg" alt="">
+            </button>
+        </div>
+    </template>
+
+    <template id="template_item_imagem_modal">
+        <li class="item_imagem_modal">
+            <img class="miniatura_imagem_modal" alt="">
+            <div class="info_imagem_modal">
+                <p class="nome_arquivo_imagem"></p>
+                <p class="tamanho_arquivo_imagem"></p>
+            </div>
+            <div class="opcoes_destino_imagem">
+                <button type="button" class="botao_destino_imagem" data-destino="perfil" aria-pressed="false">Foto de perfil</button>
+                <button type="button" class="botao_destino_imagem" data-destino="moodboard" aria-pressed="false">Moodboard</button>
+            </div>
+        </li>
+    </template>
+
+    <template id="template_item_historia_modal">
+        <li class="item_historia_modal">
+            <label class="label_historia_modal">
+                <input type="checkbox" class="chk_historia_modal" />
+                <span class="bolinha_historia"></span>
+                <span class="nome_historia_modal"></span>
+            </label>
+        </li>
+    </template>
+
+    <template id="template_chip_historia_personagem">
+        <li class="chip_historia_personagem">
+            <span class="bolinha_historia"></span>
+            <span class="nome_chip_historia"></span>
+        </li>
+    </template>
+
+    <script src="../js/personagem-formulario.js"></script>
+</body>
+</html>
