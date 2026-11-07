@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plotter · Plots</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/plot.css">
 </head>
 <body>
-    
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">Plotter</div>
+    <nav>
+      <a href="#">Dashboard</a><a href="#">Prazos</a><a href="#">Mundos</a>
+      <a href="#">Personagens</a><a href="#">Histórias</a><a class="on" href="#/plots">Plots</a>
+    </nav>
+    <div class="user"><div class="avatar">G</div><div><b>Gabi</b><small>Configurações</small></div></div>
+  </aside>
+  <main id="app">
+    <div class="logo">Plotter<sup>✦</sup></div>
+    <h1>Plots</h1>
+    <p class="sub">Carregando seus plots… Se esta mensagem não sumir, confira se plot.css e plot.js estão na mesma pasta que este arquivo.</p>
+  </main>
+</div>
+<script src="../js/plot.js"></script>
 </body>
 </html>
