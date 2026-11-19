@@ -93,12 +93,14 @@
                     </div>
                 </article>
 
-                <article class="card_indicador">
+                <!-- clicar no card abre o modal para editar a meta -->
+                <article class="card_indicador card_meta_editavel" id="card_meta_mensal" role="button" tabindex="0" title="Editar meta mensal" aria-haspopup="dialog">
                     <div class="cabecalho_card_indicador">
                         <div class="icone_card_indicador">
                             <img src="../Img/Dashboard/icon-meta-mensal.svg" alt="">
                         </div>
                         <p>Meta mensal</p>
+                        <img class="icone_editar_meta" src="../Img/Historia/icon-lapis.svg" alt="">
                     </div>
                     <div class="valor_meta_mensal">
                         <h2 id="valor_meta_mensal"></h2>
@@ -121,7 +123,7 @@
                     </div>
                     <div class="valor_media_diaria">
                         <h2 id="valor_media_diaria"></h2>
-                        <p>palavras/dia</p>
+                        <p>palavras/entrada</p>
                     </div>
                     <div class="rodape_card_indicador">
                         <p id="detalhe_media_diaria"></p>
@@ -234,6 +236,22 @@
         </main>
 
     </div>
+
+    <dialog class="modal_meta_mensal" id="modal_meta_mensal" aria-labelledby="titulo_modal_meta">
+        <form class="form_modal_meta" id="form_modal_meta">
+            <h2 id="titulo_modal_meta">Meta mensal</h2>
+            <p>Quantas palavras você quer escrever por mês?</p>
+            <label class="campo_modal_meta">
+                <input type="number" id="ipt_meta_mensal" min="1" max="1000000" step="1" required aria-label="Meta mensal de palavras" />
+                <span>palavras</span>
+            </label>
+            <p class="mensagem_modal_meta" id="mensagem_modal_meta" role="alert"></p>
+            <div class="rodape_modal_meta">
+                <button type="button" class="botao_cancelar_modal_meta" id="botao_cancelar_modal_meta">Cancelar</button>
+                <button type="submit" class="botao_salvar_modal_meta" id="botao_salvar_modal_meta">Salvar</button>
+            </div>
+        </form>
+    </dialog>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <!-- proteção desativada por enquanto (volta para o login se não tiver usuário logado) -->

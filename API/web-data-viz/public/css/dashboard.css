@@ -881,3 +881,145 @@ ul {
     border-top: 1px solid #e8e3f0;
   }
 }
+
+/* ===== meta mensal editável ===== */
+
+.card_meta_editavel {
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card_meta_editavel:hover,
+.card_meta_editavel:focus-visible {
+  border-color: #cdbdf0;
+  box-shadow: 0 6px 18px rgba(74, 36, 120, 0.1);
+}
+
+.card_meta_editavel:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+.icone_editar_meta {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.card_meta_editavel:hover .icone_editar_meta,
+.card_meta_editavel:focus-visible .icone_editar_meta {
+  opacity: 1;
+}
+
+.modal_meta_mensal {
+  width: 380px;
+  max-width: calc(100% - 32px);
+  margin: auto;
+  padding: 24px;
+  border: none;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #1e1a2b;
+  box-shadow: 0 20px 60px rgba(30, 26, 43, 0.3);
+}
+
+.modal_meta_mensal::backdrop {
+  background-color: rgba(30, 26, 43, 0.5);
+}
+
+.form_modal_meta h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.form_modal_meta > p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #5b5670;
+}
+
+.campo_modal_meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 0 14px;
+  border: 1px solid #e0daf0;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+}
+
+.campo_modal_meta:focus-within {
+  border-color: #8b5cf6;
+}
+
+.campo_modal_meta input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e1a2b;
+}
+
+.campo_modal_meta span {
+  font-size: 13px;
+  color: #5b5670;
+}
+
+.mensagem_modal_meta {
+  min-height: 18px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #d64545;
+}
+
+.rodape_modal_meta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.botao_cancelar_modal_meta,
+.botao_salvar_modal_meta {
+  height: 40px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao_cancelar_modal_meta {
+  background-color: #ede7fb;
+  color: #7a58c8;
+}
+
+.botao_cancelar_modal_meta:hover {
+  background-color: #ddd3f7;
+}
+
+.botao_salvar_modal_meta {
+  min-width: 100px;
+  background-color: #e9a824;
+  color: #1e1a2b;
+}
+
+.botao_salvar_modal_meta:hover {
+  background-color: #d99a1b;
+}
+
+.botao_salvar_modal_meta:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

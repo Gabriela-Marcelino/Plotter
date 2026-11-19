@@ -11,6 +11,10 @@ router.get("/meta/:idUsuario", function (req, res) {
     dashboardController.meta(req, res);
 });
 
+router.put("/meta/:idUsuario", function (req, res) {
+    dashboardController.atualizarMeta(req, res);
+});
+
 router.get("/ultimo-capitulo/:idUsuario", function (req, res) {
     dashboardController.ultimoCapitulo(req, res);
 });

@@ -9,13 +9,44 @@ CREATE TABLE usuario (
   meta_mensal_palavras INT NOT NULL DEFAULT 10000
 ) AUTO_INCREMENT = 1000;
 
--- TABELA 01B - HISTÓRIA (PROVISÓRIA)
+-- TABELA 01B - HISTÓRIA
 CREATE TABLE historia (
   idHistoria INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   fk_usuario INT NOT NULL,
     CONSTRAINT fk_historia_usuario FOREIGN KEY (fk_usuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE,
-  titulo VARCHAR(200) NOT NULL,
-  concluida BOOLEAN NOT NULL DEFAULT 0
+  nome VARCHAR(200) NOT NULL,
+  classificacao ENUM('livre', '10', '12', '14', '16', '18') NOT NULL,
+  capa MEDIUMTEXT NULL,        -- imagem em texto (base64) ou NULL
+  cor VARCHAR(30) NULL,        -- cor do card quando não tem capa
+  concluida BOOLEAN NOT NULL DEFAULT 0,
+  criadoEm TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- TABELA 01C - GÊNEROS (cada usuário tem a sua lista)
+CREATE TABLE genero (
+  idGenero INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  fk_usuario INT NOT NULL,
+    CONSTRAINT fk_genero_usuario FOREIGN KEY (fk_usuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE,
+  nome VARCHAR(40) NOT NULL,
+    UNIQUE KEY uq_genero_usuario_nome (fk_usuario, nome)
+);
+
+-- TABELA 01D - GÊNEROS DE CADA HISTÓRIA (N:N)
+CREATE TABLE historiaGenero (
+  fk_historia INT NOT NULL,
+    CONSTRAINT fk_hg_historia FOREIGN KEY (fk_historia) REFERENCES historia(idHistoria) ON DELETE CASCADE,
+  fk_genero INT NOT NULL,
+    CONSTRAINT fk_hg_genero FOREIGN KEY (fk_genero) REFERENCES genero(idGenero) ON DELETE CASCADE,
+  PRIMARY KEY (fk_historia, fk_genero)
+);
+
+-- TABELA 01E - MOODBOARD DA HISTÓRIA
+CREATE TABLE historiaImagem (
+  idImagem INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  fk_historia INT NOT NULL,
+    CONSTRAINT fk_himg_historia FOREIGN KEY (fk_historia) REFERENCES historia(idHistoria) ON DELETE CASCADE,
+  ordem INT NOT NULL,
+  imagem MEDIUMTEXT NOT NULL   -- imagem em texto (base64)
 );
 
 -- TABELA 02 - PLOTS
@@ -72,6 +103,54 @@ CREATE TABLE planejamentoCenas (
   descricao TEXT NULL,
   escrito BOOLEAN NOT NULL DEFAULT 0
 );
+
+-- TABELA 06 - CAPÍTULOS DA HISTÓRIA (o que é escrito de verdade)
+CREATE TABLE capitulo (
+  idCapitulo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  fk_historia INT NOT NULL,
+    CONSTRAINT fk_capitulo_historia FOREIGN KEY (fk_historia) REFERENCES historia(idHistoria) ON DELETE CASCADE,
+  numero INT NOT NULL,
+  titulo VARCHAR(200) NULL,    -- vazio vira "Capítulo 01" na tela
+  sinopse TEXT NULL,
+  status ENUM('nao_escrito', 'escrevendo', 'a_revisar', 'revisado', 'concluido', 'publicado') NOT NULL DEFAULT 'nao_escrito',
+  texto MEDIUMTEXT NULL,
+  palavras INT NOT NULL DEFAULT 0,
+  atualizadoEm TIMESTAMP NULL,  -- última vez que o texto foi salvo ("salvo há 2 min")
+  fk_capPlan INT NULL,         -- capítulo do plot que deu origem a este (se houver)
+    CONSTRAINT fk_capitulo_capplan FOREIGN KEY (fk_capPlan) REFERENCES planejamentoCapitulos(idCapPlan) ON DELETE SET NULL
+);
+
+-- TABELA 07 - PALAVRAS ESCRITAS POR DIA (dashboard: gráfico, calendário, sequência...)
+-- Uma linha por usuário por dia. Cada vez que um capítulo é salvo, a diferença
+-- de palavras (novo total - total antigo) é somada no dia de hoje.
+CREATE TABLE registroEscrita (
+  idRegistro INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  fk_usuario INT NOT NULL,
+    CONSTRAINT fk_registro_usuario FOREIGN KEY (fk_usuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE,
+  dataEscrita DATE NOT NULL,
+  palavras INT NOT NULL DEFAULT 0,
+    UNIQUE KEY uq_registro_usuario_dia (fk_usuario, dataEscrita)
+);
+
+-- TABELA 08 - IDEIAS PARA HOJE (dashboard)
+CREATE TABLE ideia (
+  idIdeia INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  texto VARCHAR(300) NOT NULL
+);
+
+INSERT INTO ideia (texto) VALUES
+  ('Escreva uma cena em que o personagem perde algo importante.'),
+  ('Escreva um diálogo em que ninguém diz o que realmente quer.'),
+  ('Coloque seu protagonista num lugar onde ele nunca esteve.'),
+  ('Escreva uma cena que comece no meio de uma discussão.'),
+  ('Mostre um segredo sendo descoberto por acidente.'),
+  ('Descreva um lugar usando só sons e cheiros.'),
+  ('Escreva a mesma cena do ponto de vista do antagonista.'),
+  ('Faça um personagem mentir para proteger alguém.'),
+  ('Escreva uma despedida que não parece uma despedida.'),
+  ('Termine uma cena com uma pergunta sem resposta.'),
+  ('Escreva um momento de calma logo antes de tudo dar errado.'),
+  ('Dê ao seu personagem uma escolha em que as duas opções custam caro.');
 
 
 

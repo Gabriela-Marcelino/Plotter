@@ -55,6 +55,12 @@ var idUsuario = sessionStorage.ID_USUARIO;
 // vetor com um objeto para cada dia mostrado no calendário (preenchido em montarDias)
 var dias = [];
 
+// meta mensal atual (muda quando a usuária edita no modal)
+var metaAtual = 0;
+
+// gráfico de cadência já desenhado (para apagar antes de desenhar de novo)
+var graficoCadencia = null;
+
 // ideias que vieram do banco e qual delas está aparecendo agora
 var ideias = [];
 var indiceIdeia = 0;
@@ -269,6 +275,7 @@ function carregarDiasDeEscrita(meta) {
 
 // Os 4 cards brancos do topo + o texto de boas-vindas.
 function renderizarIndicadores(meta) {
+  metaAtual = meta;
   var hoje = dias[dias.length - 1]; // o último dia do vetor é hoje
   var totalDiasMes = diasNoMes(hoje.mes, hoje.ano);
 
@@ -359,20 +366,30 @@ function renderizarIndicadores(meta) {
   preenchimento_progresso_meta.style.width = larguraBarra + "%";
 
   // ---- Média diária ----
-  var mediaDiaria = Math.round(palavrasMes / hoje.dia);
+  // palavras do mês divididas pela quantidade de entradas (dias do mês em que
+  // houve escrita), e não por todos os dias que já passaram
+  var diasComEscrita = 0;
+  for (var e = 0; e < dias.length; e++) {
+    if (dias[e].mes == hoje.mes && dias[e].ano == hoje.ano && dias[e].palavras > 0) {
+      diasComEscrita++;
+    }
+  }
+
+  var mediaDiaria = 0;
+  if (diasComEscrita > 0) {
+    mediaDiaria = Math.round(palavrasMes / diasComEscrita);
+  }
   valor_media_diaria.innerHTML = formatarNumero(mediaDiaria);
 
-  var diasRestantes = totalDiasMes - hoje.dia;
-  var faltaParaMeta = meta - palavrasMes;
-
-  if (faltaParaMeta <= 0) {
-    detalhe_media_diaria.innerHTML = "Meta do mês batida!";
-  } else if (diasRestantes == 0) {
-    detalhe_media_diaria.innerHTML = "Necessário: " + formatarNumero(faltaParaMeta) + " hoje para a meta";
+  if (diasComEscrita == 0) {
+    detalhe_media_diaria.innerHTML = "nenhuma entrada neste mês";
+  } else if (diasComEscrita == 1) {
+    detalhe_media_diaria.innerHTML = "em 1 entrada";
   } else {
-    var necessarioPorDia = Math.round(faltaParaMeta / diasRestantes);
-    detalhe_media_diaria.innerHTML = "Necessário: " + formatarNumero(necessarioPorDia) + "/dia para a meta";
+    detalhe_media_diaria.innerHTML = "em " + diasComEscrita + " entradas";
   }
+
+  var faltaParaMeta = meta - palavrasMes;
 
   // ---- Texto de boas-vindas ----
   // compara quanto da meta já foi escrito com quanto do mês já passou
@@ -517,7 +534,12 @@ function renderizarGraficoCadencia(meta) {
     }
   }
 
-  new Chart(grafico_cadencia_mes, {
+  // se já existe um gráfico (a meta mudou), apaga antes de desenhar de novo
+  if (graficoCadencia != null) {
+    graficoCadencia.destroy();
+  }
+
+  graficoCadencia = new Chart(grafico_cadencia_mes, {
     type: "line",
     data: {
       labels: rotulos,
@@ -748,6 +770,82 @@ function mostrarProximaIdeia() {
   }
   texto_ideia_do_dia.innerHTML = ideias[indiceIdeia].texto;
 }
+
+
+// =====================================================================
+// MODAL "META MENSAL" (clicar no card da meta)
+// =====================================================================
+//
+// FORA DO CONTEÚDO: <dialog> é uma caixa (modal) do próprio HTML.
+//   - modal.showModal() abre a caixa e escurece o fundo
+//   - modal.close() fecha
+//   - a tecla Esc também fecha sozinha
+
+function abrirModalMeta() {
+  ipt_meta_mensal.value = metaAtual; // começa com a meta atual
+  mensagem_modal_meta.innerHTML = "";
+  modal_meta_mensal.showModal();
+  ipt_meta_mensal.select(); // já deixa o número selecionado para digitar por cima
+}
+
+function salvarMeta(evento) {
+  evento.preventDefault(); // não deixa o formulário recarregar a página
+
+  var novaMeta = Number(ipt_meta_mensal.value);
+  if (!(novaMeta >= 1 && novaMeta <= 1000000) || novaMeta != Math.round(novaMeta)) {
+    mensagem_modal_meta.innerHTML = "Digite um número inteiro entre 1 e 1.000.000.";
+    return;
+  }
+  if (idUsuario == undefined) {
+    mensagem_modal_meta.innerHTML = "Entre na sua conta para salvar a meta.";
+    return;
+  }
+
+  botao_salvar_modal_meta.disabled = true; // evita clique duplo
+
+  fetch("/dashboard/meta/" + idUsuario, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ metaServer: novaMeta }),
+  })
+    .then(function (resposta) {
+      botao_salvar_modal_meta.disabled = false;
+      if (resposta.ok) {
+        modal_meta_mensal.close();
+        // redesenha os cards, a frase de boas-vindas e o gráfico com a meta nova
+        renderizarIndicadores(novaMeta);
+        renderizarGraficoCadencia(novaMeta);
+      } else {
+        resposta.text().then(function (motivo) {
+          mensagem_modal_meta.innerHTML = motivo || "Não foi possível salvar a meta.";
+        });
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro);
+      botao_salvar_modal_meta.disabled = false;
+      mensagem_modal_meta.innerHTML = "Erro ao conectar com o servidor.";
+    });
+}
+
+card_meta_mensal.addEventListener("click", abrirModalMeta);
+// o card também abre pelo teclado (Enter ou espaço), já que funciona como botão
+card_meta_mensal.addEventListener("keydown", function (evento) {
+  if (evento.key == "Enter" || evento.key == " ") {
+    evento.preventDefault();
+    abrirModalMeta();
+  }
+});
+form_modal_meta.addEventListener("submit", salvarMeta);
+botao_cancelar_modal_meta.addEventListener("click", function () {
+  modal_meta_mensal.close();
+});
+// clicar no fundo escuro (fora da caixa) também fecha
+modal_meta_mensal.addEventListener("click", function (evento) {
+  if (evento.target == modal_meta_mensal) {
+    modal_meta_mensal.close();
+  }
+});
 
 
 // =====================================================================

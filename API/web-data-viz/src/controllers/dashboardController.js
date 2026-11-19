@@ -21,6 +21,26 @@ function meta(req, res) {
     responder(res, dashboardModel.meta(req.params.idUsuario));
 }
 
+// PUT /dashboard/meta/:idUsuario   recebe { metaServer }
+function atualizarMeta(req, res) {
+    var metaMensal = Math.round(Number(req.body.metaServer));
+    if (!(metaMensal >= 1 && metaMensal <= 1000000)) {
+        return res.status(400).send("A meta precisa ser um número entre 1 e 1.000.000.");
+    }
+    dashboardModel.atualizarMeta(req.params.idUsuario, metaMensal)
+        .then(function (resultado) {
+            if (resultado.affectedRows == 0) {
+                res.status(404).send("Usuário não encontrado.");
+            } else {
+                res.json({ metaMensal: metaMensal });
+            }
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage || "Erro no servidor.");
+        });
+}
+
 // GET /dashboard/ultimo-capitulo/:idUsuario
 function ultimoCapitulo(req, res) {
     responder(res, dashboardModel.ultimoCapitulo(req.params.idUsuario));
@@ -39,6 +59,7 @@ function ideias(req, res) {
 module.exports = {
     escrita,
     meta,
+    atualizarMeta,
     ultimoCapitulo,
     historias,
     ideias

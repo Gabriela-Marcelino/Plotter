@@ -19,6 +19,12 @@ function meta(idUsuario) {
     return database.executar(instrucaoSql, [idUsuario]);
 }
 
+// Muda a meta mensal do usuário
+function atualizarMeta(idUsuario, metaMensal) {
+    var instrucaoSql = `UPDATE usuario SET meta_mensal_palavras = ? WHERE idUsuario = ?;`;
+    return database.executar(instrucaoSql, [metaMensal, idUsuario]);
+}
+
 // Capítulo salvo por último (card roxo "Continue de onde parou")
 function ultimoCapitulo(idUsuario) {
     var instrucaoSql = `
@@ -58,6 +64,7 @@ function ideias() {
 module.exports = {
     escritaPorDia,
     meta,
+    atualizarMeta,
     ultimoCapitulo,
     historias,
     ideias
