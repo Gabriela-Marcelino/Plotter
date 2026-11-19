@@ -1,12 +1,18 @@
+// =====================================================================
+// Rotas usadas (src/routes/historias.js e src/routes/capitulos.js):
+//   GET  /historias/generos-usuario/:idUsuario  gêneros que o usuário já usou
+//   GET  /historias/plots/:idUsuario            plots para o modal "Escolher plot"
+//   GET  /historias/buscar/:idHistoria          dados da história (modo edição)
+//   GET  /historias/generos/:idHistoria         gêneros da história (modo edição)
+//   GET  /historias/moodboard/:idHistoria       moodboard da história (modo edição)
+//   GET  /capitulos/listar/:idHistoria          para avisar antes de trocar o plot
+//   POST /historias/cadastrar                   cria a história
+//   PUT  /historias/atualizar/:idHistoria       salva a edição
+// =====================================================================
+
 // 1. CONSTANTES
 
-const CHAVE_HISTORIAS = "plotter_historias";   // todas as histórias
-const CHAVE_CAPITULOS = "plotter_capitulos";   // todos os capítulos de todas as histórias
-const CHAVE_PERSONAGENS = "plotter_personagens"; // personagens já criados
-const CHAVE_MUNDOS = "plotter_mundos";         // mundos já criados
-const CHAVE_PLOTS = "plotter_plots";           // plots já criados
-const CHAVE_GENEROS = "plotter_generos";       // gêneros que o usuário já digitou um dia
-const CHAVE_USUARIO = "plotter_usuario";       // usuário logado
+const idUsuario = sessionStorage.ID_USUARIO; // usuário logado (guardado pelo login.js)
 
 const MAXIMO_GENEROS = 5;      // máximo de gêneros por história
 const MAXIMO_MOODBOARD = 5;    // máximo de imagens de moodboard (a capa é +4)
@@ -15,38 +21,18 @@ const LADO_MAXIMO_PX = 900;    // a imagem é reduzida para caber nesse tamanho 
 const TIPOS_ACEITOS = ["image/png", "image/jpeg", "image/webp"]; // formatos permitidos
 
 
-// 2. FUNÇÕES AUXILIARES (leitura/gravação, menu, ids, iniciais)
+// 2. FUNÇÕES AUXILIARES (servidor, menu, ids, iniciais)
 
-// lê uma lista do localStorage ([] se não existir)
-function lerLista(chave) {
-  try {
-    const texto = localStorage.getItem(chave);
-    return texto ? JSON.parse(texto) : [];
-  } catch (erro) {
-    return [];
-  }
-}
-
-// grava uma lista no localStorage; devolve true se deu certo e false se estourou o limite
-function salvarLista(chave, lista) {
-  try {
-    localStorage.setItem(chave, JSON.stringify(lista));
-    return true;
-  } catch (erro) {
-    // acontece quando as imagens ocupam espaço demais no navegador
-    return false;
-  }
+// faz um GET e devolve o JSON (dá erro se o servidor responder com falha)
+async function buscarJson(endereco) {
+  const resposta = await fetch(endereco);
+  if (!resposta.ok) throw new Error("Falha ao buscar " + endereco);
+  return resposta.json();
 }
 
 // preenche nome/inicial do usuário no menu lateral
 function preencherMenuUsuario() {
-  let usuario = {};
-  try {
-    usuario = JSON.parse(localStorage.getItem(CHAVE_USUARIO)) || {};
-  } catch (erro) {
-    usuario = {};
-  }
-  const nome = usuario.nome || "Usuário";
+  const nome = sessionStorage.NOME_USUARIO || "Usuário";
   document.getElementById("nome_usuario_menu").textContent = nome;
   document.getElementById("inicial_usuario_menu").textContent = nome.charAt(0).toUpperCase();
 }
@@ -103,12 +89,6 @@ const listaGeneros = document.getElementById("lista_generos_formulario_historia"
 const botaoNovoGenero = document.getElementById("botao_novo_genero");
 const inputNovoGenero = document.getElementById("ipt_novo_genero");
 
-// personagens e mundos
-const listaPersonagens = document.getElementById("lista_personagens_formulario_historia");
-const mensagemSemPersonagens = document.getElementById("mensagem_sem_personagens_historia");
-const listaMundos = document.getElementById("lista_mundos_formulario_historia");
-const mensagemSemMundos = document.getElementById("mensagem_sem_mundos_historia");
-
 // plot (card + modal)
 const blocoPlotSelecionado = document.getElementById("plot_selecionado_historia");
 const textoNomePlot = document.getElementById("nome_plot_historia");
@@ -141,11 +121,13 @@ const estado = {
   capa: null,                // imagem da capa (texto base64) ou null
   moodboard: [],             // lista de imagens do moodboard (base64)
   generosSelecionados: [],   // nomes dos gêneros marcados (máx. 5)
-  personagensSelecionados: [], // ids dos personagens marcados
-  mundoSelecionado: "",      // id do mundo ("" = nenhum)
   plotSelecionado: "",       // id do plot ("" = nenhum)
   imagensPendentes: [],      // imagens que estão no modal e ainda não foram confirmadas
 };
+
+// listas que vêm do banco quando a página abre
+let generosDisponiveis = []; // nomes dos gêneros que o usuário já usou
+let plotsDisponiveis = [];   // plots do usuário
 
 // lê o ?id=... da URL; se existir, estamos EDITANDO uma história
 const idEdicao = new URLSearchParams(window.location.search).get("id");
@@ -192,11 +174,10 @@ botaoRemoverCapa.addEventListener("click", () => {
 //  GÊNEROS TEXTUAIS
 
 function renderizarGeneros() {
-  // lê a lista de gêneros que o usuário já criou (começa vazia na 1ª vez)
-  const generos = lerLista(CHAVE_GENEROS);
   listaGeneros.innerHTML = ""; // limpa a lista
 
-  generos.forEach((genero) => {
+  // gêneros que o usuário já usou (começa vazia na 1ª vez)
+  generosDisponiveis.forEach((genero) => {
     // clona o template da opção de gênero
     const opcao = document.getElementById("template_opcao_genero_historia").content.cloneNode(true);
     const checkbox = opcao.querySelector(".chk_genero_historia");
@@ -232,15 +213,13 @@ function adicionarNovoGenero() {
   const nome = inputNovoGenero.value.trim();
   if (!nome) return; // se estiver vazio, não faz nada
 
-  const generos = lerLista(CHAVE_GENEROS);
   // procura se já existe um gênero igual (ignorando maiúsculas/minúsculas)
-  const existente = generos.find((g) => g.toLowerCase() === nome.toLowerCase());
+  const existente = generosDisponiveis.find((g) => g.toLowerCase() === nome.toLowerCase());
   const nomeFinal = existente || nome;
 
-  // se for novo, guarda na lista para aparecer nas próximas histórias
+  // se for novo, entra na lista da tela; vai para o banco quando a história for salva
   if (!existente) {
-    generos.push(nome);
-    salvarLista(CHAVE_GENEROS, generos);
+    generosDisponiveis.push(nome);
   }
 
   // já seleciona o gênero, se ainda houver espaço e ele não estiver marcado
@@ -268,99 +247,21 @@ inputNovoGenero.addEventListener("keydown", (evento) => {
 });
 
 
-// PERSONAGENS E MUNDOS
-
-function renderizarPersonagens() {
-  const personagens = lerLista(CHAVE_PERSONAGENS);
-  listaPersonagens.innerHTML = "";
-  // se não existe nenhum personagem, mostra o aviso com link para criar
-  mensagemSemPersonagens.hidden = personagens.length > 0;
-
-  personagens.forEach((personagem) => {
-    const opcao = document.getElementById("template_opcao_personagem_historia").content.cloneNode(true);
-    const checkbox = opcao.querySelector(".chk_personagem_historia");
-    const img = opcao.querySelector(".img_avatar_opcao_personagem");
-    const iniciais = opcao.querySelector(".iniciais_avatar_opcao_personagem");
-
-    opcao.querySelector(".nome_opcao_personagem").textContent = personagem.nome;
-    checkbox.checked = estado.personagensSelecionados.includes(personagem.id);
-
-    if (personagem.imagem) {
-      img.src = personagem.imagem; // foto do personagem
-    } else {
-      iniciais.hidden = false;     // sem foto: mostra iniciais
-      iniciais.textContent = gerarIniciais(personagem.nome);
-    }
-
-    // marcar/desmarcar atualiza a lista de ids
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) {
-        estado.personagensSelecionados.push(personagem.id);
-      } else {
-        estado.personagensSelecionados = estado.personagensSelecionados.filter((id) => id !== personagem.id);
-      }
-    });
-
-    listaPersonagens.appendChild(opcao);
-  });
-}
-
-function renderizarMundos() {
-  const mundos = lerLista(CHAVE_MUNDOS);
-  listaMundos.innerHTML = "";
-  mensagemSemMundos.hidden = mundos.length > 0;
-
-  mundos.forEach((mundo) => {
-    const opcao = document.getElementById("template_opcao_mundo_historia").content.cloneNode(true);
-    const radio = opcao.querySelector(".rdo_mundo_historia");
-    const img = opcao.querySelector(".img_miniatura_opcao_mundo");
-    const iniciais = opcao.querySelector(".iniciais_miniatura_opcao_mundo");
-
-    opcao.querySelector(".nome_opcao_mundo").textContent = mundo.nome;
-    radio.checked = estado.mundoSelecionado === mundo.id;
-
-    if (mundo.imagem) {
-      img.src = mundo.imagem;
-    } else {
-      iniciais.hidden = false;
-      iniciais.textContent = gerarIniciais(mundo.nome);
-    }
-
-    // radio normalmente não "desmarca"; aqui clicar no mundo já escolhido tira a escolha
-    radio.addEventListener("click", () => {
-      if (estado.mundoSelecionado === mundo.id) {
-        radio.checked = false;       // desmarca visualmente
-        estado.mundoSelecionado = ""; // nenhum mundo
-      } else {
-        estado.mundoSelecionado = mundo.id; // escolhe este mundo
-      }
-    });
-
-    listaMundos.appendChild(opcao);
-  });
-}
-
-
 // 8. PLOT (card + modal "Escolher plot")
 
-// conta quantas cenas tem no total dentro de um plot
-function contarCenasDoPlot(plot) {
-  return (plot.capitulos || []).reduce((total, cap) => total + (cap.cenas ? cap.cenas.length : 0), 0);
-}
-
 // monta o texto "3 atos · 50 capítulos · 200 cenas"
+// (estrutura, totalCapitulos e totalCenas vêm do banco)
 function montarResumoPlot(plot) {
   const partes = [];
-  if (plot.atos) partes.push(plot.atos + " atos");                       // estrutura (3, 4 ou 5 atos)
-  partes.push((plot.capitulos || []).length + " capítulos");             // quantidade de capítulos
-  const cenas = contarCenasDoPlot(plot);
-  if (cenas > 0) partes.push(cenas + " cenas");                          // total de cenas (só se tiver)
+  if (plot.estrutura && plot.estrutura !== "livre") partes.push(plot.estrutura + " atos"); // 3, 4 ou 5 atos
+  partes.push(plot.totalCapitulos + " capítulos");                                        // quantidade de capítulos
+  if (plot.totalCenas > 0) partes.push(plot.totalCenas + " cenas");                       // total de cenas (só se tiver)
   return partes.join(" · ");
 }
 
 // mostra no card o plot escolhido (ou o botão "Escolher plot")
 function renderizarPlotSelecionado() {
-  const plot = lerLista(CHAVE_PLOTS).find((p) => p.id === estado.plotSelecionado);
+  const plot = plotsDisponiveis.find((p) => p.idPlot === estado.plotSelecionado);
   if (plot) {
     textoNomePlot.textContent = plot.nome;
     textoResumoPlot.textContent = montarResumoPlot(plot);
@@ -375,7 +276,9 @@ function renderizarPlotSelecionado() {
 
 // abre o modal com a lista de plots
 function abrirModalPlots() {
-  const plots = lerLista(CHAVE_PLOTS);
+  // só aparecem plots livres ou o que já está nesta história
+  // (cada plot fica vinculado a uma história só)
+  const plots = plotsDisponiveis.filter((p) => !p.idHistoria || String(p.idHistoria) === idEdicao);
 
   // remove os plots antigos da lista (mantém só o 1º item fixo: "Sem plot")
   listaPlotsModal.querySelectorAll("li:not(:first-child)").forEach((li) => li.remove());
@@ -388,8 +291,8 @@ function abrirModalPlots() {
   plots.forEach((plot) => {
     const item = document.getElementById("template_item_plot_modal").content.cloneNode(true);
     const radio = item.querySelector(".rdo_plot_modal");
-    radio.value = plot.id;                                   // o valor do radio é o id do plot
-    radio.checked = estado.plotSelecionado === plot.id;      // marca se já estava escolhido
+    radio.value = plot.idPlot;                               // o valor do radio é o id do plot
+    radio.checked = estado.plotSelecionado === plot.idPlot;  // marca se já estava escolhido
     item.querySelector(".nome_plot_modal").textContent = plot.nome;       // nome do plot
     item.querySelector(".resumo_plot_modal").textContent = montarResumoPlot(plot); // atos · capítulos · cenas
     listaPlotsModal.appendChild(item);
@@ -567,39 +470,23 @@ botaoConfirmarModalImagens.addEventListener("click", () => {
 });
 
 
-// 10. CRIAR OS CAPÍTULOS A PARTIR DO PLOT
+// 10. MODO EDIÇÃO: PREENCHER O FORMULÁRIO COM A HISTÓRIA DO BANCO
 
-// cada capítulo do plot vira um capítulo da história, com status "não escrito"
-function criarCapitulosDoPlot(historiaId, plot) {
-  return (plot.capitulos || []).map((capPlot, indice) => ({
-    id: gerarId(),                    // id do capítulo
-    historiaId: historiaId,           // a qual história pertence
-    numero: indice + 1,               // número do capítulo (1, 2, 3...)
-    titulo: capPlot.titulo || "",     // título vindo do plot (vazio vira "Capítulo 01" na tela)
-    sinopse: capPlot.sinopse || "",   // sinopse vinda do plot
-    ato: capPlot.ato || "",           // em qual ato do plot o capítulo está
-    plotTwist: Boolean(capPlot.plotTwist), // se foi marcado como plot twist
-    status: "nao_escrito",            // todo capítulo começa como "não escrito"
-    texto: "",                        // texto escrito (HTML) — preenchido na tela do capítulo
-    cenas: (capPlot.cenas || []).map((cena) => ({
-      titulo: cena.titulo || "",
-      descricao: cena.descricao || "",
-      concluida: false,               // o "check" da cena na aba Plot
-    })),
-  }));
-}
+async function carregarHistoriaParaEdicao() {
+  // busca a história, os gêneros e o moodboard ao mesmo tempo
+  const [resultado, generos, moodboard] = await Promise.all([
+    buscarJson("/historias/buscar/" + idEdicao),
+    buscarJson("/historias/generos/" + idEdicao),
+    buscarJson("/historias/moodboard/" + idEdicao),
+  ]);
 
-
-// 11. MODO EDIÇÃO: PREENCHER O FORMULÁRIO COM A HISTÓRIA EXISTENTE
-
-function carregarHistoriaParaEdicao() {
-  // procura a história pelo id da URL
-  historiaEmEdicao = lerLista(CHAVE_HISTORIAS).find((h) => h.id === idEdicao);
-  // se não achou, volta para a lista
-  if (!historiaEmEdicao) {
+  historiaEmEdicao = resultado[0];
+  // não existe, ou é de outro usuário: volta para a lista
+  if (!historiaEmEdicao || String(historiaEmEdicao.idUsuario) !== String(idUsuario)) {
     window.location.href = "historias.html";
     return;
   }
+
   tituloFormulario.textContent = "Editar história";   // muda o título da página
   botaoSalvar.textContent = "Salvar alterações";      // muda o texto do botão
   inputNome.value = historiaEmEdicao.nome;            // nome
@@ -608,19 +495,36 @@ function carregarHistoriaParaEdicao() {
   const radio = form.querySelector('input[name="classificacao"][value="' + historiaEmEdicao.classificacao + '"]');
   if (radio) radio.checked = true;
 
-  // copia o resto para o estado (usa || para evitar valores indefinidos)
+  // copia o resto para o estado
   estado.capa = historiaEmEdicao.capa || null;
-  estado.moodboard = [...(historiaEmEdicao.moodboard || [])];
-  estado.generosSelecionados = [...(historiaEmEdicao.generos || [])];
-  estado.personagensSelecionados = [...(historiaEmEdicao.personagens || [])];
-  estado.mundoSelecionado = historiaEmEdicao.mundo || "";
-  estado.plotSelecionado = historiaEmEdicao.plot || "";
+  estado.moodboard = moodboard.map((m) => m.imagem);
+  estado.generosSelecionados = generos.map((g) => g.nome);
+  estado.plotSelecionado = historiaEmEdicao.idPlot || "";
+}
+
+
+// 11. TROCA DE PLOT: AVISA ANTES DE APAGAR CAPÍTULOS JÁ TRABALHADOS
+
+// devolve true se pode continuar salvando
+async function confirmarTrocaDePlot() {
+  const plotAntigo = historiaEmEdicao ? historiaEmEdicao.idPlot || "" : "";
+  const plotMudou = estado.plotSelecionado !== plotAntigo;
+
+  // só importa na edição, quando um plot NOVO foi escolhido (o servidor recria os capítulos)
+  if (!historiaEmEdicao || !plotMudou || !estado.plotSelecionado) return true;
+
+  const capitulos = await buscarJson("/capitulos/listar/" + idEdicao);
+  // algum capítulo já foi trabalhado? (status diferente de "não escrito" ou com palavras)
+  const temTrabalho = capitulos.some((c) => c.status !== "nao_escrito" || c.palavras > 0);
+  if (!temTrabalho) return true;
+
+  return confirm("Esta história já tem capítulos em andamento. Trocar o plot vai APAGAR todos os capítulos atuais. Continuar?");
 }
 
 
 // 12. ENVIO DO FORMULÁRIO (criar ou salvar alterações)
 
-form.addEventListener("submit", (evento) => {
+form.addEventListener("submit", async (evento) => {
   evento.preventDefault();               // impede a página de recarregar
   limparMensagem(divMensagemFormulario); // apaga erro antigo
 
@@ -637,64 +541,48 @@ form.addEventListener("submit", (evento) => {
     return;
   }
 
-  // ---- monta o objeto da história ----
-  const historias = lerLista(CHAVE_HISTORIAS);
-  const id = historiaEmEdicao ? historiaEmEdicao.id : gerarId(); // reaproveita o id na edição
+  botaoSalvar.disabled = true; // evita clique duplo (criaria a história duas vezes)
+  try {
+    if (!(await confirmarTrocaDePlot())) return; // o usuário desistiu
 
-  const historia = {
-    id: id,
-    nome: nome,
-    classificacao: classificacaoMarcada.value,
-    generos: estado.generosSelecionados,
-    personagens: estado.personagensSelecionados,
-    mundo: estado.mundoSelecionado,
-    plot: estado.plotSelecionado,
-    capa: estado.capa,
-    moodboard: estado.moodboard,
-    // mantém a cor antiga na edição; na criação sorteia uma nova
-    corAleatoria: historiaEmEdicao ? historiaEmEdicao.corAleatoria : gerarCorAleatoria(),
-    criadoEm: historiaEmEdicao ? historiaEmEdicao.criadoEm : new Date().toISOString(),
-  };
+    // ---- dados enviados para o servidor ----
+    const dados = {
+      idUsuarioServer: idUsuario,
+      nomeServer: nome,
+      classificacaoServer: classificacaoMarcada.value,
+      capaServer: estado.capa,
+      // a cor só é usada na criação; na edição o servidor mantém a antiga
+      corServer: gerarCorAleatoria(),
+      generosServer: estado.generosSelecionados,
+      moodboardServer: estado.moodboard,
+      idPlotServer: estado.plotSelecionado,
+    };
 
-  // ---- capítulos: criados automaticamente quando há um plot ----
-  let capitulos = lerLista(CHAVE_CAPITULOS);
-  const plot = lerLista(CHAVE_PLOTS).find((p) => p.id === historia.plot);
-  const plotMudou = !historiaEmEdicao || historiaEmEdicao.plot !== historia.plot;
+    const endereco = historiaEmEdicao ? "/historias/atualizar/" + idEdicao : "/historias/cadastrar";
+    const resposta = await fetch(endereco, {
+      method: historiaEmEdicao ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados),
+    });
 
-  if (plot && plotMudou) {
-    // capítulos que essa história já tem
-    const existentes = capitulos.filter((c) => c.historiaId === id);
-    // algum deles já foi trabalhado? (status diferente de "não escrito" ou texto preenchido)
-    const temTrabalho = existentes.some((c) => c.status !== "nao_escrito" || c.texto);
-
-    if (temTrabalho) {
-      // não apaga capítulos já escritos sem avisar
-      const confirmou = confirm("Esta história já tem capítulos em andamento. Trocar o plot vai APAGAR todos os capítulos atuais. Continuar?");
-      if (!confirmou) return; // o usuário desistiu
+    if (!resposta.ok) {
+      // 413 = as imagens passaram do limite que o servidor aceita
+      const texto = resposta.status === 413
+        ? "As imagens ocupam espaço demais. Tente remover algumas."
+        : (await resposta.text()) || "Não foi possível salvar a história.";
+      mostrarMensagem(divMensagemFormulario, texto);
+      return;
     }
-    // remove os capítulos antigos dessa história e cria os novos a partir do plot
-    capitulos = capitulos.filter((c) => c.historiaId !== id);
-    capitulos = capitulos.concat(criarCapitulosDoPlot(id, plot));
-  }
 
-  // ---- grava no localStorage ----
-  if (historiaEmEdicao) {
-    // edição: troca a história antiga pela nova
-    const indice = historias.findIndex((h) => h.id === id);
-    historias[indice] = historia;
-  } else {
-    // criação: adiciona no final da lista
-    historias.push(historia);
+    const salva = await resposta.json(); // { idHistoria }
+    // vai para a tela da história (tela 4)
+    window.location.href = "historia.html?id=" + salva.idHistoria;
+  } catch (erro) {
+    console.log(erro);
+    mostrarMensagem(divMensagemFormulario, "Erro ao conectar com o servidor.");
+  } finally {
+    botaoSalvar.disabled = false;
   }
-
-  const salvou = salvarLista(CHAVE_HISTORIAS, historias) && salvarLista(CHAVE_CAPITULOS, capitulos);
-  if (!salvou) {
-    mostrarMensagem(divMensagemFormulario, "Não foi possível salvar: as imagens ocupam espaço demais. Tente remover algumas.");
-    return;
-  }
-
-  // vai para a tela da história (tela 4)
-  window.location.href = "historia.html?id=" + id;
 });
 
 
@@ -702,10 +590,26 @@ form.addEventListener("submit", (evento) => {
 // 13. INICIALIZAÇÃO
 // ---------------------------------------------------------------------
 
-preencherMenuUsuario();                    // menu lateral
-if (idEdicao) carregarHistoriaParaEdicao(); // se tem ?id=, carrega a história para editar
-renderizarPreviewImagens();                // painel esquerdo
-renderizarGeneros();                       // tags de gênero
-renderizarPersonagens();                   // lista de personagens
-renderizarMundos();                        // lista de mundos
-renderizarPlotSelecionado();               // card do plot
+async function iniciar() {
+  preencherMenuUsuario(); // menu lateral
+  try {
+    // gêneros e plots do usuário (opções do formulário)
+    const [generos, plots] = await Promise.all([
+      buscarJson("/historias/generos-usuario/" + idUsuario),
+      buscarJson("/historias/plots/" + idUsuario),
+    ]);
+    generosDisponiveis = generos.map((g) => g.nome);
+    plotsDisponiveis = plots;
+
+    // se tem ?id=, carrega a história para editar
+    if (idEdicao) await carregarHistoriaParaEdicao();
+  } catch (erro) {
+    console.log(erro);
+    mostrarMensagem(divMensagemFormulario, "Não foi possível carregar os dados do servidor.");
+  }
+  renderizarPreviewImagens();  // painel esquerdo
+  renderizarGeneros();         // tags de gênero
+  renderizarPlotSelecionado(); // card do plot
+}
+
+iniciar();

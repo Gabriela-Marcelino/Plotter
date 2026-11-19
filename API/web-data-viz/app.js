@@ -21,8 +21,13 @@ var avisosRouter = require("./src/routes/avisos");
 var medidasRouter = require("./src/routes/medidas");
 var aquariosRouter = require("./src/routes/aquarios");
 var empresasRouter = require("./src/routes/empresas");
+var historiasRouter = require("./src/routes/historias");
+var capitulosRouter = require("./src/routes/capitulos");
+var plotsRouter = require("./src/routes/plots");
+var dashboardRouter = require("./src/routes/dashboard");
 
-app.use(express.json());
+// limite maior porque capa e moodboard vão como texto (base64)
+app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -34,6 +39,10 @@ app.use("/avisos", avisosRouter);
 app.use("/medidas", medidasRouter);
 app.use("/aquarios", aquariosRouter);
 app.use("/empresas", empresasRouter);
+app.use("/historias", historiasRouter);
+app.use("/capitulos", capitulosRouter);
+app.use("/plots", plotsRouter);
+app.use("/dashboard", dashboardRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`

@@ -39,9 +39,12 @@
   transition: background-color 0.2s;
 }
 
+/* os SVGs têm uma margem interna grande: o tamanho maior + margem negativa
+   deixa o desenho visível sem aumentar a altura do item */
 .item_menu_lateral img {
-  width: 16px;
-  height: 16px;
+  width: 26px;
+  height: 26px;
+  margin: -5px;
   flex-shrink: 0;
 }
 

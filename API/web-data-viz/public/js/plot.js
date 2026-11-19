@@ -1,4 +1,5 @@
-var API = "http://localhost:3333"
+// id do usuário logado (o login.js guardou no sessionStorage)
+var idUsuario = sessionStorage.ID_USUARIO;
 
 var CORES = ["#8b5cf6", "#3b82f6", "#eab308", "#22c55e", "#ef4444"];
 
@@ -50,11 +51,21 @@ var cenaAberta = 0;
 
 async function carregarHistorias() {
   try {
-    var resposta = await fetch(API + "/historias", { credentials: "include" });
+    var resposta = await fetch("/historias/listar/" + idUsuario);
     if (resposta.ok == false) {
       return [];
     }
-    return await resposta.json();
+    var lista = await resposta.json();
+    // converte para o formato que este arquivo usa: { id, nome, status }
+    var historiasConvertidas = [];
+    for (var posicao = 0; posicao < lista.length; posicao++) {
+      var status = "";
+      if (lista[posicao].concluida == 1) {
+        status = "concluida";
+      }
+      historiasConvertidas.push({ id: String(lista[posicao].idHistoria), nome: lista[posicao].nome, status: status });
+    }
+    return historiasConvertidas;
   } catch (erro) {
     return [];
   }
@@ -62,7 +73,7 @@ async function carregarHistorias() {
 
 async function carregarPlots() {
   try {
-    var resposta = await fetch(API + "/plots", { credentials: "include" });
+    var resposta = await fetch("/plots/listar/" + idUsuario);
     if (resposta.ok == false) {
       return [];
     }
@@ -72,22 +83,25 @@ async function carregarPlots() {
   }
 }
 
+// Envia o plot inteiro (com atos, capítulos e cenas) para o servidor.
+// Novo: POST /plots/cadastrar   ·   Edição: PUT /plots/atualizar/:id
 async function salvarPlot(plot, plotNovo) {
-  var endereco = API + "/plots";
+  var endereco = "/plots/cadastrar";
   var metodo = "POST";
   if (plotNovo == false) {
-    endereco = endereco + "/" + plot.id;
+    endereco = "/plots/atualizar/" + plot.id;
     metodo = "PUT";
   }
   try {
     var resposta = await fetch(endereco, {
       method: metodo,
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(plot)
+      body: JSON.stringify({ idUsuarioServer: idUsuario, plotServer: plot })
     });
     if (resposta.ok == false) {
-      alert("Não foi possível salvar. Tente de novo.");
+      // o servidor explica o motivo (ex.: "Informe o nome do plot.")
+      var motivo = await resposta.text();
+      alert("Não foi possível salvar. " + motivo);
       return false;
     }
     if (plotNovo) {
@@ -907,15 +921,9 @@ async function criarPlot() {
   if (salvouComSucesso == false) {
     return;
   }
-  if (plotNovo) {
-    plots.push(plotEmEdicao);
-  } else {
-    for (var indicePlot = 0; indicePlot < plots.length; indicePlot++) {
-      if (plots[indicePlot].id == idPlotEditando) {
-        plots[indicePlot] = plotEmEdicao;
-      }
-    }
-  }
+  // busca de novo no banco: ao vincular uma história, outro plot que estava
+  // ligado a ela fica sem história, e a lista precisa mostrar isso
+  plots = await carregarPlots();
   mostrarLista();
 }
 
@@ -1076,6 +1084,8 @@ async function duplicar(idPlot) {
   }
 
   plotCopia.nome = nomeBase + " (" + numeroCopia + ")";
+  // a cópia é um modelo: não leva a história (cada história tem um plot só)
+  plotCopia.historia = "";
   var salvouComSucesso = await salvarPlot(plotCopia, true);
   if (salvouComSucesso) {
     plots.push(plotCopia);
@@ -1156,7 +1166,21 @@ function excluirCena() {
 
 // PRIMEIRA COISA QUE RODA quando a página abre: busca histórias e plots no banco
 // (await = espera chegar) e só depois desenha a tela 1.
+// nome e inicial do usuário logado no rodapé do menu lateral (o login.js guardou no sessionStorage)
+function preencherMenuUsuario() {
+  var nome = sessionStorage.NOME_USUARIO || "Usuário";
+  pegarElemento("nome_usuario_menu").textContent = nome;
+  pegarElemento("inicial_usuario_menu").textContent = nome.charAt(0).toUpperCase();
+}
+
 async function iniciar() {
+  preencherMenuUsuario();
+  // sem usuário logado não dá para saber de quem são os plots
+  if (idUsuario == undefined) {
+    pegarElemento("conteudo").innerHTML =
+      '<h1>Plots</h1><p class="sub">Você precisa entrar na sua conta para ver e criar plots. <a class="link" href="login.html">Entrar</a></p>';
+    return;
+  }
   historias = await carregarHistorias();
   plots = await carregarPlots();
   mostrarLista();

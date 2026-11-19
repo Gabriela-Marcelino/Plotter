@@ -25,19 +25,12 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* ===== layout geral (plot.html) ===== */
 .app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
-.sidebar{background:var(--lateral);color:#fff;padding:28px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
-.sidebar .brand{font-weight:700;font-size:16px;padding:0 12px 28px}
-.sidebar nav{display:grid;gap:4px}
-.sidebar nav a{padding:10px 12px;border-radius:8px;color:#d9ccef;display:block}
-.sidebar nav a:hover{background:rgba(255,255,255,.08)}
-.sidebar nav a.on{background:#fff;color:var(--lateral);font-weight:600}
-.user{margin-top:auto;border-top:1px solid rgba(255,255,255,.15);padding:16px 12px 0;display:flex;gap:10px;align-items:center}
-.user b{display:block;font-size:13px}
-.user small{color:#c9b9e6}
-.avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-weight:700}
 main{padding:24px 32px 48px;min-width:0}
-.logo{font-family:var(--serif);font-weight:600;font-size:34px;color:var(--violeta);line-height:1}
-.logo sup{color:var(--gold);font-size:16px}
+/* logo no topo (igual às outras telas) */
+.cabecalho_plot{margin-bottom:16px}
+.cabecalho_plot img{display:block;width:150px;height:auto}
+/* menu lateral (estilo em menu_lateral.css) */
+.lista_menu_lateral{list-style:none;padding:0}
 
 /* ===== textos ===== */
 h1{font-size:24px;margin-top:10px;line-height:1.2}
@@ -208,7 +201,6 @@ input[type=range]{accent-color:var(--violeta);width:100%}
 /* ===== responsivo ===== */
 @media (max-width:900px){
   .app{grid-template-columns:1fr}
-  .sidebar{position:static;height:auto}
   .wizard,.detalhe{grid-template-columns:1fr}
   .estruturas{grid-template-columns:repeat(2,1fr)}
   .linha-ato{grid-template-columns:1fr 1fr}

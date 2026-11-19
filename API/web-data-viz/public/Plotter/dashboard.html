@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Plotter</title>
-    <link rel="stylesheet" href="../CSS/dashboard.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
@@ -25,31 +25,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="prazos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
-                            <span>Prazos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="mundos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
-                            <span>Mundos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="personagens.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
-                            <span>Personagens</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="historias.html" class="item_menu_lateral">
                             <img src="../Img/Dashboard/icon-historias.svg" alt="">
                             <span>Histórias</span>
                         </a>
                     </li>
                     <li>
-                        <a href="plots.html" class="item_menu_lateral">
+                        <a href="plot.html" class="item_menu_lateral">
                             <img src="../Img/Dashboard/icon-plots.svg" alt="">
                             <span>Plots</span>
                         </a>
@@ -147,9 +129,7 @@
                 </article>
 
                 <article class="card_continuar_escrita">
-                    <div class="capa_continuar_escrita">
-                        <img id="img_capa_continuar_escrita" alt="Capa da história">
-                    </div>
+                    <div class="capa_continuar_escrita" id="capa_continuar_escrita"></div>
                     <div class="info_continuar_escrita">
                         <div class="cabecalho_continuar_escrita">
                             <p>Continue de onde parou</p>
@@ -158,7 +138,7 @@
                         <h2 id="titulo_continuar_escrita"></h2>
                         <p id="detalhe_continuar_escrita"></p>
                         <div class="rodape_continuar_escrita">
-                            <a href="editor.html" class="botao_abrir_capitulo" id="botao_abrir_capitulo"></a>
+                            <a href="historias.html" class="botao_abrir_capitulo" id="botao_abrir_capitulo"></a>
                             <p class="sequencia_dias" id="valor_sequencia_dias"></p>
                         </div>
                     </div>
@@ -199,22 +179,6 @@
             </section>
 
             <section class="linha_inferior_dashboard">
-
-                <article class="card_proximo_prazo">
-                    <div class="cabecalho_card_indicador">
-                        <div class="icone_card_indicador">
-                            <img src="../Img/Dashboard/icon-proximo-prazo.svg" alt="">
-                        </div>
-                        <p>Próximo prazo</p>
-                    </div>
-                    <h2 id="valor_proximo_prazo"></h2>
-                    <div class="rodape_proximo_prazo">
-                        <div class="barra_progresso_prazo">
-                            <div class="preenchimento_progresso_prazo" id="preenchimento_progresso_prazo"></div>
-                        </div>
-                        <p id="dias_restantes_prazo"></p>
-                    </div>
-                </article>
 
                 <article class="card_projetos_ativos">
                     <div class="cabecalho_card_indicador">
@@ -261,7 +225,7 @@
                     <div class="container_ideia_do_dia">
                         <p class="titulo_ideia_do_dia">Ideia para hoje</p>
                         <p class="texto_ideia_do_dia" id="texto_ideia_do_dia"></p>
-                        <button type="button" class="botao_gerar_ideia" id="botao_gerar_ideia">Gerar outra ideia</button>
+                        <button type="button" class="botao_gerar_ideia" onclick="mostrarProximaIdeia()">Gerar outra ideia</button>
                     </div>
                 </article>
 
@@ -271,29 +235,9 @@
 
     </div>
 
-    <template id="template_item_progresso_historia">
-        <li class="item_progresso_historia">
-            <div class="cabecalho_item_progresso_historia">
-                <div class="nome_item_progresso_historia">
-                    <span class="bolinha_historia"></span>
-                    <p class="nome_historia_progresso"></p>
-                </div>
-                <p class="capitulos_historia_progresso"></p>
-            </div>
-            <div class="barra_progresso_historia">
-                <div class="preenchimento_progresso_historia"></div>
-            </div>
-        </li>
-    </template>
-
-    <template id="template_item_projeto_ativo">
-        <li class="item_projeto_ativo">
-            <span class="bolinha_historia"></span>
-            <p class="nome_projeto_ativo"></p>
-        </li>
-    </template>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <!-- proteção desativada por enquanto (volta para o login se não tiver usuário logado) -->
+    <!-- <script src="../js/protecao.js"></script> -->
     <script src="../js/dashboard.js"></script>
 </body>
 </html>

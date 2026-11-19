@@ -26,31 +26,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="prazos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
-                            <span>Prazos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="mundos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
-                            <span>Mundos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="personagens.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
-                            <span>Personagens</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="historias.html" class="item_menu_lateral item_menu_ativo">
                             <img src="../Img/Historia/icon-historias-roxo.svg" alt="">
                             <span>Histórias</span>
                         </a>
                     </li>
                     <li>
-                        <a href="plots.html" class="item_menu_lateral">
+                        <a href="plot.html" class="item_menu_lateral">
                             <img src="../Img/Dashboard/icon-plots.svg" alt="">
                             <span>Plots</span>
                         </a>
@@ -197,20 +179,6 @@
                     </article>
 
                     <article class="card_campo_historia">
-                        <h2 class="titulo_card_campo_historia">Personagens principais</h2>
-                        <p class="descricao_card_campo_historia">Escolha entre os personagens que você já criou.</p>
-                        <ul class="lista_opcoes_historia" id="lista_personagens_formulario_historia"></ul>
-                        <p class="mensagem_sem_opcoes_historia" id="mensagem_sem_personagens_historia" hidden>Você ainda não criou nenhum personagem. <a href="personagem-formulario.html">Criar personagem</a></p>
-                    </article>
-
-                    <article class="card_campo_historia">
-                        <h2 class="titulo_card_campo_historia">Mundo onde se passa</h2>
-                        <p class="descricao_card_campo_historia">Escolha entre os mundos que você já criou.</p>
-                        <ul class="lista_opcoes_historia" id="lista_mundos_formulario_historia"></ul>
-                        <p class="mensagem_sem_opcoes_historia" id="mensagem_sem_mundos_historia" hidden>Você ainda não criou nenhum mundo. <a href="mundo-formulario.html">Criar mundo</a></p>
-                    </article>
-
-                    <article class="card_campo_historia">
                         <h2 class="titulo_card_campo_historia">Plot (opcional)</h2>
                         <p class="descricao_card_campo_historia">Define quantos capítulos a história terá e, se você quiser, quantas cenas por capítulo.</p>
                         <div class="plot_selecionado_historia" id="plot_selecionado_historia" hidden>
@@ -336,32 +304,6 @@
         </li>
     </template>
 
-    <template id="template_opcao_personagem_historia">
-        <li>
-            <label class="opcao_personagem_historia">
-                <input type="checkbox" class="chk_personagem_historia" />
-                <span class="avatar_opcao_personagem">
-                    <img class="img_avatar_opcao_personagem" alt="">
-                    <span class="iniciais_avatar_opcao_personagem" hidden></span>
-                </span>
-                <span class="nome_opcao_personagem"></span>
-            </label>
-        </li>
-    </template>
-
-    <template id="template_opcao_mundo_historia">
-        <li>
-            <label class="opcao_mundo_historia">
-                <input type="radio" name="mundo" class="rdo_mundo_historia" />
-                <span class="miniatura_opcao_mundo">
-                    <img class="img_miniatura_opcao_mundo" alt="">
-                    <span class="iniciais_miniatura_opcao_mundo" hidden></span>
-                </span>
-                <span class="nome_opcao_mundo"></span>
-            </label>
-        </li>
-    </template>
-
     <template id="template_item_plot_modal">
         <li class="item_plot_modal">
             <label class="label_plot_modal">
@@ -374,6 +316,8 @@
         </li>
     </template>
 
+    <!-- proteção desativada por enquanto (volta para o login se não tiver usuário logado) -->
+    <!-- <script src="../js/protecao.js"></script> -->
     <script src="../js/historia-formulario.js"></script>
 </body>
 </html>

@@ -26,31 +26,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="prazos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
-                            <span>Prazos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="mundos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
-                            <span>Mundos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="personagens.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
-                            <span>Personagens</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="historias.html" class="item_menu_lateral item_menu_ativo">
                             <img src="../Img/Historia/icon-historias-roxo.svg" alt="">
                             <span>Histórias</span>
                         </a>
                     </li>
                     <li>
-                        <a href="plots.html" class="item_menu_lateral">
+                        <a href="plot.html" class="item_menu_lateral">
                             <img src="../Img/Dashboard/icon-plots.svg" alt="">
                             <span>Plots</span>
                         </a>
@@ -78,122 +60,54 @@
             </header>
 
             <a href="historias.html" class="link_voltar_historias">
-                <img src="INSERIR LINK DA IMAGEM DO ÍCONE SETA ESQUERDA" alt="">
+                <img src="../Img/prazos/icon-seta-esquerda.svg" alt="">
                 <span>Histórias</span>
             </a>
 
             <section class="card_cabecalho_historia">
-                <div class="capa_cabecalho_historia">
-                    <img id="img_capa_cabecalho_historia" alt="Capa da história">
-                    <span class="iniciais_cabecalho_historia" id="iniciais_cabecalho_historia" hidden></span>
-                </div>
+                <!-- capa (preenchida pelo JS) -->
+                <div id="area_capa_historia"></div>
 
                 <div class="info_cabecalho_historia">
                     <h1 id="titulo_historia"></h1>
+                    <!-- selo de classificação, gêneros e mundo (preenchidos pelo JS) -->
                     <div class="linha_tags_cabecalho_historia">
-                        <span class="selo_classificacao_historia" id="selo_classificacao_historia"></span>
+                        <span id="area_selo_historia"></span>
                         <ul class="lista_generos_cabecalho_historia" id="lista_generos_cabecalho_historia"></ul>
-                        <div class="mundo_cabecalho_historia" id="mundo_cabecalho_historia" hidden>
-                            <img src="INSERIR LINK DA IMAGEM DO ÍCONE MUNDO" alt="">
-                            <p id="nome_mundo_historia"></p>
-                        </div>
+                        <div id="area_mundo_historia"></div>
                     </div>
-                    <div class="grupo_personagens_cabecalho_historia" id="grupo_personagens_cabecalho_historia" hidden>
-                        <p class="rotulo_card_historia">Personagens principais</p>
-                        <ul class="lista_avatares_cabecalho_historia" id="lista_avatares_cabecalho_historia"></ul>
-                    </div>
+                    <!-- personagens principais (preenchidos pelo JS) -->
+                    <div id="area_personagens_historia"></div>
                 </div>
 
+                <!-- progresso + botão "Editar história" (preenchidos pelo JS) -->
                 <div class="progresso_cabecalho_historia">
                     <p class="valor_progresso_historia" id="valor_progresso_historia"></p>
-                    <div class="barra_progresso_historia">
-                        <div class="preenchimento_progresso_historia" id="preenchimento_progresso_historia"></div>
-                    </div>
+                    <div class="barra_progresso_historia" id="area_barra_progresso_historia"></div>
                     <p class="detalhe_progresso_historia" id="detalhe_progresso_historia"></p>
-                    <a href="historia-formulario.html" class="botao_editar_historia" id="botao_editar_historia">Editar história</a>
+                    <a href="historias.html" class="botao_editar_historia" id="botao_editar_historia">Editar história</a>
                 </div>
             </section>
 
             <section class="barra_filtros_capitulos">
-                <div class="filtros_status_capitulos" id="filtros_status_capitulos">
-                    <button type="button" class="filtro_status_capitulo" data-status="nao_escrito" aria-pressed="false">
-                        <span class="bolinha_status"></span>
-                        <span class="nome_filtro_status">Não escrito</span>
-                        <span class="contador_filtro_status" id="contador_status_nao_escrito"></span>
-                    </button>
-                    <button type="button" class="filtro_status_capitulo" data-status="escrevendo" aria-pressed="false">
-                        <span class="bolinha_status"></span>
-                        <span class="nome_filtro_status">Escrevendo</span>
-                        <span class="contador_filtro_status" id="contador_status_escrevendo"></span>
-                    </button>
-                    <button type="button" class="filtro_status_capitulo" data-status="a_revisar" aria-pressed="false">
-                        <span class="bolinha_status"></span>
-                        <span class="nome_filtro_status">A revisar</span>
-                        <span class="contador_filtro_status" id="contador_status_a_revisar"></span>
-                    </button>
-                    <button type="button" class="filtro_status_capitulo" data-status="revisado" aria-pressed="false">
-                        <span class="bolinha_status"></span>
-                        <span class="nome_filtro_status">Revisado</span>
-                        <span class="contador_filtro_status" id="contador_status_revisado"></span>
-                    </button>
-                    <button type="button" class="filtro_status_capitulo" data-status="concluido" aria-pressed="false">
-                        <span class="bolinha_status"></span>
-                        <span class="nome_filtro_status">Concluído</span>
-                        <span class="contador_filtro_status" id="contador_status_concluido"></span>
-                    </button>
-                    <button type="button" class="filtro_status_capitulo" data-status="publicado" aria-pressed="false">
-                        <span class="bolinha_status"></span>
-                        <span class="nome_filtro_status">Publicado</span>
-                        <span class="contador_filtro_status" id="contador_status_publicado"></span>
-                    </button>
-                </div>
-                <button type="button" class="botao_novo_capitulo" id="botao_novo_capitulo">
-                    <img src="INSERIR LINK DA IMAGEM DO ÍCONE MAIS" alt="">
-                    <span>Capítulo</span>
-                </button>
+                <!-- botões de filtro (preenchidos pelo JS) -->
+                <div class="filtros_status_capitulos" id="filtros_status_capitulos"></div>
+                <!-- botão "+ Capítulo" (preenchido pelo JS, só aparece em histórias sem plot) -->
+                <div id="area_botao_novo_capitulo"></div>
             </section>
 
             <section class="grade_capitulos" id="grade_capitulos"></section>
 
-            <p class="mensagem_sem_capitulos" id="mensagem_sem_capitulos" hidden>Esta história ainda não tem capítulos. Escolha um plot ou crie o primeiro capítulo.</p>
+            <div id="area_mensagem_sem_capitulos"></div>
 
-            <div class="rodape_capitulos" id="rodape_capitulos">
-                <p id="texto_mostrando_capitulos"></p>
-                <button type="button" class="botao_ver_todos_capitulos" id="botao_ver_todos_capitulos">Ver todos</button>
-            </div>
+            <div class="rodape_capitulos" id="rodape_capitulos"></div>
 
         </main>
 
     </div>
 
-    <template id="template_card_capitulo">
-        <a href="capitulo.html" class="card_capitulo" data-status="nao_escrito">
-            <div class="cabecalho_card_capitulo">
-                <span class="etiqueta_status_capitulo">
-                    <span class="bolinha_status"></span>
-                    <span class="texto_status_capitulo"></span>
-                </span>
-                <p class="numero_card_capitulo"></p>
-            </div>
-            <h3 class="titulo_card_capitulo"></h3>
-            <div class="rodape_card_capitulo">
-                <img src="INSERIR LINK DA IMAGEM DO ÍCONE CENAS" alt="">
-                <p class="contagem_cenas_card_capitulo"></p>
-            </div>
-        </a>
-    </template>
-
-    <template id="template_tag_genero_historia">
-        <li class="tag_genero_historia"></li>
-    </template>
-
-    <template id="template_avatar_personagem_historia">
-        <li class="avatar_personagem_historia">
-            <img class="img_avatar_personagem_historia" alt="">
-            <span class="iniciais_avatar_personagem_historia" hidden></span>
-        </li>
-    </template>
-
+    <!-- proteção desativada por enquanto (volta para o login se não tiver usuário logado) -->
+    <!-- <script src="../js/protecao.js"></script> -->
     <script src="../js/historia.js"></script>
 </body>
 </html>

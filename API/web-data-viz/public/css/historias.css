@@ -198,6 +198,49 @@ button:focus-visible {
   box-shadow: 0 2px 6px rgba(30, 26, 43, 0.25);
 }
 
+.botao_excluir_historia {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.92);
+  color: #c0392b;
+  cursor: pointer;
+  opacity: 0;
+  box-shadow: 0 2px 6px rgba(30, 26, 43, 0.25);
+  transition: opacity 0.2s, background-color 0.2s, color 0.2s;
+}
+
+/* aparece ao passar o mouse no card ou ao chegar nele pelo teclado (Tab) */
+.card_historia:hover .botao_excluir_historia,
+.botao_excluir_historia:focus-visible {
+  opacity: 1;
+}
+
+.botao_excluir_historia:hover {
+  background-color: #c0392b;
+  color: #ffffff;
+}
+
+/* em telas de toque não existe "hover": deixa o botão sempre visível */
+@media (hover: none) {
+  .botao_excluir_historia {
+    opacity: 1;
+  }
+}
+
+.mensagem_lista_historias {
+  margin: 8px 0;
+  color: #c0392b;
+  font-size: 14px;
+}
+
 .info_card_historia {
   flex: 1;
   padding: 16px 18px 20px;

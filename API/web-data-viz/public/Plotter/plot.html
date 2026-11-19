@@ -6,22 +6,62 @@
 <title>Plotter · Plots</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/plot.css">
+<link rel="stylesheet" href="../css/menu_lateral.css">
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar">
-    <div class="brand">Plotter</div>
-    <nav>
-      <a href="#">Dashboard</a><a href="#">Prazos</a><a href="#">Mundos</a>
-      <a href="#">Personagens</a><a href="#">Histórias</a><a class="on" href="#/plots">Plots</a>
+
+  <aside class="menu_lateral">
+    <div class="cabecalho_menu_lateral">
+      <p>Plotter</p>
+    </div>
+
+    <nav class="navegacao_menu_lateral">
+      <ul class="lista_menu_lateral">
+        <li>
+          <a href="dashboard.html" class="item_menu_lateral">
+            <img src="../Img/prazos/icon-dash-branco.svg" alt="">
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="historias.html" class="item_menu_lateral">
+            <img src="../Img/Dashboard/icon-historias.svg" alt="">
+            <span>Histórias</span>
+          </a>
+        </li>
+        <li>
+          <a href="plot.html" class="item_menu_lateral item_menu_ativo">
+            <img src="../Img/Plot/icon-plots-roxo.svg" alt="">
+            <span>Plots</span>
+          </a>
+        </li>
+      </ul>
     </nav>
-    <div class="user"><div class="avatar">G</div><div><b>Gabi</b><small>Configurações</small></div></div>
+
+    <div class="perfil_menu_lateral">
+      <div class="avatar_usuario">
+        <span id="inicial_usuario_menu"></span>
+      </div>
+      <div class="info_perfil_menu">
+        <p id="nome_usuario_menu"></p>
+        <a href="configuracoes.html" class="link_configuracoes_menu">Configurações</a>
+      </div>
+    </div>
   </aside>
-  <main id="conteudo">
-    <div class="logo">Plotter<sup>✦</sup></div>
-    <h1>Plots</h1>
-    <p class="sub">Carregando seus plots… Se esta mensagem não sumir, confira se plot.css e plot.js estão na mesma pasta que este arquivo.</p>
+
+  <main>
+    <header class="cabecalho_plot">
+      <img src="../Img/Dashboard/icon-plotter-menor.svg" alt="Logo do Plotter">
+    </header>
+
+    <!-- o plot.js desenha as telas aqui dentro -->
+    <div id="conteudo">
+      <h1>Plots</h1>
+      <p class="sub">Carregando seus plots… Se esta mensagem não sumir, confira se plot.css e plot.js estão na mesma pasta que este arquivo.</p>
+    </div>
   </main>
+
 </div>
 <script src="../js/plot.js"></script>
 </body>

@@ -26,31 +26,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="prazos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-prazos.svg" alt="">
-                            <span>Prazos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="mundos.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-mundos.svg" alt="">
-                            <span>Mundos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="personagens.html" class="item_menu_lateral">
-                            <img src="../Img/Dashboard/icon-personagens.svg" alt="">
-                            <span>Personagens</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="historias.html" class="item_menu_lateral item_menu_ativo">
                             <img src="../Img/Historia/icon-historias-roxo.svg" alt="">
                             <span>Histórias</span>
                         </a>
                     </li>
                     <li>
-                        <a href="plots.html" class="item_menu_lateral">
+                        <a href="plot.html" class="item_menu_lateral">
                             <img src="../Img/Dashboard/icon-plots.svg" alt="">
                             <span>Plots</span>
                         </a>
@@ -80,13 +62,15 @@
             <section class="titulo_historias">
                 <div class="texto_titulo_historias">
                     <h1>Histórias</h1>
-                    <p>Todas as suas histórias, com classificação, gênero, personagens e mundo.</p>
+                    <p>Todas as suas histórias, com classificação e gênero.</p>
                 </div>
                 <a href="historia-formulario.html" class="botao_criar_historia">
                     <img src="../Img/Historia/icon-mais.svg" alt="">
                     <span>Nova história</span>
                 </a>
             </section>
+
+            <p class="mensagem_lista_historias" id="mensagem_lista_historias" hidden></p>
 
             <section class="grade_historias" id="grade_historias">
                 <a href="historia-formulario.html" class="card_nova_historia" id="card_nova_historia">
@@ -107,25 +91,19 @@
                 <img class="img_capa_card_historia" alt="">
                 <span class="iniciais_card_historia" hidden></span>
                 <span class="selo_classificacao_historia"></span>
+                <button type="button" class="botao_excluir_historia" aria-label="Excluir história">
+                    <!-- ícone de lixeira -->
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 6h18" />
+                        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                    </svg>
+                </button>
             </div>
             <div class="info_card_historia">
                 <h2 class="nome_card_historia"></h2>
                 <ul class="lista_generos_card_historia"></ul>
-                <div class="grupo_personagens_card_historia">
-                    <p class="rotulo_card_historia">Personagens principais</p>
-                    <div class="linha_personagens_card_historia">
-                        <ul class="lista_avatares_card_historia"></ul>
-                        <span class="contador_personagens_card_historia" hidden></span>
-                        <p class="nomes_personagens_card_historia"></p>
-                    </div>
-                </div>
-                <div class="grupo_mundo_card_historia">
-                    <p class="rotulo_card_historia">Mundo onde se passa</p>
-                    <div class="linha_mundo_card_historia">
-                        <img src="../Img/Dashboard/icon-mundos.svg alt="">
-                        <p class="nome_mundo_card_historia"></p>
-                    </div>
-                </div>
             </div>
         </a>
     </template>
@@ -134,13 +112,8 @@
         <li class="tag_genero_historia"></li>
     </template>
 
-    <template id="template_avatar_personagem_historia">
-        <li class="avatar_personagem_historia">
-            <img class="img_avatar_personagem_historia" alt="">
-            <span class="iniciais_avatar_personagem_historia" hidden></span>
-        </li>
-    </template>
-
+    <!-- proteção desativada por enquanto (volta para o login se não tiver usuário logado) -->
+    <!-- <script src="../js/protecao.js"></script> -->
     <script src="../js/historias.js"></script>
 </body>
 </html>
