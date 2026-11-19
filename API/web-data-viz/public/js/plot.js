@@ -1,1626 +1,1164 @@
-'use strict';
+var API = "http://localhost:3333"
 
-/* DEMO = true carrega plots de exemplo quando não há nada salvo.
-   Os dados passam pela camada API (mais abaixo): hoje usa localStorage;
-   para usar o banco, troque só o corpo das funções de API por fetch(). */
-var DEMO = true;
-var KEY = 'plot.v1';
-var app = document.getElementById('app');
+var CORES = ["#8b5cf6", "#3b82f6", "#eab308", "#22c55e", "#ef4444"];
 
-var CORES = ['#8b5cf6', '#3b82f6', '#e8a817', '#22a55b', '#e0443e'];
-var CLS = ['', 'b', 'g', 'gr', 'r'];
 
-var STORIES = [];
-var plots = [];
-var W = null;     // estado do assistente (wizard)
-var SEL = 0;      // capítulo selecionado na ficha
-var ED = null;    // cena em edição
-var DEL = null;   // item que está sendo excluído
-
-var STRUCT_KEYS = ['livre', 'tres', 'quatro', 'cinco'];
-var STRUCTS = {
-  livre: {
-    label: 'Estrutura livre',
-    sub: 'Sem atos definidos',
-    acts: []
+// subtitulo, imagem (gráfico do card, em Img/Plot) e descricoes são usados na tela do passo 2 e na prévia.
+var ESTRUTURAS = {
+  "livre": {
+    nome: "Estrutura livre", subtitulo: "Sem atos definidos",
+    imagem: "sem-estrutura.svg",
+    atos: [], porcentagem: [], descricoes: []
   },
-  tres: {
-    label: 'Estrutura de 3 atos',
-    sub: 'Linear tradicional',
-    d: 'M10 58 C70 56 90 10 130 22 S170 12 190 8',
-    acts: [
-      ['Ato 1 · Introdução', 25, 'Mundo atual, incidente inicial e aceitação'],
-      ['Ato 2 · Confronto', 50, 'Obstáculos, ponto de virada e desespero'],
-      ['Ato 3 · Resolução', 25, 'Preparação, clímax e novo encerramento']
-    ]
+  "3": {
+    nome: "Estrutura de 3 atos", subtitulo: "Linear tradicional",
+    imagem: "linha-grafico-3-atos.svg",
+    atos: ["Introdução", "Confronto", "Resolução"], porcentagem: [25, 50, 25],
+    descricoes: ["Mundo atual, incidente inicial e aceitação do chamado.", "Obstáculos crescentes, ponto de virada central e crise.", "Clímax final e o novo encerramento."]
   },
-  quatro: {
-    label: 'Kishōtenketsu (4 atos)',
-    sub: 'Sem conflito obrigatório',
-    d: 'M10 55 H110 V25 H190',
-    acts: [
-      ['Ki · Introdução', 25, 'Rotina, personagens e situação inicial'],
-      ['Shō · Desenvolvimento', 25, 'Aprofundamento sem grandes mudanças'],
-      ['Ten · A virada', 25, 'Elemento surpresa e nova perspectiva'],
-      ['Ketsu · Conclusão', 25, 'Conexão dos elementos e reinterpretação']
-    ]
+  "4": {
+    nome: "Kishōtenketsu (4 atos)", subtitulo: "Sem conflito obrigatório",
+    imagem: "linha-grafico-4-atos.svg",
+    atos: ["Ki · Introdução", "Shō · Desenvolvimento", "Ten · A virada", "Ketsu · Conclusão"], porcentagem: [25, 25, 25, 25],
+    descricoes: ["Apresenta personagens e o mundo.", "Aprofunda a situação sem grandes conflitos.", "Uma reviravolta muda a perspectiva.", "Une as partes e conclui a história."]
   },
-  cinco: {
-    label: 'Pirâmide dramática (5 atos)',
-    sub: 'Tragédia',
-    d: 'M10 60 L100 10 L190 60',
-    acts: [
-      ['Ato 1 · Introdução', 20, 'Cenário, personagens e gatilho inicial'],
-      ['Ato 2 · Ação ascendente', 20, 'Tensão crescente e obstáculos'],
-      ['Ato 3 · Clímax', 20, 'Ponto máximo e virada sem volta'],
-      ['Ato 4 · Ação decrescente', 20, 'Consequências e desdobramentos'],
-      ['Ato 5 · Resolução', 20, 'Desfecho final']
-    ]
+  "5": {
+    nome: "Pirâmide dramática (5 atos)", subtitulo: "Tragédia",
+    imagem: "linha-grafico-5-atos.svg",
+    atos: ["Introdução", "Ação ascendente", "Clímax", "Ação descendente", "Resolução"], porcentagem: [20, 20, 20, 20, 20],
+    descricoes: ["Apresenta personagens e o conflito.", "A tensão cresce com complicações.", "O ponto de maior tensão da história.", "As consequências do clímax se desdobram.", "Desfecho e novo equilíbrio."]
   }
 };
 
-var ICON_DEL = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" ' +
-  'stroke="currentColor" stroke-width="2" stroke-linecap="round" ' +
-  'stroke-linejoin="round">' +
-  '<path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 11v5M14 11v5"/></svg>';
+// 150000 -> "150.000"
+function formatarNumero(numero) {
+  return Number(numero).toLocaleString("pt-BR");
+}
 
+var historias = []
+var plots = []
 
-/* ---------- funções pequenas de apoio ---------- */
+var plotEmEdicao = null;
+var idPlotEditando = null;
+var passoAtual = 1;
+var atoAbertoAssistente = 0;
 
-// troca caracteres especiais para o texto não "quebrar" o HTML
-function esc(texto) {
-  if (texto === null || texto === undefined) {
-    texto = '';
+var idPlotAberto = null
+var capituloAberto = 0;
+var atoAbertoSumario = 0;
+var cenaAberta = 0;
+
+async function carregarHistorias() {
+  try {
+    var resposta = await fetch(API + "/historias", { credentials: "include" });
+    if (resposta.ok == false) {
+      return [];
+    }
+    return await resposta.json();
+  } catch (erro) {
+    return [];
   }
-  texto = String(texto);
-  texto = texto.replaceAll('&', '&amp;');
-  texto = texto.replaceAll('<', '&lt;');
-  texto = texto.replaceAll('>', '&gt;');
-  texto = texto.replaceAll('"', '&quot;');
-  return texto;
 }
 
-function fmt(n) {
-  return Number(n).toLocaleString('pt-BR');
-}
-
-function pad(n) {
-  return String(n).padStart(2, '0');
-}
-
-function clone(objeto) {
-  return JSON.parse(JSON.stringify(objeto));
-}
-
-function uuid() {
-  if (crypto.randomUUID) {
-    return crypto.randomUUID();
+async function carregarPlots() {
+  try {
+    var resposta = await fetch(API + "/plots", { credentials: "include" });
+    if (resposta.ok == false) {
+      return [];
+    }
+    return await resposta.json();
+  } catch (erro) {
+    return [];
   }
-  return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-// devolve 's' quando a quantidade é maior que 1
-function plural(n) {
-  if (n > 1) {
-    return 's';
+async function salvarPlot(plot, plotNovo) {
+  var endereco = API + "/plots";
+  var metodo = "POST";
+  if (plotNovo == false) {
+    endereco = endereco + "/" + plot.id;
+    metodo = "PUT";
   }
-  return '';
-}
-
-// flex não pode ser 0, senão o trecho some da barra
-function flexDe(n) {
-  if (n === 0) {
-    return 0.01;
+  try {
+    var resposta = await fetch(endereco, {
+      method: metodo,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(plot)
+    });
+    if (resposta.ok == false) {
+      alert("Não foi possível salvar. Tente de novo.");
+      return false;
+    }
+    if (plotNovo) {
+      var dadosRecebidos = await resposta.json(); // id que o banco criou
+      plot.id = dadosRecebidos.id;
+    }
+    return true;
+  } catch (erro) {
+    alert("Erro de conexão com o servidor.");
+    return false;
   }
-  return n;
 }
 
-// procura um item pelo id; devolve a posição (ou -1)
-function indexById(lista, id) {
-  for (var i = 0; i < lista.length; i++) {
-    if (lista[i].id === id) {
-      return i;
+function protecaoCaractereEspecial(texto) {
+  texto = "" + texto; // n tava dando certo porque n tinha transformação de int em string
+  var textoProtegido = "";
+  for (var posicaoLetra = 0; posicaoLetra < texto.length; posicaoLetra++) {
+    var letra = texto[posicaoLetra];
+    if (letra == "&") {
+      textoProtegido += "&amp;";
+    } else if (letra == '"') {
+      textoProtegido += "&quot;";
+    } else if (letra == "<") {
+      textoProtegido += "&lt;";
+    } else {
+      textoProtegido += letra;
     }
   }
-  return -1;
+  return textoProtegido;
 }
 
-// procura um item pelo id; devolve o item (ou null)
-function findById(lista, id) {
-  var i = indexById(lista, id);
-  if (i < 0) {
-    return null;
+function copiarPlot(plotOriginal) {
+  return JSON.parse(JSON.stringify(plotOriginal));
+}
+
+function pegarElemento(idElemento) {
+  return document.getElementById(idElemento);
+}
+
+function buscarHistoriavincula(idHistoria) {
+  for (var posicao = 0; posicao < historias.length; posicao++) {
+    if (historias[posicao].id == idHistoria) {
+      return historias[posicao];
+    }
   }
-  return lista[i];
+  return null;
 }
 
-function nomeExiste(nome) {
-  for (var i = 0; i < plots.length; i++) {
-    if (plots[i].name === nome) {
+function acharPlot(idPlot) {
+  for (var posicao = 0; posicao < plots.length; posicao++) {
+    if (plots[posicao].id == idPlot) {
+      return plots[posicao];
+    }
+  }
+  return null;
+}
+
+function statusPlot(plot) {
+  var historiaVinculada = buscarHistoriavincula(plot.historia);
+  if (historiaVinculada == null) {
+    return { texto: "Rascunho", classe: "cinza" };
+  }
+  if (historiaVinculada.status == "concluida") {
+    return { texto: "Finalizado", classe: "verde" };
+  }
+  return { texto: "Em produção", classe: "azul" };
+}
+
+function totalCapitulos(plot) {
+  var tamanho = Number(plot.total);
+  if (plot.medida == "capitulos") {
+    return Math.round(tamanho);
+  }
+  var palavrasPorCapitulo = Number(plot.palavrasCap);
+  if (palavrasPorCapitulo == 0) {
+    palavrasPorCapitulo = 3000;
+  }
+  var quantidadeCapitulos = Math.round(tamanho / palavrasPorCapitulo);
+  if (quantidadeCapitulos < 1) {
+    quantidadeCapitulos = 1;
+  }
+  return quantidadeCapitulos;
+}
+
+function distribuir(quantidadeCapitulos, porcentagens) {
+  var capitulosPorAto = [];
+  var somaDistribuida = 0;
+  for (var indiceAto = 0; indiceAto < porcentagens.length; indiceAto++) {
+    if (indiceAto == porcentagens.length - 1) {
+      capitulosPorAto.push(quantidadeCapitulos - somaDistribuida);
+    } else {
+      var capitulosDoAto = Math.round(quantidadeCapitulos * porcentagens[indiceAto] / 100);
+      capitulosPorAto.push(capitulosDoAto);
+      somaDistribuida += capitulosDoAto;
+    }
+  }
+  return capitulosPorAto;
+}
+
+function somaAtos() {
+  var soma = 0;
+  for (var indiceAto = 0; indiceAto < plotEmEdicao.atos.length; indiceAto++) {
+    soma += plotEmEdicao.atos[indiceAto];
+  }
+  return soma;
+}
+
+function capEscrito(capitulo) {
+  if (capitulo.cenas.length == 0) {
+    return false; // ESCRITO só se tem pelo menos 1 cena e TODAS escritas.
+  }
+  for (var indiceCena = 0; indiceCena < capitulo.cenas.length; indiceCena++) {
+    if (capitulo.cenas[indiceCena].escrita == false) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function contarCapsEscritos(plot) {
+  var capitulosEscritos = 0;
+  for (var indiceCapitulo = 0; indiceCapitulo < plot.capitulos.length; indiceCapitulo++) {
+    if (capEscrito(plot.capitulos[indiceCapitulo])) {
+      capitulosEscritos++;
+    }
+  }
+  return capitulosEscritos;
+}
+
+function contarCenas(plot) { // contar cenas todos os caps
+  var totalCenas = 0;
+  var cenasEscritas = 0;
+  for (var indiceCapitulo = 0; indiceCapitulo < plot.capitulos.length; indiceCapitulo++) {
+    var capitulo = plot.capitulos[indiceCapitulo];
+    for (var indiceCena = 0; indiceCena < capitulo.cenas.length; indiceCena++) {
+      totalCenas++;
+      if (capitulo.cenas[indiceCena].escrita) {
+        cenasEscritas++;
+      }
+    }
+  }
+  return { total: totalCenas, escritas: cenasEscritas };
+}
+
+// Conta as cenas de UM cap.
+function contarEscritasCap(capitulo) {
+  var cenasEscritas = 0;
+  for (var indiceCena = 0; indiceCena < capitulo.cenas.length; indiceCena++) {
+    if (capitulo.cenas[indiceCena].escrita) {
+      cenasEscritas++;
+    }
+  }
+  return cenasEscritas;
+}
+
+function contarTwists(plot) {
+  var quantidadeTwists = 0;
+  for (var indiceCapitulo = 0; indiceCapitulo < plot.capitulos.length; indiceCapitulo++) {
+    if (plot.capitulos[indiceCapitulo].twist) {
+      quantidadeTwists++;
+    }
+  }
+  return quantidadeTwists;
+}
+
+function porcentagem(parte, total) {
+  if (total == 0) {
+    return 0;
+  }
+  return Math.round(parte * 100 / total);
+}
+
+
+function faixasAtos(plot) {
+  var faixas = [];
+  var inicioFaixa = 0;
+  var nomesAtos = ESTRUTURAS[plot.estrutura].atos;
+  // Estrutura livre 
+  if (plot.atos.length == 0) {
+    faixas.push({ nome: "Capítulos", inicio: 0, fim: plot.capitulos.length, cor: CORES[0] });
+    return faixas;
+  }
+  for (var indiceAto = 0; indiceAto < plot.atos.length; indiceAto++) {
+    faixas.push({ nome: nomesAtos[indiceAto], inicio: inicioFaixa, fim: inicioFaixa + plot.atos[indiceAto], cor: CORES[indiceAto] });
+    inicioFaixa += plot.atos[indiceAto];
+  }
+  return faixas;
+}
+
+function barraHTML(plot) {
+  var faixas = faixasAtos(plot);
+  var quantidadeCapitulos = plot.capitulos.length;
+  var html = '<div class="barra-wrap">';
+
+  for (var indiceCapitulo = 0; indiceCapitulo < quantidadeCapitulos; indiceCapitulo++) {
+    if (plot.capitulos[indiceCapitulo].twist) {
+      var posicaoLosango = (indiceCapitulo + 0.5) * 100 / quantidadeCapitulos;
+      html += '<span class="twist" style="left:' + posicaoLosango + '%">◆</span>';
+    }
+  }
+
+  html += '<div class="barra">';
+  for (var indiceFaixa = 0; indiceFaixa < faixas.length; indiceFaixa++) {
+    var faixa = faixas[indiceFaixa];
+    var capitulosDoAto = faixa.fim - faixa.inicio;
+    var capitulosEscritos = 0;
+    for (var indiceCapituloAto = faixa.inicio; indiceCapituloAto < faixa.fim; indiceCapituloAto++) {
+      if (capEscrito(plot.capitulos[indiceCapituloAto])) {
+        capitulosEscritos++;
+      }
+    }
+    var porcentagemPintada = 0;
+    if (capitulosDoAto > 0) {
+      porcentagemPintada = capitulosEscritos * 100 / capitulosDoAto;
+    }
+    html += '<div class="seg" style="flex:' + capitulosDoAto + '"><div style="width:' + porcentagemPintada + '%;background:' + faixa.cor + '"></div></div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TELA 1 · LISTA DE PLOTS
+
+function mostrarLista() {
+  var html = '<div class="topo-pagina"><div><h1>Plots</h1><p class="sub">Estrutura, progresso e status de cada plot.</p></div>';
+  html += '<button class="btn" onclick="novoPlot()">+ Novo plot</button></div>';
+
+  if (plots.length == 0) {
+    html += '<div class="grade"><div class="card novo" onclick="novoPlot()"><div style="font-size:26px">+</div>Criar novo plot</div></div>';
+    pegarElemento("conteudo").innerHTML = html;
+    return;
+  }
+
+  html += '<div class="grade">';
+  for (var indicePlot = 0; indicePlot < plots.length; indicePlot++) {
+    var plot = plots[indicePlot];
+    var status = statusPlot(plot);
+    var historiaVinculada = buscarHistoriavincula(plot.historia);
+    var quantidadeCapitulos = plot.capitulos.length;
+    var capitulosEscritos = contarCapsEscritos(plot);
+    var porcentagemEscrita = porcentagem(capitulosEscritos, quantidadeCapitulos);
+    var cenas = contarCenas(plot);
+    var quantidadeTwists = contarTwists(plot);
+
+    var textoTwist = "plot twists";
+    if (quantidadeTwists == 1) {
+      textoTwist = "plot twist";
+    }
+
+    html += '<div class="card" onclick="abrirDetalhe(\'' + plot.id + '\')">';
+    html += '<div class="topo"><h3>' + protecaoCaractereEspecial(plot.nome) + '</h3><span class="tag ' + status.classe + '">' + status.texto + '</span></div>';
+    if (historiaVinculada != null) {
+      html += '<div class="hist">▫ ' + protecaoCaractereEspecial(historiaVinculada.nome) + '</div>';
+    } else {
+      html += '<div class="hist cinza">▫ Sem história vinculada</div>';
+    }
+    html += '<div class="peq">' + ESTRUTURAS[plot.estrutura].nome + ' · ' + quantidadeCapitulos + ' capítulos</div>';
+    html += barraHTML(plot);
+    html += '<div class="linha"><b>' + porcentagemEscrita + '% escrito</b><span>' + capitulosEscritos + ' / ' + quantidadeCapitulos + ' capítulos</span></div>';
+    html += '<div class="linha"><span>' + cenas.escritas + ' / ' + cenas.total + ' cenas escritas</span>';
+    html += '<span>◆ ' + quantidadeTwists + textoTwist + '</span></div></div>';
+  }
+  html += '<div class="card novo" onclick="novoPlot()"><div style="font-size:26px">+</div>Novo plot</div></div>';
+  pegarElemento("conteudo").innerHTML = html;
+}
+
+
+// ============================================================
+// 5. TELAS 2 a 5 · ASSISTENTE DE CRIAÇÃO
+// ============================================================
+
+// Cria um plot vazio com valores padrão e abre o passo 1.
+function novoPlot() {
+  plotEmEdicao = {
+    id: "", nome: "", historia: "", medida: "capitulos", total: 50, palavrasCap: 3000,
+    rascunho: "", estrutura: "", atos: [], capitulos: []
+  };
+  idPlotEditando = null;
+  passoAtual = 1;
+  atoAbertoAssistente = 0;
+  renderWizard();
+}
+
+// Procura o plot clicado, faz uma CÓPIA dele em "plotEmEdicao" e abre o assistente já preenchido.
+function editarPlot(idPlot) {
+  for (var indicePlot = 0; indicePlot < plots.length; indicePlot++) {
+    if (plots[indicePlot].id == idPlot) {
+      plotEmEdicao = copiarPlot(plots[indicePlot]);
+    }
+  }
+  idPlotEditando = idPlot;
+  passoAtual = 1;
+  atoAbertoAssistente = 0;
+  renderWizard();
+}
+
+// Garante que o vetor de capítulos tem o tamanho certo.
+// Se faltam: adiciona "Capítulo N" no fim (push). Se sobram: remove do fim (pop).
+// [FORA DAS LISTAS] vetor.pop() remove o ÚLTIMO item do vetor (é o contrário do push).
+function ajustarCapitulos() {
+  var quantidadeDesejada = totalCapitulos(plotEmEdicao);
+  while (plotEmEdicao.capitulos.length < quantidadeDesejada) {
+    plotEmEdicao.capitulos.push({ titulo: "Capítulo " + (plotEmEdicao.capitulos.length + 1), twist: false, sinopse: "", cenas: [] });
+  }
+  while (plotEmEdicao.capitulos.length > quantidadeDesejada) {
+    plotEmEdicao.capitulos.pop();
+  }
+}
+
+// Verifica se um texto tem pelo menos uma letra que não seja espaço.
+// Ex.: "   " -> false   " Ana " -> true
+function temTexto(texto) {
+  for (var posicaoLetra = 0; posicaoLetra < texto.length; posicaoLetra++) {
+    if (texto[posicaoLetra] != " ") {
       return true;
     }
   }
   return false;
 }
 
-// "Meu plot (3)" vira "Meu plot"
-function nomeBase(nome) {
-  var pos = nome.lastIndexOf(' (');
-  if (pos < 0 || nome.charAt(nome.length - 1) !== ')') {
-    return nome;
-  }
-  var miolo = nome.substring(pos + 2, nome.length - 1);
-  if (miolo === '') {
-    return nome;
-  }
-  for (var i = 0; i < miolo.length; i++) {
-    var letra = miolo.charAt(i);
-    if (letra < '0' || letra > '9') {
-      return nome;
-    }
-  }
-  return nome.substring(0, pos);
-}
-
-function newScene(capitulo) {
-  return {
-    id: uuid(),
-    title: 'Cena ' + (capitulo.scenes.length + 1),
-    desc: '',
-    written: false
-  };
-}
-
-function newChapter(i) {
-  return {
-    id: uuid(),
-    title: 'Capítulo ' + (i + 1),
-    twist: false,
-    written: false,
-    scenes: []
-  };
-}
-
-function makeChapters(total) {
-  var lista = [];
-  for (var i = 0; i < total; i++) {
-    lista.push(newChapter(i));
-  }
-  return lista;
-}
-
-
-/* ---------- dados ---------- */
-
-function demo() {
-  // plot 1: 50 capítulos, 8 escritos, com cenas
-  var a = makeChapters(50);
-  for (var i = 0; i < 8; i++) {
-    a[i].written = true;
-    for (var k = 0; k < 4; k++) {
-      a[i].scenes.push({
-        id: uuid(),
-        title: 'Cena ' + (k + 1),
-        desc: '',
-        written: (i < 7 || k < 3)
-      });
-    }
-  }
-  a[7].title = 'A Cripta Vermelha';
-  a[7].twist = true;
-  a[19].twist = true;
-
-  // plot 3: 18 capítulos, todos escritos
-  var c = makeChapters(18);
-  for (var j = 0; j < c.length; j++) {
-    c[j].written = true;
-  }
-  c[8].twist = true;
-
-  return [
-    {
-      id: 'd1', name: 'Dentro da Muralha', storyId: 's1', measure: 'cap',
-      total: 50, wpc: 3000, draft: '', struct: 'tres',
-      pcts: [25, 50, 25], chapters: a
-    },
-    {
-      id: 'd2', name: 'Cartas para Ísis', storyId: '', measure: 'cap',
-      total: 25, wpc: 3000, draft: '', struct: 'livre',
-      pcts: [100], chapters: makeChapters(25)
-    },
-    {
-      id: 'd3', name: 'A Casa do Vento', storyId: 's2', measure: 'cap',
-      total: 18, wpc: 3000, draft: '', struct: 'cinco',
-      pcts: [20, 20, 20, 20, 20], chapters: c
-    }
-  ];
-}
-
-/* ===== CAMADA DE DADOS (trocar por fetch() quando o banco estiver pronto) ===== */
-
-function readStore() {
-  try {
-    return JSON.parse(localStorage.getItem(KEY));
-  } catch (erro) {
-    return null;
-  }
-}
-
-function allPlots() {
-  var salvos = readStore();
-  if (salvos) {
-    return salvos;
-  }
-  if (DEMO) {
-    return demo();
-  }
-  return [];
-}
-
-var API = {
-  async list() {
-    /* GET /api/plots */
-    return allPlots();
-  },
-
-  async stories() {
-    /* GET /api/stories */
-    return [
-      { id: 's1', name: 'Dentro da Muralha', done: false },
-      { id: 's2', name: 'A Casa do Vento', done: true },
-      { id: 's3', name: 'Sírius', done: false }
-    ];
-  },
-
-  async save(p) {
-    /* POST /api/plots (novo) ou PUT /api/plots/:id */
-    var lista = allPlots();
-    var i = indexById(lista, p.id);
-    if (i < 0) {
-      lista.push(p);
-    } else {
-      lista[i] = p;
-    }
-    localStorage.setItem(KEY, JSON.stringify(lista));
-  },
-
-  async remove(id) {
-    /* DELETE /api/plots/:id */
-    var lista = allPlots();
-    var restantes = [];
-    for (var i = 0; i < lista.length; i++) {
-      if (lista[i].id !== id) {
-        restantes.push(lista[i]);
+// Troca de passo. Só valida quando está AVANÇANDO; voltar é sempre livre.
+// Passo 1 -> 2: exige nome e tamanho, cria os capítulos e refaz a divisão dos atos se precisar.
+// Passo 2 -> 3: exige estrutura e que a soma dos atos seja igual ao total de capítulos.
+// return interrompe a função e impede de avançar.
+function irPasso(proximoPasso) {
+  if (proximoPasso > passoAtual) {
+    if (passoAtual == 1) {
+      if (temTexto(plotEmEdicao.nome) == false) {
+        alert("Dê um nome ao plot.");
+        return;
+      }
+      if (totalCapitulos(plotEmEdicao) < 1) {
+        alert("Informe um tamanho maior que zero.");
+        return;
+      }
+      ajustarCapitulos();
+      if (plotEmEdicao.estrutura != "" && plotEmEdicao.estrutura != "livre" && somaAtos() != plotEmEdicao.capitulos.length) {
+        plotEmEdicao.atos = distribuir(plotEmEdicao.capitulos.length, ESTRUTURAS[plotEmEdicao.estrutura].porcentagem);
       }
     }
-    localStorage.setItem(KEY, JSON.stringify(restantes));
-  }
-};
-
-function fail() {
-  alert('Não foi possível salvar no servidor. Tente novamente.');
-}
-
-function saveP(p) {
-  API.save(p).catch(fail);
-}
-
-function delP(id) {
-  API.remove(id).catch(fail);
-}
-
-function blank() {
-  return {
-    id: uuid(), name: '', storyId: '', measure: 'cap', total: 50,
-    wpc: 3000, draft: '', struct: null, pcts: [100], chapters: []
-  };
-}
-
-
-/* ---------- cálculos ---------- */
-
-function S(p) {
-  return STRUCTS[p.struct || 'livre'];
-}
-
-// quantidade de capítulos do plot
-function count(p) {
-  if (p.measure === 'pal') {
-    return Math.max(1, Math.round(p.total / (p.wpc || 1)));
-  }
-  return p.total;
-}
-
-// quantidade de palavras do plot
-function words(p) {
-  if (p.measure === 'pal') {
-    return p.total;
-  }
-  return p.total * p.wpc;
-}
-
-// divide n capítulos entre os atos, de acordo com as porcentagens
-function split(n, pcts) {
-  var soma = 0;
-  for (var i = 0; i < pcts.length; i++) {
-    soma += pcts[i];
-  }
-  if (soma === 0) {
-    soma = 1;
-  }
-
-  var base = [];
-  var sobras = [];
-  var usados = 0;
-  for (var j = 0; j < pcts.length; j++) {
-    var bruto = n * pcts[j] / soma;
-    var inteiro = Math.floor(bruto + 1e-9);
-    base.push(inteiro);
-    sobras.push(bruto - inteiro);
-    usados += inteiro;
-  }
-
-  // os capítulos que faltam vão para quem tem a maior sobra
-  var faltam = n - usados;
-  var rodada = 0;
-  while (rodada < faltam && rodada < pcts.length) {
-    var melhor = 0;
-    for (var m = 1; m < sobras.length; m++) {
-      if (sobras[m] > sobras[melhor]) {
-        melhor = m;
+    if (passoAtual == 2) {
+      if (plotEmEdicao.estrutura == "") {
+        alert("Escolha uma estrutura.");
+        return;
       }
-    }
-    base[melhor]++;
-    sobras[melhor] = -1;
-    rodada++;
-  }
-  return base;
-}
-
-// lista de atos com o capítulo inicial e a quantidade de cada um
-function ranges(p, n) {
-  if (n === undefined) {
-    n = p.chapters.length;
-  }
-  var atos = S(p).acts;
-  if (atos.length === 0) {
-    atos = [['Capítulos', 100, '']];
-  }
-  var contagem = split(n, p.pcts);
-  var inicio = 0;
-  var lista = [];
-  for (var i = 0; i < atos.length; i++) {
-    lista.push({
-      i: i,
-      name: atos[i][0],
-      desc: atos[i][2],
-      from: inicio,
-      n: contagem[i],
-      col: CORES[i]
-    });
-    inicio += contagem[i];
-  }
-  return lista;
-}
-
-// ajusta a quantidade de capítulos do plot ao total escolhido
-function sync(p) {
-  var n = count(p);
-  while (p.chapters.length < n) {
-    p.chapters.push(newChapter(p.chapters.length));
-  }
-  p.chapters.length = n;
-}
-
-function stats(p) {
-  var r = { n: p.chapters.length, w: 0, sp: 0, sw: 0, tw: [] };
-  for (var i = 0; i < p.chapters.length; i++) {
-    var c = p.chapters[i];
-    if (c.written) {
-      r.w++;
-    }
-    if (c.twist) {
-      r.tw.push(i);
-    }
-    for (var k = 0; k < c.scenes.length; k++) {
-      r.sp++;
-      if (c.scenes[k].written) {
-        r.sw++;
+      if (plotEmEdicao.estrutura != "livre" && somaAtos() != plotEmEdicao.capitulos.length) {
+        alert("A soma dos atos precisa ser igual a " + plotEmEdicao.capitulos.length + " capítulos.");
+        return;
       }
     }
   }
-  return r;
+  passoAtual = proximoPasso;
+  renderWizard();
 }
 
-// quantos capítulos escritos existem de "from" até "from + n"
-function countWritten(p, from, n) {
-  var total = 0;
-  for (var i = from; i < from + n && i < p.chapters.length; i++) {
-    if (p.chapters[i].written) {
-      total++;
+// Desenha o esqueleto do assistente: prévia à esquerda, indicador de passos e o miolo,
+// que é preenchido pela função do passo atual.
+function renderWizard() {
+  var nomesPassos = ["Básico", "Estrutura", "Detalhar (opcional)", "Revisar"];
+
+  var titulo = "Novo plot";
+  if (idPlotEditando != null) {
+    titulo = "Editar plot";
+  }
+
+  var html = '<span class="link" onclick="mostrarLista()">‹ Plots</span>';
+  html += '<h1>' + titulo + '</h1>';
+  html += '<p class="sub">Passo ' + passoAtual + ' de 4 · você pode voltar e mudar qualquer coisa antes de criar.</p>';
+  html += '<div class="wizard"><div class="painel previa"><b>Prévia da estrutura</b><div id="previa"></div></div>';
+  html += '<div class="painel painel-passos"><div class="passos">';
+
+  for (var numeroPasso = 1; numeroPasso <= 4; numeroPasso++) {
+    var classeCss = "";
+    var marcador = numeroPasso;
+    if (numeroPasso == passoAtual) {
+      classeCss = "atual";
+    } else if (numeroPasso < passoAtual) {
+      classeCss = "feito";
+      marcador = "✓"; // passo já concluído
     }
+    html += '<div class="p ' + classeCss + '"><span class="n">' + marcador + '</span><span class="nome-passo">' + nomesPassos[numeroPasso - 1] + '</span></div>';
   }
-  return total;
+  html += '</div><div id="passo"></div></div></div>';
+  pegarElemento("conteudo").innerHTML = html;
+
+  if (passoAtual == 1) { passo1(); }
+  if (passoAtual == 2) { passo2(); }
+  if (passoAtual == 3) { passo3(); }
+  if (passoAtual == 4) { passo4(); }
+  atualizarPrevia();
 }
 
-function planStatus(p) {
-  var s = findById(STORIES, p.storyId);
-  var t = stats(p);
-  if (!s) {
-    return { t: 'Planejamento', c: 'b-rasc' };
-  }
-  if (s.done && t.n && t.w === t.n) {
-    return { t: 'Concluído', c: 'b-fin' };
-  }
-  return { t: 'Em produção', c: 'b-prod' };
-}
+// Atualiza a COLUNA DA ESQUERDA (prévia) em tempo real.
+function atualizarPrevia() {
+  var html = "";
 
-function setStruct(k) {
-  var p = W.plot;
-  var atos = STRUCTS[k].acts;
-  p.struct = k;
-  if (atos.length > 0) {
-    p.pcts = [];
-    for (var i = 0; i < atos.length; i++) {
-      p.pcts.push(atos[i][1]);
-    }
+  if (plotEmEdicao.estrutura == "livre") {
+    html = '<div class="previa-vazia">Estrutura livre<br>(sem atos)</div>';
+  } else if (plotEmEdicao.estrutura == "") {
+    html = '<div class="previa-vazia">Sem estrutura definida<br>Escolha no passo 2</div>';
   } else {
-    p.pcts = [100];
-  }
-  W.open = 0;
-}
-
-/* Alterar o ato i só mexe nos atos seguintes.
-   Retorna um aviso (texto) se a alteração não for possível. */
-function setCount(i, v) {
-  var p = W.plot;
-  var n = count(p);
-  var c = split(n, p.pcts);
-  var k = c.length;
-
-  var antes = 0;
-  for (var j = 0; j < i; j++) {
-    antes += c[j];
-  }
-  var resta = n - antes;
-
-  if (v > resta) {
-    var s = 's';
-    if (resta === 1) {
-      s = '';
+    var nomesAtos = ESTRUTURAS[plotEmEdicao.estrutura].atos;
+    var quantidadeCapitulos = plotEmEdicao.capitulos.length;
+    if (quantidadeCapitulos == 0) {
+      quantidadeCapitulos = totalCapitulos(plotEmEdicao);
     }
-    return 'Restam apenas ' + resta + ' capítulo' + s +
-      ' para este ato (os atos anteriores já usam ' + antes + '). ' +
-      'Adicione mais capítulos no total, no passo 1, para fazer essa alteração.';
-  }
 
-  if (i === k - 1) {
-    if (v === resta) {
-      return '';
+    var descricoesAtos = ESTRUTURAS[plotEmEdicao.estrutura].descricoes;
+    html = '<p class="previa-nome">' + ESTRUTURAS[plotEmEdicao.estrutura].nome + '</p><div class="barra">';
+    for (var indiceAto = 0; indiceAto < plotEmEdicao.atos.length; indiceAto++) {
+      var larguraAto = plotEmEdicao.atos[indiceAto];
+      if (larguraAto == 0) {
+        larguraAto = 0.01; // ato com 0 capítulos ainda aparece fininho
+      }
+      html += '<div class="seg" style="flex:' + larguraAto + '"></div>';
     }
-    return 'O último ato recebe os capítulos que sobram (' + resta + '). ' +
-      'Para ter menos capítulos nele, aumente os atos anteriores.';
-  }
+    html += '</div>';
 
-  var depois = [];
-  var somaDepois = 0;
-  for (var a = i + 1; a < k; a++) {
-    depois.push(c[a]);
-    somaDepois += c[a];
-  }
-  if (somaDepois === 0) {
-    depois = [];
-    for (var b = i + 1; b < k; b++) {
-      depois.push(1);
+    for (var indiceCard = 0; indiceCard < plotEmEdicao.atos.length; indiceCard++) {
+      var porcentagemAto = porcentagem(plotEmEdicao.atos[indiceCard], quantidadeCapitulos);
+      html += '<div class="ato-card" style="border-color:' + CORES[indiceCard] + '"><b>Ato ' + (indiceCard + 1) + ' · ' + nomesAtos[indiceCard] + '</b>';
+      html += '<small>' + plotEmEdicao.atos[indiceCard] + ' capítulos · ' + porcentagemAto + '%</small>';
+      html += '<span class="desc">' + descricoesAtos[indiceCard] + '</span></div>';
     }
   }
-
-  var novo = [];
-  for (var x = 0; x < i; x++) {
-    novo.push(c[x]);
-  }
-  novo.push(v);
-  var divisao = split(resta - v, depois);
-  for (var y = 0; y < divisao.length; y++) {
-    novo.push(divisao[y]);
-  }
-
-  p.pcts = [];
-  for (var z = 0; z < novo.length; z++) {
-    p.pcts.push(novo[z] / n * 100);
-  }
-  return '';
+  html += '<p class="previa-total">' + totalCapitulos(plotEmEdicao) + ' capítulos · ~' + formatarNumero(totalCapitulos(plotEmEdicao) * plotEmEdicao.palavrasCap) + ' palavras</p>';
+  pegarElemento("previa").innerHTML = html;
 }
 
-function warn(mensagem) {
-  var e = document.getElementById('warn');
-  if (e) {
-    e.textContent = mensagem;
-    e.hidden = (mensagem === '');
-  }
-}
+/* ---- Passo 1 ---- */
 
-function lbl(p, i, c) {
-  var palavras = Math.round(c[i] * words(p) / count(p));
-  return Math.round(p.pcts[i]) + '% · ~' + fmt(palavras) + ' palavras';
-}
+// PASSO 1 · BÁSICO: nome, história vinculada, medir por capítulos/palavras, quantidade e rascunho.
+//
+// [FORA DAS LISTAS] Eventos dentro do HTML:
+//   oninput="..."  -> roda o código A CADA LETRA digitada no campo.
+//   onchange="..." -> roda quando o usuário escolhe uma opção (select) ou sai do campo.
+//   this.value     -> o que está escrito no próprio campo naquele momento.
+// Ex.: oninput="plotEmEdicao.nome=this.value" guarda o que foi digitado direto no plot.
+function passo1() {
+  var html = '<label>Nome do plot *</label><input type="text" value="' + protecaoCaractereEspecial(plotEmEdicao.nome) + '" oninput="plotEmEdicao.nome=this.value">';
 
-function refreshDist(force) {
-  var p = W.plot;
-  var c = split(count(p), p.pcts);
-  for (var i = 0; i < p.pcts.length; i++) {
-    var r = document.querySelector('[data-i=pct][data-n="' + i + '"]');
-    var q = document.querySelector('[data-i=cnt][data-n="' + i + '"]');
-    r.value = p.pcts[i];
-    r.style.setProperty('--v', p.pcts[i] + '%');
-    if (force || q !== document.activeElement) {
-      q.value = c[i];
-      q.classList.remove('bad');
+  html += '<div class="fila"><div style="flex:2"><label>História vinculada (opcional)</label><select onchange="plotEmEdicao.historia=this.value">';
+  html += '<option value="">Nenhuma história vinculada</option>';
+  for (var indiceHistoria = 0; indiceHistoria < historias.length; indiceHistoria++) {
+    var historia = historias[indiceHistoria];
+    var selecionada = "";
+    if (plotEmEdicao.historia == historia.id) {
+      selecionada = " selected"; // deixa marcada a história que já estava escolhida
     }
-    document.getElementById('pl' + i).textContent = lbl(p, i, c);
+    html += '<option value="' + historia.id + '"' + selecionada + '>' + protecaoCaractereEspecial(historia.nome) + '</option>';
   }
-  document.getElementById('pv').innerHTML = pv();
+  html += '</select></div>';
+
+  var classeBotaoCapitulos = "";
+  var classeBotaoPalavras = "";
+  var rotuloTamanho = "Nº de palavras";
+  if (plotEmEdicao.medida == "capitulos") {
+    classeBotaoCapitulos = "sel";
+    rotuloTamanho = "Nº de capítulos";
+  } else {
+    classeBotaoPalavras = "sel";
+  }
+
+  html += '<div style="flex:2"><label>Como medir o tamanho?</label><div class="toggle">';
+  html += '<button class="' + classeBotaoCapitulos + '" onclick="setMedida(\'capitulos\')">Capítulos</button>';
+  html += '<button class="' + classeBotaoPalavras + '" onclick="setMedida(\'palavras\')">Palavras</button></div></div>';
+  html += '<div><label>' + rotuloTamanho + '</label><input type="number" min="1" value="' + plotEmEdicao.total + '" oninput="plotEmEdicao.total=Number(this.value);atualizarCalculo()"></div></div>';
+  html += '<div class="fila"><div><label>Palavras por capítulo</label><input type="number" min="1" value="' + plotEmEdicao.palavrasCap + '" oninput="plotEmEdicao.palavrasCap=Number(this.value);atualizarCalculo()"></div>';
+  html += '<div style="flex:2"><div class="calc" id="calculo"></div></div></div>';
+  html += '<label>Rascunho do plot</label><textarea oninput="plotEmEdicao.rascunho=this.value">' + protecaoCaractereEspecial(plotEmEdicao.rascunho) + '</textarea>';
+  html += '<div class="rodape"><span></span><button class="btn" onclick="irPasso(2)">Próximo</button></div>';
+  pegarElemento("passo").innerHTML = html;
+  atualizarCalculo();
 }
 
-
-/* ---------- componentes ---------- */
-
-var logo = '<div class="logo">Plotter<sup>✦</sup></div>';
-
-function bar(p) {
-  var n = p.chapters.length;
-  var tw = stats(p).tw;
-  var faixas = ranges(p);
-
-  var html = '<div class="bar">';
-  for (var i = 0; i < faixas.length; i++) {
-    var r = faixas[i];
-    var escritos = countWritten(p, r.from, r.n);
-    var pc = 0;
-    if (r.n > 0) {
-      pc = escritos / r.n * 100;
-    }
-    html += '<span style="flex:' + flexDe(r.n) + ';';
-    html += 'background:linear-gradient(90deg,' + r.col + ' ' + pc + '%,';
-    html += 'var(--track) ' + pc + '%)"></span>';
+// Troca entre capítulos e palavras e coloca um valor padrão (50 capítulos ou 150000 palavras).
+function setMedida(tipoMedida) {
+  plotEmEdicao.medida = tipoMedida;
+  if (tipoMedida == "palavras") {
+    plotEmEdicao.total = 150000;
+  } else {
+    plotEmEdicao.total = 50;
   }
-  for (var k = 0; k < tw.length; k++) {
-    html += '<i style="left:' + ((tw[k] + 0.5) / n * 100) + '%"></i>';
+  renderWizard();
+}
+
+// Mostra a conta ao lado do campo.
+function atualizarCalculo() {
+  var textoCalculo;
+  if (plotEmEdicao.medida == "capitulos") {
+    textoCalculo = "≈ " + (plotEmEdicao.total * plotEmEdicao.palavrasCap) + " palavras no total";
+  } else {
+    textoCalculo = "≈ " + totalCapitulos(plotEmEdicao) + " capítulos (palavras ÷ média por capítulo)";
+  }
+  pegarElemento("calculo").innerHTML = textoCalculo;
+  atualizarPrevia();
+}
+
+/* ---- Passo 2 ---- */
+
+// PASSO 2 · ESTRUTURA: 4 cards para escolher. Com estrutura de atos, mostra uma linha por ato
+// com slider (input range) colorido e o % ao lado. O slider do ÚLTIMO ato fica travado (disabled),
+// porque ele é sempre o que sobra.
+function passo2() {
+  var html = '<h3>Como você quer estruturar esta história?</h3>';
+  html += '<p class="peq">Cada estrutura distribui seus capítulos em atos. Você ajusta as proporções logo abaixo.</p><div class="estruturas">';
+  var chavesEstruturas = ["livre", "3", "4", "5"];
+
+  for (var indiceEstrutura = 0; indiceEstrutura < chavesEstruturas.length; indiceEstrutura++) {
+    var chave = chavesEstruturas[indiceEstrutura];
+    var estrutura = ESTRUTURAS[chave];
+    var classeCss = "";
+    if (plotEmEdicao.estrutura == chave) {
+      classeCss = "sel";
+    }
+    html += '<div class="est ' + classeCss + '" onclick="setEstrutura(\'' + chave + '\')"><b>' + estrutura.nome + '</b><small>' + estrutura.subtitulo + '</small>';
+    html += '<img class="grafico" src="../Img/Plot/' + estrutura.imagem + '" alt=""><ul>';
+    if (estrutura.atos.length == 0) {
+      html += '<li>Escreva do seu jeito, sem divisão</li>';
+    }
+    for (var indiceAto = 0; indiceAto < estrutura.atos.length; indiceAto++) {
+      var rotuloAto = 'Ato ' + (indiceAto + 1) + ' · ' + estrutura.atos[indiceAto];
+      if (chave == "4") {
+        rotuloAto = estrutura.atos[indiceAto]; // Kishōtenketsu já tem o nome do ato (Ki, Shō...)
+      }
+      html += '<li><span class="bolinha" style="background:' + CORES[indiceAto] + '"></span>' + rotuloAto + '</li>';
+    }
+    html += '</ul></div>';
   }
   html += '</div>';
-  return html;
-}
 
-function twTxt(n) {
-  if (n > 0) {
-    return '<span class="gd">◆</span> ' + n + ' plot twist' + plural(n);
-  }
-  return '';
-}
-
-function storyLine(p, pre) {
-  if (pre === undefined) {
-    pre = '';
-  }
-  var s = findById(STORIES, p.storyId);
-  var classe = 'none';
-  var icone = 'off';
-  var texto = 'Sem história vinculada';
-  if (s) {
-    classe = '';
-    icone = 'on';
-    texto = pre + esc(s.name);
-  }
-  return '<div class="story ' + classe + '"><span class="ico ' + icone +
-    '"></span>' + texto + '</div>';
-}
-
-function card(p) {
-  var s = stats(p);
-  var st = planStatus(p);
-  var pc = 0;
-  if (s.n > 0) {
-    pc = Math.round(s.w / s.n * 100);
-  }
-  var cenas = '';
-  if (s.sp > 0) {
-    cenas = s.sw + ' / ' + s.sp + ' cenas escritas';
-  }
-
-  var html = '<article class="pcard" tabindex="0" data-a="open" data-id="' + p.id + '">';
-  html += '<div class="top"><h3>' + esc(p.name) + '</h3><div class="tr">';
-  html += '<span class="badge ' + st.c + '">' + st.t + '</span>';
-  html += '<button class="del" data-a="askdel" data-kind="plot" data-id="' + p.id + '" ';
-  html += 'aria-label="Excluir ' + esc(p.name) + '" title="Excluir plot">';
-  html += ICON_DEL + '</button></div></div>';
-  html += storyLine(p);
-  html += '<div class="meta">' + S(p).label + ' · ' + s.n + ' capítulos</div>';
-  html += bar(p);
-  html += '<div class="row"><b>' + pc + '% escrito</b>';
-  html += '<span>' + s.w + ' / ' + s.n + ' capítulos</span></div>';
-  html += '<div class="row"><span>' + cenas + '</span>';
-  html += '<span>' + twTxt(s.tw.length) + '</span></div>';
-  html += '</article>';
-  return html;
-}
-
-
-/* ---------- Tela 1 · lista de plots ---------- */
-
-function list() {
-  var subtitulo = 'Todos os plots que você criou e em quais histórias cada um é usado.';
-  var textoBotao = 'Criar novo plot';
-  if (plots.length > 0) {
-    subtitulo = 'Estrutura, progresso e status de cada plot.';
-    textoBotao = 'Novo plot';
-  }
-
-  var html = logo;
-  html += '<div class="head"><div><h1>Plots</h1>';
-  html += '<p class="sub">' + subtitulo + '</p></div>';
-  html += '<button class="btn btn-p" data-a="new">+ ' + textoBotao + '</button></div>';
-  html += '<div class="grid">';
-  for (var i = 0; i < plots.length; i++) {
-    html += card(plots[i]);
-  }
-  html += '<button class="new" data-a="new"><div><span>+</span>';
-  html += textoBotao + '</div></button></div>';
-  return html;
-}
-
-
-/* ---------- Wizard ---------- */
-
-// prévia da estrutura (painel lateral)
-function pv() {
-  var p = W.plot;
-  var n = count(p);
-
-  var tw = 0;
-  for (var i = 0; i < p.chapters.length; i++) {
-    if (p.chapters[i].twist) {
-      tw++;
+  if (plotEmEdicao.estrutura != "" && plotEmEdicao.estrutura != "livre") {
+    var quantidadeCapitulos = plotEmEdicao.capitulos.length;
+    html += '<div class="distribuicao-topo"><h3>Distribuição dos capítulos</h3><span class="peq">' + quantidadeCapitulos + ' capítulos no total</span></div>';
+    for (var indiceLinha = 0; indiceLinha < plotEmEdicao.atos.length; indiceLinha++) {
+      var travado = "";
+      if (indiceLinha == plotEmEdicao.atos.length - 1) {
+        travado = " disabled"; // último ato
+      }
+      html += '<div class="linha-ato"><span class="nome-ato">Ato ' + (indiceLinha + 1) + ' · ' + ESTRUTURAS[plotEmEdicao.estrutura].atos[indiceLinha] + '</span>';
+      html += '<input type="range" id="slider' + indiceLinha + '" style="--cor:' + CORES[indiceLinha] + '" min="0" max="' + quantidadeCapitulos + '" value="' + plotEmEdicao.atos[indiceLinha] + '"' + travado + ' oninput="slider(' + indiceLinha + ',this.value)">';
+      html += '<span class="rotulo-ato" id="rotulo' + indiceLinha + '"></span></div>';
     }
+    html += '<div id="aviso"></div>';
   }
+  html += '<div class="rodape"><button class="btn sec" onclick="irPasso(1)">Voltar</button><button class="btn" onclick="irPasso(3)">Próximo</button></div>';
+  pegarElemento("passo").innerHTML = html;
+  atualizarAtos();
+}
 
-  var b = '';
-  if (!p.struct) {
-    b = '<div class="empty-box"><b>Sem estrutura definida</b>Escolha uma no passo 2</div>';
-  } else if (S(p).acts.length === 0) {
-    b = '<div class="empty-box"><b>Estrutura livre</b>Linha contínua, sem divisão em atos</div>';
+// Ao clicar numa estrutura: guarda a escolha e calcula a divisão padrão. Livre = nenhum ato.
+function setEstrutura(chaveEstrutura) {
+  plotEmEdicao.estrutura = chaveEstrutura;
+  ajustarCapitulos();
+  if (chaveEstrutura == "livre") {
+    plotEmEdicao.atos = [];
   } else {
-    var rs = ranges(p, n);
-    b = '<div class="tag">' + S(p).label + '</div>';
-    b += '<div class="bar" style="margin:0">';
-    for (var j = 0; j < rs.length; j++) {
-      b += '<span style="flex:' + flexDe(rs[j].n) + ';background:' + rs[j].col + '"></span>';
-    }
-    b += '</div>';
-    for (var k = 0; k < rs.length; k++) {
-      var r = rs[k];
-      b += '<div class="act ' + CLS[r.i] + '"><b>' + r.name + '</b>';
-      b += '<small>' + r.n + ' capítulos · ' + p.pcts[r.i] + '% — ' + r.desc;
-      b += '</small></div>';
-    }
+    plotEmEdicao.atos = distribuir(plotEmEdicao.capitulos.length, ESTRUTURAS[chaveEstrutura].porcentagem);
   }
-
-  var rodape = '';
-  if (tw > 0) {
-    rodape = '◆ ' + tw + ' plot twist' + plural(tw) + ' marcado' + plural(tw) + '<br>';
-  }
-
-  var html = '<h4>Prévia da estrutura</h4>' + b;
-  html += '<div class="foot">' + rodape + n + ' capítulos · ~';
-  html += fmt(words(p)) + ' palavras</div>';
-  return html;
+  renderWizard();
 }
 
-function calc(p) {
-  if (p.measure === 'cap') {
-    return '≈ ' + fmt(words(p)) + ' palavras no total';
+// REGRA DOS SLIDERS: mexer no ato "atoMexido" só altera os atos DEPOIS dele. Os anteriores nunca mudam.
+// 1) "capitulosAntes" = soma dos atos anteriores. O ato mexido não pode passar do que sobra.
+// 2) "capitulosRestantes" = capítulos que sobram para os atos seguintes. Eles são redistribuídos
+//    mantendo a proporção que já tinham. Se estavam zerados, o próximo ato recebe tudo.
+// 3) O último ato sempre recebe o que sobrou, para a soma continuar igual ao total.
+function slider(atoMexido, valorSlider) {
+  var quantidadeCapitulos = plotEmEdicao.capitulos.length;
+  var atos = plotEmEdicao.atos;
+  var indiceAto;
+  var novoValor = Number(valorSlider);
+
+  var capitulosAntes = 0;
+  for (indiceAto = 0; indiceAto < atoMexido; indiceAto++) {
+    capitulosAntes += atos[indiceAto];
   }
-  return '≈ ' + count(p) + ' capítulos';
-}
-
-function steps() {
-  var nomes = ['Básico', 'Estrutura', 'Detalhar (opcional)', 'Revisar'];
-  var html = '';
-  for (var i = 0; i < nomes.length; i++) {
-    var n = i + 1;
-    var classe = '';
-    var atributos = '';
-    var icone = n;
-    if (n < W.step) {
-      classe = 'done';
-      atributos = ' data-a="step" data-n="' + n + '"';
-      icone = '✓';
-    } else if (n === W.step) {
-      classe = 'now';
-    }
-    html += '<div class="step ' + classe + '"' + atributos + '>';
-    html += '<i>' + icone + '</i><span>' + nomes[i] + '</span></div>';
-  }
-  return html;
-}
-
-// passo 1 · básico
-function body1() {
-  var p = W.plot;
-  var cap = (p.measure === 'cap');
-
-  var classeNome = '';
-  var msgErro = '';
-  if (W.err) {
-    classeNome = 'bad';
-    msgErro = '<span class="err">Dê um nome ao plot para continuar.</span>';
+  if (novoValor > quantidadeCapitulos - capitulosAntes) {
+    novoValor = quantidadeCapitulos - capitulosAntes;
   }
 
-  var onCap = '';
-  var onPal = 'on';
-  var unidade = 'palavras';
-  if (cap) {
-    onCap = 'on';
-    onPal = '';
-    unidade = 'capítulos';
+  var capitulosRestantes = quantidadeCapitulos - capitulosAntes - novoValor;
+  var restantesAntigos = 0;
+  for (indiceAto = atoMexido + 1; indiceAto < atos.length; indiceAto++) {
+    restantesAntigos += atos[indiceAto];
   }
 
-  var opcoes = '<option value="">Nenhuma história vinculada</option>';
-  for (var i = 0; i < STORIES.length; i++) {
-    var selecionada = '';
-    if (STORIES[i].id === p.storyId) {
-      selecionada = 'selected';
-    }
-    opcoes += '<option value="' + STORIES[i].id + '" ' + selecionada + '>';
-    opcoes += esc(STORIES[i].name) + '</option>';
-  }
-
-  var html = '';
-  html += '<label>Nome do plot *';
-  html += '<input class="in ' + classeNome + '" data-i="name" value="' + esc(p.name) + '" ';
-  html += 'placeholder="Ex.: Plot de Dentro da Muralha">' + msgErro + '</label>';
-
-  html += '<div class="f2">';
-  html += '<label>História vinculada (opcional)';
-  html += '<select class="in" data-i="story">' + opcoes + '</select></label>';
-  html += '<div><label style="margin-bottom:6px">Como medir o tamanho?</label>';
-  html += '<div class="seg">';
-  html += '<button type="button" class="' + onCap + '" data-a="measure" data-m="cap">Capítulos</button>';
-  html += '<button type="button" class="' + onPal + '" data-a="measure" data-m="pal">Palavras</button>';
-  html += '<input class="in" type="number" min="1" data-i="total" ';
-  html += 'value="' + p.total + '" aria-label="Tamanho">';
-  html += '<span class="hint">' + unidade + '</span></div></div></div>';
-
-  html += '<div class="seg"><label>Palavras por capítulo';
-  html += '<input class="in" type="number" min="1" data-i="wpc" value="' + p.wpc + '" ';
-  html += 'style="width:150px"></label>';
-  html += '<span class="total" id="calc" style="margin-top:20px">' + calc(p) + '</span></div>';
-
-  html += '<label>Rascunho do plot';
-  html += '<textarea class="in" data-i="draft" placeholder="Escreva livremente a ideia ';
-  html += 'central, os conflitos e os possíveis desfechos…">' + esc(p.draft) + '</textarea>';
-  html += '<span class="hint">Você detalha capítulos e cenas nos próximos passos.</span></label>';
-  return html;
-}
-
-// passo 2 · estrutura
-function body2() {
-  var p = W.plot;
-  var n = count(p);
-  var c = split(n, p.pcts);
-  var atos = S(p).acts;
-
-  // cartões de escolha da estrutura
-  var opts = '';
-  for (var i = 0; i < STRUCT_KEYS.length; i++) {
-    var k = STRUCT_KEYS[i];
-    var s = STRUCTS[k];
-
-    var curva = '';
-    if (k === 'livre') {
-      curva = '<line x1="10" y1="35" x2="190" y2="35" stroke="#c9c4d8" stroke-dasharray="4 3"/>';
+  atos[atoMexido] = novoValor;
+  var capitulosJaUsados = 0;
+  for (indiceAto = atoMexido + 1; indiceAto < atos.length; indiceAto++) {
+    if (indiceAto == atos.length - 1) {
+      atos[indiceAto] = capitulosRestantes - capitulosJaUsados;
     } else {
-      curva = '<path d="' + s.d + '" fill="none" stroke="#8b5cf6" stroke-width="2"/>';
-    }
-
-    var lista = '';
-    if (s.acts.length > 0) {
-      lista = '<ul>';
-      for (var j = 0; j < s.acts.length; j++) {
-        lista += '<li style="--c:' + CORES[j] + '">' + s.acts[j][0] + '</li>';
+      if (restantesAntigos > 0) {
+        atos[indiceAto] = Math.round(atos[indiceAto] * capitulosRestantes / restantesAntigos);
+      } else if (indiceAto == atoMexido + 1) {
+        atos[indiceAto] = capitulosRestantes;
+      } else {
+        atos[indiceAto] = 0;
       }
-      lista += '</ul>';
-    } else {
-      lista = '<small>Escreva do seu jeito, sem divisão</small>';
-    }
-
-    var sel = '';
-    if (p.struct === k) {
-      sel = 'sel';
-    }
-    opts += '<div class="opt ' + sel + '" role="button" tabindex="0" ';
-    opts += 'data-a="struct" data-k="' + k + '">';
-    opts += '<b>' + s.label + '</b><small>' + s.sub + '</small>';
-    opts += '<svg viewBox="0 0 200 70">' + curva + '</svg>' + lista + '</div>';
-  }
-
-  // barras de distribuição dos capítulos por ato
-  var sl = '';
-  if (atos.length > 0) {
-    sl += '<div class="dist"><div class="row2" style="grid-template-columns:1fr auto"><div>';
-    sl += '<h2>Distribuição dos capítulos</h2>';
-    sl += '<p class="sub">Arraste a barra ou digite quantos capítulos cada ato terá. ';
-    sl += 'Ao alterar um ato, só os atos seguintes se ajustam.</p></div>';
-    sl += '<span class="hint">' + n + ' capítulos no total · ~' + fmt(words(p));
-    sl += ' palavras</span></div>';
-    sl += '<p class="warn" id="warn" role="alert" hidden></p>';
-    for (var a = 0; a < atos.length; a++) {
-      sl += '<div class="row2"><b>' + atos[a][0] + '</b>';
-      sl += '<input class="rng" type="range" min="0" max="100" data-i="pct" ';
-      sl += 'data-n="' + a + '" value="' + p.pcts[a] + '" ';
-      sl += 'style="--c:' + CORES[a] + ';--v:' + p.pcts[a] + '%" ';
-      sl += 'aria-label="' + atos[a][0] + '">';
-      sl += '<div class="cnt"><input class="in" type="number" min="0" max="' + n + '" ';
-      sl += 'data-i="cnt" data-n="' + a + '" value="' + c[a] + '" ';
-      sl += 'aria-label="Capítulos de ' + atos[a][0] + '">';
-      sl += '<span class="hint" id="pl' + a + '">' + lbl(p, a, c) + '</span></div></div>';
-    }
-    sl += '</div>';
-  }
-
-  var html = '<div><h2>Como você quer estruturar esta história?</h2>';
-  html += '<p class="sub">Cada estrutura distribui seus capítulos em atos. ';
-  html += 'Você ajusta as proporções logo abaixo.</p></div>';
-  html += '<div class="opts">' + opts + '</div>' + sl;
-  return html;
-}
-
-// passo 3 · capítulos e cenas
-function body3() {
-  var p = W.plot;
-  var rs = ranges(p);
-
-  var html = '<div class="f2"><div><h2>Detalhe capítulos e cenas</h2>';
-  html += '<p class="sub">Dê títulos, defina quantas cenas cada capítulo terá e marque ';
-  html += 'os plot twists. Dá para fazer isso depois.</p></div>';
-  html += '<div class="batch"><label>Cenas por capítulo (em lote)';
-  html += '<input class="in" type="number" min="0" data-i="bn" value="' + W.bn + '" ';
-  html += 'style="width:80px;padding:6px 10px"></label>';
-  html += '<button class="btn btn-p" data-a="batch">Aplicar a todos</button></div></div>';
-
-  html += '<div class="stack">';
-  for (var a = 0; a < rs.length; a++) {
-    var r = rs[a];
-    var aberto = (W.open === r.i);
-    var seta = '›';
-    if (aberto) {
-      seta = '⌄';
-    }
-    html += '<div class="group" data-a="act" data-i="' + r.i + '" ';
-    html += 'style="border-color:' + r.col + '">';
-    html += '<span>' + r.name + ' · ' + r.n + ' capítulos</span>';
-    html += '<em style="font-style:normal">' + seta + '</em></div>';
-
-    if (aberto) {
-      html += '<div class="stack list">';
-      for (var k = 0; k < r.n; k++) {
-        var i = r.from + k;
-        var c = p.chapters[i];
-        var classeTw = '';
-        if (c.twist) {
-          classeTw = 'on';
-        }
-        html += '<div class="chap"><span class="n">' + pad(i + 1) + '</span>';
-        html += '<input class="in" data-i="ctitle" data-c="' + i + '" ';
-        html += 'value="' + esc(c.title) + '" aria-label="Título do capítulo ' + (i + 1) + '">';
-        html += '<div class="stp">Cenas ';
-        html += '<button data-a="sc" data-c="' + i + '" data-d="-1" aria-label="Menos">−</button>';
-        html += '<b>' + c.scenes.length + '</b>';
-        html += '<button data-a="sc" data-c="' + i + '" data-d="1" aria-label="Mais">+</button></div>';
-        html += '<button class="tw ' + classeTw + '" data-a="twist" data-c="' + i + '">';
-        html += '◆ Plot twist</button></div>';
+      if (atos[indiceAto] > capitulosRestantes - capitulosJaUsados) {
+        atos[indiceAto] = capitulosRestantes - capitulosJaUsados;
       }
-      html += '</div>';
+      capitulosJaUsados += atos[indiceAto];
     }
   }
-  html += '</div>';
-  return html;
+  atualizarAtos();
 }
 
-// passo 4 · revisão
-function body4() {
-  var p = W.plot;
-  var s = stats(p);
-  var st = planStatus(p);
-  var story = findById(STORIES, p.storyId);
-  var c = split(s.n, p.pcts);
-
-  var comCenas = 0;
-  for (var i = 0; i < p.chapters.length; i++) {
-    if (p.chapters[i].scenes.length > 0) {
-      comCenas++;
-    }
-  }
-
-  var textoHistoria = 'Nenhuma história vinculada';
-  if (story) {
-    textoHistoria = esc(story.name);
-  }
-
-  var textoEstrutura = 'Estrutura livre';
-  if (S(p).acts.length > 0) {
-    textoEstrutura = S(p).label + ' · ' + c.join(' / ') + ' capítulos';
-  }
-
-  var textoCenas = s.n + ' capítulos (sem cenas planejadas)';
-  if (s.sp > 0) {
-    textoCenas = comCenas + ' capítulos com cenas (' + s.sp + ' cenas)';
-  }
-
-  var textoTwists = 'Nenhum';
-  if (s.tw.length > 0) {
-    var nomes = [];
-    for (var k = 0; k < s.tw.length; k++) {
-      var pos = s.tw[k];
-      nomes.push('Capítulo ' + (pos + 1) + ', ' + esc(p.chapters[pos].title));
-    }
-    textoTwists = s.tw.length + ' · ' + nomes.join(' · ');
-  }
-
-  var linhas = [
-    ['Nome', esc(p.name)],
-    ['História vinculada', textoHistoria],
-    ['Estrutura', textoEstrutura],
-    ['Tamanho', s.n + ' capítulos · ~' + fmt(words(p)) + ' palavras'],
-    ['Cenas planejadas', textoCenas],
-    ['Plot twists', textoTwists],
-    ['Status', st.t]
-  ];
-
-  var aviso = 'Sem história vinculada: você pode associar uma depois.';
-  if (story) {
-    aviso = 'Ao salvar, os ' + s.n + ' capítulos viram cards na história “' +
-      esc(story.name) + '”.';
-  }
-
-  var html = '<h2>Tudo certo? Revise antes de criar.</h2><div class="review">';
-  for (var j = 0; j < linhas.length; j++) {
-    html += '<div><span>' + linhas[j][0] + '</span><b>' + linhas[j][1] + '</b></div>';
-  }
-  html += '</div>';
-  html += '<div class="note"><i>✦</i><div><b>' + aviso + '</b>';
-  html += '<span>Você pode editar o plot depois sem perder nada do que já escreveu.';
-  html += '</span></div></div>';
-  return html;
-}
-
-function wizard() {
-  var st = W.step;
-  var b = '';
-  if (st === 1) {
-    b = body1();
-  } else if (st === 2) {
-    b = body2();
-  } else if (st === 3) {
-    b = body3();
-  } else {
-    b = body4();
-  }
-
-  var next = '<button class="btn btn-g" data-a="save">Salvar plot</button>';
-  if (st < 4) {
-    next = '<button class="btn btn-p" data-a="step" data-n="' + (st + 1) + '">Próximo</button>';
-  }
-
-  var back = '<button class="btn btn-s" data-a="list">Cancelar</button>';
-  if (st > 1) {
-    back = '<button class="btn btn-s" data-a="step" data-n="' + (st - 1) + '">Voltar</button>';
-  }
-
-  var skip = '';
-  if (st === 3) {
-    skip = '<button class="link" style="background:none;border:0;cursor:pointer;';
-    skip += 'margin-right:20px" data-a="step" data-n="4">Pular esta etapa</button>';
-  }
-
-  var titulo = 'Novo plot';
-  if (W.editing) {
-    titulo = 'Editar plot';
-  }
-
-  var html = logo + '<h1>' + titulo + '</h1>';
-  html += '<p class="sub">Passo ' + st + ' de 4 · você pode voltar e mudar ';
-  html += 'qualquer coisa antes de salvar.</p>';
-  html += '<div class="wiz" style="margin-top:16px">';
-  html += '<aside class="panel preview" id="pv">' + pv() + '</aside>';
-  html += '<div class="panel"><div class="steps">' + steps() + '</div>';
-  html += '<div class="body">' + b + '</div>';
-  html += '<div class="actions">' + back + '<span>' + skip + next + '</span></div>';
-  html += '</div></div>';
-  return html;
-}
-
-
-/* ---------- Tela 6 · ficha ---------- */
-
-function ficha(p) {
-  var s = stats(p);
-  var st = planStatus(p);
-  var pc = 0;
-  if (s.n > 0) {
-    pc = Math.round(s.w / s.n * 100);
-  }
-  var rs = ranges(p);
-  SEL = Math.min(SEL, s.n - 1);
-  var atual = p.chapters[SEL];
-
-  // ato do capítulo selecionado
-  var ra = null;
-  for (var a = 0; a < rs.length; a++) {
-    if (SEL >= rs[a].from && SEL < rs[a].from + rs[a].n) {
-      ra = rs[a];
-    }
-  }
-
-  // sumário (lado esquerdo)
-  var toc = '';
-  for (var b = 0; b < rs.length; b++) {
-    var r = rs[b];
-    var aberto = '';
-    if (r === ra) {
-      aberto = 'open';
-    }
-    toc += '<details ' + aberto + '><summary style="border-color:' + r.col + '">';
-    toc += r.name + '<em>Caps. ' + (r.from + 1) + '–' + (r.from + r.n) + ' ⌄</em></summary>';
-
-    for (var k = 0; k < r.n; k++) {
-      var i = r.from + k;
-      var c = p.chapters[i];
-      var classeCap = '';
-      if (i === SEL) {
-        classeCap = 'cur';
-      }
-      var marca = '';
-      if (c.twist) {
-        marca = '<span class="dm">◆</span>';
-      }
-      toc += '<div class="ch ' + classeCap + '" data-a="selch" data-c="' + i + '">';
-      toc += '<small>' + pad(i + 1) + '</small>' + esc(c.title) + marca + '</div>';
-
-      if (i === SEL && c.scenes.length > 0) {
-        toc += '<ul class="sc">';
-        for (var m = 0; m < c.scenes.length; m++) {
-          var classeCena = '';
-          if (!c.scenes[m].written) {
-            classeCena = 'todo';
-          }
-          toc += '<li class="' + classeCena + '">' + esc(c.scenes[m].title) + '</li>';
-        }
-        toc += '</ul>';
-      }
-    }
-    toc += '</details>';
-  }
-
-  // cenas do capítulo selecionado
-  var escritas = 0;
-  for (var q = 0; q < atual.scenes.length; q++) {
-    if (atual.scenes[q].written) {
-      escritas++;
-    }
-  }
-  var resumoCenas = '';
-  if (atual.scenes.length > 0) {
-    resumoCenas = escritas + ' de ' + atual.scenes.length + ' escritas';
-  }
-
-  var cenas = '';
-  if (atual.scenes.length > 0) {
-    for (var j = 0; j < atual.scenes.length; j++) {
-      var x = atual.scenes[j];
-      var classeDot = '';
-      var simbolo = j + 1;
-      var classeBadge = 'b-rasc';
-      var textoBadge = 'Planejada';
-      if (x.written) {
-        classeDot = 'ok';
-        simbolo = '✓';
-        classeBadge = 'b-fin';
-        textoBadge = 'Escrita';
-      }
-      var descricao = esc(x.desc);
-      if (descricao === '') {
-        descricao = 'Sem descrição ainda.';
-      }
-      cenas += '<button class="scene" data-a="openscene" data-k="' + j + '">';
-      cenas += '<span class="dot ' + classeDot + '">' + simbolo + '</span>';
-      cenas += '<div><b>' + esc(x.title) + '</b><span>' + descricao + '</span></div>';
-      cenas += '<span class="badge ' + classeBadge + '">' + textoBadge + '</span></button>';
-    }
-  } else {
-    cenas = '<div class="empty-line">Nenhuma cena planejada neste capítulo. ';
-    cenas += 'Use “Criar cena” para começar.</div>';
-  }
-
-  var nomeAto = '';
-  if (S(p).acts.length > 0) {
-    nomeAto = ' · ' + ra.name;
-  }
-  var selo = '';
-  if (atual.twist) {
-    selo = '<span class="badge b-twist">Plot twist</span>';
-  }
-
-  var html = logo + '<a class="crumb" href="#/plots">‹ Plots</a>';
-
-  // cabeçalho
-  html += '<div class="panel hcard" style="margin-top:8px"><div class="tt"><div>';
-  html += '<h1>' + esc(p.name) + '</h1>';
-  html += '<span class="badge ' + st.c + '">' + st.t + '</span>';
-  html += storyLine(p, 'História: ');
-  html += '<span class="sub">' + S(p).label + ' · ' + s.n + ' capítulos</span></div>';
-  html += '<div class="btns">';
-  html += '<button class="btn btn-o" data-a="edit" data-s="1">Editar plot</button>';
-  html += '<button class="btn btn-s" data-a="dup">Duplicar modelo</button></div></div>';
-  html += '<div class="prog">' + bar(p) + '<span>' + pc + '% escrito · ';
-  html += s.w + ' / ' + s.n + ' capítulos · ' + twTxt(s.tw.length) + '</span></div></div>';
-
-  // sumário + capítulo
-  html += '<div class="fich"><nav class="panel toc" aria-label="Sumário">';
-  html += '<header><b>Sumário</b><span>' + s.n + ' capítulos</span></header>' + toc + '</nav>';
-  html += '<article class="panel read"><div class="top"><div>';
-  html += '<span class="sub">Capítulo ' + pad(SEL + 1) + nomeAto + '</span>';
-  html += '<h2>' + esc(atual.title) + selo + '</h2></div>';
-  html += '<button class="btn btn-o" data-a="edit" data-s="3" data-o="' + ra.i + '">Editar</button></div>';
-  html += '<div style="display:flex;justify-content:space-between;align-items:center">';
-  html += '<b>Cenas planejadas</b><span class="sub">' + resumoCenas + ' ';
-  html += '<button class="btn btn-p" style="margin-left:12px" data-a="newscene">';
-  html += '+ Criar cena</button></span></div>';
-  html += '<div class="scenes">' + cenas + '</div></article></div>';
-  return html;
-}
-
-
-/* ---------- Tela 7 · cena ---------- */
-
-function scene(p, ci, si) {
-  var html = logo + '<a class="crumb" href="#/plot/' + p.id + '">‹ ' + esc(p.name) + '</a>';
-  html += '<h1>Cena ' + (si + 1) + '</h1>';
-  html += '<p class="sub">Capítulo ' + pad(ci + 1) + ' · ' + esc(p.chapters[ci].title) + '</p>';
-  html += '<div class="panel editor" style="margin-top:16px"><div class="body">';
-  html += '<label>Título da cena<input class="in" data-i="stitle" value="' + esc(ED.title) + '"></label>';
-  html += '<label>Descrição<textarea class="in" data-i="sdesc" ';
-  html += 'placeholder="O que deve acontecer nesta cena?">' + esc(ED.desc) + '</textarea>';
-  html += '<span class="hint">Esta descrição aparece na barra lateral do editor da história.</span></label></div>';
-  html += '<div class="actions">';
-  html += '<button class="btn btn-r" data-a="askdel" data-kind="scene">Excluir cena</button>';
-  html += '<span><a class="btn btn-s" href="#/plot/' + p.id + '" style="margin-right:10px">Voltar</a>';
-  html += '<button class="btn btn-p" data-a="savescene">Salvar cena</button></span></div></div>';
-  return html;
-}
-
-
-/* ---------- roteador ---------- */
-
-function go(hash) {
-  if (location.hash === hash) {
-    route();
-  } else {
-    location.hash = hash;
-  }
-}
-
-function currentPlot() {
-  return findById(plots, location.hash.split('/')[2]);
-}
-
-function grow(textarea) {
-  textarea.style.height = 'auto';
-  textarea.style.height = textarea.scrollHeight + 'px';
-}
-
-// escreve o HTML na página mantendo a rolagem da lista
-function paint(html) {
-  var lista = document.querySelector('.list');
-  var topo = 0;
-  if (lista) {
-    topo = lista.scrollTop;
-  }
-  app.innerHTML = html;
-
-  var nova = document.querySelector('.list');
-  if (nova) {
-    nova.scrollTop = topo;
-  }
-  var areas = document.querySelectorAll('textarea');
-  for (var i = 0; i < areas.length; i++) {
-    grow(areas[i]);
-  }
-}
-
-function route() {
-  var partes = location.hash.split('/');
-  var pg = partes[1];
-  var id = partes[2];
-  var ci = partes[4];
-  var si = partes[6];
-
-  if (pg === 'novo' && W) {
-    return paint(wizard());
-  }
-
-  if (pg === 'plot' && id) {
-    var p = findById(plots, id);
-    if (!p) {
-      return go('#/plots');
-    }
-    if (ci !== undefined && p.chapters[ci] && p.chapters[ci].scenes[si]) {
-      var chave = id + ci + si;
-      if (!ED || ED.k !== chave) {
-        var x = p.chapters[ci].scenes[si];
-        ED = { k: chave, title: x.title, desc: x.desc };
-      }
-      SEL = Number(ci);
-      return paint(scene(p, Number(ci), Number(si)));
-    }
-    ED = null;
-    return paint(ficha(p));
-  }
-
-  paint(list());
-}
-
-function goStep(n) {
-  var p = W.plot;
-  if (n > 1 && p.name.trim() === '') {
-    W.err = true;
-    W.step = 1;
-    return route();
-  }
-  if (n >= 2 && !p.struct) {
-    setStruct('tres');
-  }
-  if (n >= 3) {
-    sync(p);
-  }
-  W.err = false;
-  W.step = n;
-  route();
-  scrollTo(0, 0);
-}
-
-
-/* ---------- confirmação de exclusão ---------- */
-
-function openModal(kind, id) {
-  DEL = { kind: kind, id: id };
-
-  var texto = '';
-  var tipo = 'cena';
-  if (kind === 'plot') {
-    var alvo = findById(plots, id);
-    var nome = '';
-    if (alvo) {
-      nome = alvo.name;
-    }
-    tipo = 'plot';
-    texto = 'O plot “' + esc(nome) + '” será apagado junto com todos os ';
-    texto += 'capítulos e cenas planejados.';
-  } else {
-    var partes = location.hash.split('/');
-    var cena = currentPlot().chapters[partes[4]].scenes[partes[6]];
-    texto = 'A cena “' + esc(cena.title) + '” será removida do capítulo.';
-  }
-
-  var m = document.getElementById('modal');
-  if (!m) {
-    m = document.createElement('div');
-    m.id = 'modal';
-    document.body.appendChild(m);
-  }
-
-  var html = '<div class="ov"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dt">';
-  html += '<h2 id="dt">Excluir ' + tipo + '?</h2>';
-  html += '<p>' + texto + ' Esta ação não pode ser desfeita.</p>';
-  html += '<label>Para confirmar, digite <b>Excluir</b>';
-  html += '<input class="in" id="cf" data-i="confirm" autocomplete="off" placeholder="Excluir"></label>';
-  html += '<div class="actions"><button class="btn btn-s" data-a="canceldel">Cancelar</button>';
-  html += '<button class="btn btn-d" id="cfbtn" data-a="confirmdel" disabled>Excluir</button>';
-  html += '</div></div></div>';
-  m.innerHTML = html;
-  document.getElementById('cf').focus();
-}
-
-function closeModal() {
-  DEL = null;
-  var m = document.getElementById('modal');
-  if (m) {
-    m.innerHTML = '';
-  }
-}
-
-
-/* ---------- ações (cada botão com data-a chama uma delas) ---------- */
-
-var A = {
-  new: function () {
-    W = { step: 1, plot: blank(), open: 0, bn: 4 };
-    go('#/novo');
-  },
-
-  open: function (d) {
-    SEL = 0;
-    go('#/plot/' + d.id);
-  },
-
-  list: function () {
-    W = null;
-    go('#/plots');
-  },
-
-  measure: function (d) {
-    W.plot.measure = d.m;
-    route();
-  },
-
-  struct: function (d) {
-    setStruct(d.k);
-    route();
-  },
-
-  step: function (d) {
-    goStep(Number(d.n));
-  },
-
-  act: function (d) {
-    W.open = Number(d.i);
-    route();
-  },
-
-  sc: function (d) {
-    var c = W.plot.chapters[Number(d.c)];
-    if (Number(d.d) > 0) {
-      c.scenes.push(newScene(c));
-    } else {
-      c.scenes.pop();
-    }
-    route();
-  },
-
-  twist: function (d) {
-    var c = W.plot.chapters[Number(d.c)];
-    c.twist = !c.twist;
-    route();
-  },
-
-  batch: function () {
-    var chapters = W.plot.chapters;
-    for (var i = 0; i < chapters.length; i++) {
-      var c = chapters[i];
-      while (c.scenes.length < W.bn) {
-        c.scenes.push(newScene(c));
-      }
-      c.scenes.length = W.bn;
-    }
-    route();
-  },
-
-  save: function () {
-    var p = W.plot;
-    sync(p);
-    var i = indexById(plots, p.id);
-    if (i < 0) {
-      plots.push(p);
-    } else {
-      plots[i] = p;
-    }
-    saveP(p);
-    W = null;
-    go('#/plots');
-  },
-
-  edit: function (d) {
-    var etapa = Number(d.s);
-    if (!etapa) {
-      etapa = 1;
-    }
-    var ato = Number(d.o);
-    if (!ato) {
-      ato = 0;
-    }
-    W = { step: etapa, plot: clone(currentPlot()), open: ato, bn: 4, editing: true };
-    if (W.step > 1) {
-      sync(W.plot);
-    }
-    go('#/novo');
-  },
-
-  dup: function () {
-    var p = currentPlot();
-    var base = nomeBase(p.name);
-    var n = 2;
-    while (nomeExiste(base + ' (' + n + ')')) {
-      n++;
-    }
-
-    var copia = clone(p);
-    copia.id = uuid();
-    copia.name = base + ' (' + n + ')';
-    for (var i = 0; i < copia.chapters.length; i++) {
-      copia.chapters[i].id = uuid();
-      for (var k = 0; k < copia.chapters[i].scenes.length; k++) {
-        copia.chapters[i].scenes[k].id = uuid();
-      }
-    }
-    plots.push(copia);
-    saveP(copia);
-    go('#/plots');
-  },
-
-  selch: function (d) {
-    SEL = Number(d.c);
-    route();
-  },
-
-  newscene: function () {
-    var p = currentPlot();
-    var c = p.chapters[SEL];
-    c.scenes.push(newScene(c));
-    saveP(p);
-    go('#/plot/' + p.id + '/c/' + SEL + '/s/' + (c.scenes.length - 1));
-  },
-
-  openscene: function (d) {
-    go('#/plot/' + currentPlot().id + '/c/' + SEL + '/s/' + d.k);
-  },
-
-  savescene: function () {
-    var partes = location.hash.split('/');
-    var id = partes[2];
-    var p = currentPlot();
-    var x = p.chapters[partes[4]].scenes[partes[6]];
-
-    var novoTitulo = ED.title.trim();
-    if (novoTitulo !== '') {
-      x.title = novoTitulo;
-    }
-    x.desc = ED.desc;
-    saveP(p);
-    ED = null;
-    go('#/plot/' + id);
-  },
-
-  askdel: function (d) {
-    openModal(d.kind, d.id);
-  },
-
-  canceldel: function () {
-    closeModal();
-  },
-
-  confirmdel: function () {
-    var campo = document.getElementById('cf');
-    if (!DEL || !campo || campo.value !== 'Excluir') {
-      return;
-    }
-
-    if (DEL.kind === 'plot') {
-      var rid = DEL.id;
-      var restantes = [];
-      for (var i = 0; i < plots.length; i++) {
-        if (plots[i].id !== rid) {
-          restantes.push(plots[i]);
-        }
-      }
-      plots = restantes;
-      delP(rid);
-      closeModal();
-      W = null;
-      go('#/plots');
-    } else {
-      var partes = location.hash.split('/');
-      var id = partes[2];
-      var p = currentPlot();
-      p.chapters[partes[4]].scenes.splice(partes[6], 1);
-      saveP(p);
-      ED = null;
-      closeModal();
-      go('#/plot/' + id);
-    }
-  }
-};
-
-
-/* ---------- eventos da página ---------- */
-
-document.addEventListener('click', function (e) {
-  if (e.target.classList.contains('ov')) {
-    return closeModal();
-  }
-  var botao = e.target.closest('[data-a]');
-  if (botao && A[botao.dataset.a]) {
-    A[botao.dataset.a](botao.dataset);
-  }
-});
-
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape' && DEL) {
-    closeModal();
-  } else if (e.key === 'Enter' && e.target.id === 'cf') {
-    A.confirmdel();
-  } else if (e.key === 'Enter' && e.target.matches('[data-a]:not(button)')) {
-    e.target.click();
-  }
-});
-
-document.addEventListener('input', function (e) {
-  var t = e.target;
-  var k = t.dataset.i;
-  if (!k) {
+// Atualiza sliders (posição e parte colorida), % ao lado, aviso e prévia.
+// A parte colorida do slider é a variável CSS --preenchido (ver .linha-ato input[type=range] no plot.css).
+function atualizarAtos() {
+  if (plotEmEdicao.estrutura == "livre" || plotEmEdicao.estrutura == "") {
+    atualizarPrevia();
     return;
   }
-  var p = null;
-  if (W) {
-    p = W.plot;
+  var quantidadeCapitulos = plotEmEdicao.capitulos.length;
+  for (var indiceAto = 0; indiceAto < plotEmEdicao.atos.length; indiceAto++) {
+    var capitulosDoAto = plotEmEdicao.atos[indiceAto];
+    var porcentagemAto = porcentagem(capitulosDoAto, quantidadeCapitulos);
+    pegarElemento("rotulo" + indiceAto).innerHTML = porcentagemAto + "% · " + capitulosDoAto + " capítulos";
+    var campoSlider = pegarElemento("slider" + indiceAto);
+    campoSlider.value = capitulosDoAto;
+    campoSlider.style.setProperty("--preenchido", porcentagemAto + "%");
   }
 
-  if (k === 'confirm') {
-    document.getElementById('cfbtn').disabled = (t.value !== 'Excluir');
-  } else if (k === 'name') {
-    p.name = t.value;
-    t.classList.remove('bad');
-  } else if (k === 'story') {
-    p.storyId = t.value;
-  } else if (k === 'total' || k === 'wpc') {
-    p[k] = Math.max(1, parseInt(t.value) || 1);
-    document.getElementById('calc').textContent = calc(p);
-    document.getElementById('pv').innerHTML = pv();
-  } else if (k === 'draft') {
-    p.draft = t.value;
-    grow(t);
-  } else if (k === 'pct' || k === 'cnt') {
-    var i = Number(t.dataset.n);
-    var n = count(p);
-    var v = 0;
-    if (k === 'pct') {
-      v = Math.round(Number(t.value) / 100 * n);
-    } else {
-      v = Math.max(0, parseInt(t.value) || 0);
+  var somaDosAtos = somaAtos();
+  var aviso = "";
+  if (somaDosAtos > quantidadeCapitulos) {
+    aviso = '<div class="aviso">A soma dos atos (' + somaDosAtos + ') passa do total de ' + quantidadeCapitulos + ' capítulos. Aumente o número de capítulos no passo 1 para fazer isso.</div>';
+  } else if (somaDosAtos < quantidadeCapitulos) {
+    aviso = '<div class="aviso">Ainda faltam ' + (quantidadeCapitulos - somaDosAtos) + ' capítulos para distribuir.</div>';
+  }
+  pegarElemento("aviso").innerHTML = aviso;
+  atualizarPrevia();
+}
+
+/* ---- Passo 3 ---- */
+
+// PASSO 3 · DETALHAR: um cabeçalho por ato. Clicar abre ele (só o "atoAbertoAssistente" mostra os capítulos).
+// Cada capítulo tem título editável, contador de cenas (− e +) e botão de plot twist.
+function passo3() {
+  var faixas = faixasAtos(plotEmEdicao);
+  var html = '<div class="fila"><div><b>Detalhe capítulos e cenas</b><p class="peq">Dê títulos, defina as cenas e marque os plot twists. Dá para fazer depois.</p></div>';
+  html += '<div style="flex:0 0 230px"><label style="margin:0">Cenas por capítulo (em lote)</label><div class="fila"><input type="number" id="cenasEmLote" min="0" value="4" style="width:70px"><button class="btn" onclick="aplicarTodos()">Aplicar a todos</button></div></div></div>';
+
+  for (var indiceFaixa = 0; indiceFaixa < faixas.length; indiceFaixa++) {
+    var faixa = faixas[indiceFaixa];
+    var prefixoAto = "";
+    if (plotEmEdicao.atos.length > 0) {
+      prefixoAto = 'Ato ' + (indiceFaixa + 1) + ' · ';
     }
-    var aviso = setCount(i, v);
-    warn(aviso);
-    refreshDist(k === 'pct' && aviso !== '');
-    if (k === 'cnt') {
-      t.classList.toggle('bad', aviso !== '');
+    html += '<div class="ato-cab" style="border-color:' + faixa.cor + '" onclick="atoAbertoAssistente=' + indiceFaixa + ';renderWizard()">' + prefixoAto + faixa.nome + ' · ' + (faixa.fim - faixa.inicio) + ' capítulos</div>';
+
+    if (indiceFaixa == atoAbertoAssistente) {
+      for (var indiceCapitulo = faixa.inicio; indiceCapitulo < faixa.fim; indiceCapitulo++) {
+        var capitulo = plotEmEdicao.capitulos[indiceCapitulo];
+        var classeTwist = "tw";
+        if (capitulo.twist) {
+          classeTwist = "tw on";
+        }
+        html += '<div class="cap-linha"><span>' + (indiceCapitulo + 1) + '</span>';
+        html += '<input type="text" value="' + protecaoCaractereEspecial(capitulo.titulo) + '" oninput="plotEmEdicao.capitulos[' + indiceCapitulo + '].titulo=this.value">';
+        html += '<span class="cenas-ctl">Cenas <button onclick="mudarCenas(' + indiceCapitulo + ',-1)">−</button> <b id="qtdCenas' + indiceCapitulo + '">' + capitulo.cenas.length + '</b> <button onclick="mudarCenas(' + indiceCapitulo + ',1)">+</button></span>';
+        html += '<button class="' + classeTwist + '" onclick="toggleTwist(' + indiceCapitulo + ',this)">◆ Plot twist</button></div>';
+      }
     }
-  } else if (k === 'ctitle') {
-    p.chapters[Number(t.dataset.c)].title = t.value;
-  } else if (k === 'bn') {
-    W.bn = Math.max(0, parseInt(t.value) || 0);
-  } else if (k === 'stitle') {
-    ED.title = t.value;
-  } else if (k === 'sdesc') {
-    ED.desc = t.value;
-    grow(t);
   }
-});
+  html += '<div class="rodape"><button class="btn sec" onclick="irPasso(2)">Voltar</button><span><span class="link" onclick="irPasso(4)">Pular esta etapa</span> &nbsp; <button class="btn" onclick="irPasso(4)">Próximo</button></span></div>';
+  pegarElemento("passo").innerHTML = html;
+}
 
-document.addEventListener('change', function (e) {
-  if (W && e.target.dataset.i === 'cnt') {
-    refreshDist(true);
+// Botões − e +: adiciona (push) ou remove (pop) uma cena no fim do capítulo.
+// direcao = 1 (botão +) ou -1 (botão −)
+function mudarCenas(indiceCapitulo, direcao) {
+  var cenas = plotEmEdicao.capitulos[indiceCapitulo].cenas;
+  if (direcao > 0) {
+    cenas.push({ titulo: "Cena " + (cenas.length + 1), desc: "", escrita: false });
+  } else if (cenas.length > 0) {
+    cenas.pop();
   }
-});
+  pegarElemento("qtdCenas" + indiceCapitulo).innerHTML = cenas.length;
+}
 
-window.addEventListener('hashchange', route);
+// Liga/desliga o plot twist do capítulo.
+// "botaoClicado" é o próprio botão (o "this" no onclick).
+// [FORA DAS LISTAS] botaoClicado.className = troca a classe CSS do botão (muda a cor dele).
+function toggleTwist(indiceCapitulo, botaoClicado) {
+  var capitulo = plotEmEdicao.capitulos[indiceCapitulo];
+  if (capitulo.twist) {
+    capitulo.twist = false;
+    botaoClicado.className = "tw";
+  } else {
+    capitulo.twist = true;
+    botaoClicado.className = "tw on";
+  }
+}
+
+// "Aplicar a todos": deixa TODOS os capítulos com exatamente a quantidade de cenas digitada.
+function aplicarTodos() {
+  var cenasPorCapitulo = Number(pegarElemento("cenasEmLote").value);
+  for (var indiceCapitulo = 0; indiceCapitulo < plotEmEdicao.capitulos.length; indiceCapitulo++) {
+    var cenas = plotEmEdicao.capitulos[indiceCapitulo].cenas;
+    while (cenas.length < cenasPorCapitulo) {
+      cenas.push({ titulo: "Cena " + (cenas.length + 1), desc: "", escrita: false });
+    }
+    while (cenas.length > cenasPorCapitulo) {
+      cenas.pop();
+    }
+  }
+  renderWizard();
+}
+
+/* ---- Passo 4 ---- */
+
+// PASSO 4 · REVISÃO: dois vetores do mesmo tamanho, um com os rótulos e outro com os valores.
+// O for desenha uma linha para cada posição: rotulos[0] com valores[0], rotulos[1] com valores[1]...
+function passo4() {
+  var html = '<b>Tudo certo? Revise antes de criar.</b>';
+
+  var historiaVinculada = buscarHistoriavincula(plotEmEdicao.historia);
+  var textoHistoria = "Nenhuma história vinculada";
+  if (historiaVinculada != null) {
+    textoHistoria = protecaoCaractereEspecial(historiaVinculada.nome);
+  }
+
+  var textoTamanho = totalCapitulos(plotEmEdicao) + " capítulos · ~" + (totalCapitulos(plotEmEdicao) * plotEmEdicao.palavrasCap) + " palavras";
+
+  // Monta "13 / 25 / 12 capítulos" juntando os números dos atos com " / " entre eles.
+  var textoEstrutura = ESTRUTURAS[plotEmEdicao.estrutura].nome;
+  if (plotEmEdicao.atos.length > 0) {
+    var divisaoAtos = "";
+    for (var indiceAto = 0; indiceAto < plotEmEdicao.atos.length; indiceAto++) {
+      if (indiceAto > 0) {
+        divisaoAtos += " / ";
+      }
+      divisaoAtos += plotEmEdicao.atos[indiceAto];
+    }
+    textoEstrutura += " · " + divisaoAtos + " capítulos";
+  }
+
+  var cenas = contarCenas(plotEmEdicao);
+  var textoCenas;
+  if (cenas.total == 0) {
+    textoCenas = "Sem cenas planejadas · " + plotEmEdicao.capitulos.length + " capítulos";
+  } else {
+    textoCenas = cenas.total + " cenas planejadas";
+  }
+
+  // Lista dos plot twists: "Cap. 8, Título; Cap. 20, Título"
+  var listaTwists = "";
+  var quantidadeTwists = 0;
+  for (var indiceCapitulo = 0; indiceCapitulo < plotEmEdicao.capitulos.length; indiceCapitulo++) {
+    var capitulo = plotEmEdicao.capitulos[indiceCapitulo];
+    if (capitulo.twist) {
+      quantidadeTwists++;
+      if (listaTwists != "") {
+        listaTwists += "; ";
+      }
+      listaTwists += "Cap. " + (indiceCapitulo + 1) + ", " + protecaoCaractereEspecial(capitulo.titulo);
+    }
+  }
+  var textoTwists = "Nenhum";
+  if (quantidadeTwists > 0) {
+    textoTwists = quantidadeTwists + " · " + listaTwists;
+  }
+
+  var rotulos = ["Nome", "História vinculada", "Estrutura", "Tamanho", "Cenas planejadas", "Plot twists", "Status inicial"];
+  var valores = [protecaoCaractereEspecial(plotEmEdicao.nome), textoHistoria, textoEstrutura, textoTamanho, textoCenas, textoTwists, statusPlot(plotEmEdicao).texto];
+
+  for (var indiceLinha = 0; indiceLinha < rotulos.length; indiceLinha++) {
+    html += '<div class="resumo"><span>' + rotulos[indiceLinha] + '</span><b>' + valores[indiceLinha] + '</b></div>';
+  }
+  html += '<div class="rodape"><button class="btn sec" onclick="irPasso(3)">Voltar</button><button class="btn amarelo" onclick="criarPlot()">Criar plot</button></div>';
+  pegarElemento("passo").innerHTML = html;
+}
+
+// Ao clicar em "Criar plot": envia ao banco (POST se for novo, PUT se for edição).
+// Só atualiza a lista e volta à tela 1 se o banco confirmou.
+// (async/await: ver explicação na seção 2)
+async function criarPlot() {
+  var plotNovo = false;
+  if (idPlotEditando == null) {
+    plotNovo = true;
+  }
+  var salvouComSucesso = await salvarPlot(plotEmEdicao, plotNovo);
+  if (salvouComSucesso == false) {
+    return;
+  }
+  if (plotNovo) {
+    plots.push(plotEmEdicao);
+  } else {
+    for (var indicePlot = 0; indicePlot < plots.length; indicePlot++) {
+      if (plots[indicePlot].id == idPlotEditando) {
+        plots[indicePlot] = plotEmEdicao;
+      }
+    }
+  }
+  mostrarLista();
+}
 
 
-/* ---------- início ---------- */
+// ============================================================
+// 6. TELA 6 · DETALHE DO PLOT
+// ============================================================
 
-Promise.all([API.list(), API.stories()])
-  .then(function (resultado) {
-    plots = resultado[0];
-    STORIES = resultado[1];
-    route();
-  })
-  .catch(function () {
-    app.innerHTML = '<p class="err">Não foi possível carregar os plots.</p>';
-  });
+// Abre a tela de detalhe começando no capítulo 1 do ato 1.
+function abrirDetalhe(idPlot) {
+  idPlotAberto = idPlot;
+  capituloAberto = 0;
+  atoAbertoSumario = 0;
+  mostrarDetalhe();
+}
+
+// Cabeçalho (nome, status, barra, botões), sumário à esquerda e capítulo escolhido à direita.
+function mostrarDetalhe() {
+  var plot = acharPlot(idPlotAberto);
+  var status = statusPlot(plot);
+  var historiaVinculada = buscarHistoriavincula(plot.historia);
+  var quantidadeCapitulos = plot.capitulos.length;
+  var capitulosEscritos = contarCapsEscritos(plot);
+  var quantidadeTwists = contarTwists(plot);
+
+  var nomeHistoria = "Sem história vinculada";
+  if (historiaVinculada != null) {
+    nomeHistoria = protecaoCaractereEspecial(historiaVinculada.nome);
+  }
+
+  var html = '<span class="link" onclick="mostrarLista()">‹ Plots</span><div class="cabecalho"><div class="topo-pagina"><div>';
+  html += '<h1 style="display:inline">' + protecaoCaractereEspecial(plot.nome) + '</h1> <span class="tag ' + status.classe + '">' + status.texto + '</span>';
+  html += '<p class="peq" style="margin-top:6px">▫ ' + nomeHistoria + ' · ' + ESTRUTURAS[plot.estrutura].nome + ' · ' + quantidadeCapitulos + ' capítulos</p></div>';
+  html += '<div><button class="btn borda" onclick="editarPlot(\'' + plot.id + '\')">Editar plot</button> <button class="btn sec" onclick="duplicar(\'' + plot.id + '\')">Duplicar modelo</button></div></div>';
+  html += barraHTML(plot) + '<div class="linha"><span>' + porcentagem(capitulosEscritos, quantidadeCapitulos) + '% escrito · ' + capitulosEscritos + ' / ' + quantidadeCapitulos + ' capítulos</span><span>◆ ' + quantidadeTwists + ' plot twists</span></div></div>';
+
+  // ---- sumário (esquerda) ----
+  var faixas = faixasAtos(plot);
+  html += '<div class="detalhe"><div class="painel"><b>Sumário</b> <span class="peq" style="float:right">' + quantidadeCapitulos + ' capítulos</span>';
+  for (var indiceFaixa = 0; indiceFaixa < faixas.length; indiceFaixa++) {
+    var faixa = faixas[indiceFaixa];
+    var prefixoAto = "";
+    if (plot.atos.length > 0) {
+      prefixoAto = 'Ato ' + (indiceFaixa + 1) + ' · ';
+    }
+    html += '<div class="ato-cab" style="border-color:' + faixa.cor + '" onclick="atoAbertoSumario=' + indiceFaixa + ';mostrarDetalhe()">' + prefixoAto + faixa.nome + ' <span class="peq" style="float:right">Caps. ' + (faixa.inicio + 1) + '–' + faixa.fim + '</span></div>';
+
+    if (indiceFaixa == atoAbertoSumario) {
+      for (var indiceCapitulo = faixa.inicio; indiceCapitulo < faixa.fim; indiceCapitulo++) {
+        var classeSelecionado = "";
+        if (indiceCapitulo == capituloAberto) {
+          classeSelecionado = "sel";
+        }
+        // Número com 2 dígitos: 1 -> "01", 12 -> "12"
+        var numeroCapitulo = "" + (indiceCapitulo + 1);
+        if (indiceCapitulo + 1 < 10) {
+          numeroCapitulo = "0" + numeroCapitulo;
+        }
+        var losango = "";
+        if (plot.capitulos[indiceCapitulo].twist) {
+          losango = '<span style="color:#eab308">◆</span>';
+        }
+        html += '<div class="item-cap ' + classeSelecionado + '" onclick="capituloAberto=' + indiceCapitulo + ';mostrarDetalhe()"><span>' + numeroCapitulo + '</span><span style="flex:1">' + protecaoCaractereEspecial(plot.capitulos[indiceCapitulo].titulo) + '</span>' + losango + '</div>';
+      }
+    }
+  }
+  html += '</div>';
+
+  // ---- capítulo (direita) ----
+  var capitulo = plot.capitulos[capituloAberto];
+  var etiquetaTwist = "";
+  if (capitulo.twist) {
+    etiquetaTwist = ' <span class="tag dourado">◆ Plot twist</span>';
+  }
+  html += '<div class="painel"><p class="peq">Capítulo ' + (capituloAberto + 1) + '</p><h1>' + protecaoCaractereEspecial(capitulo.titulo) + etiquetaTwist + '</h1>';
+  html += '<label>Sinopse</label><textarea style="min-height:90px" onchange="salvarSinopse(this.value)">' + protecaoCaractereEspecial(capitulo.sinopse) + '</textarea>';
+  html += '<div class="topo-pagina" style="margin-top:18px"><b>Cenas planejadas</b><span><span class="peq">' + contarEscritasCap(capitulo) + ' de ' + capitulo.cenas.length + ' escritas</span> <button class="btn" onclick="novaCena()">+ Nova cena</button></span></div>';
+
+  if (capitulo.cenas.length == 0) {
+    html += '<p class="peq" style="margin-top:12px">Nenhuma cena ainda. Clique em “Nova cena”.</p>';
+  }
+  for (var indiceCena = 0; indiceCena < capitulo.cenas.length; indiceCena++) {
+    var cena = capitulo.cenas[indiceCena];
+
+    // Mostra só os 90 primeiros caracteres da descrição.
+    // substring(0, 90) = pedaço do texto da posição 0 até a 90 (Lista 06 · strings).
+    var descricao = "Sem descrição";
+    if (cena.desc != null && cena.desc != "") {
+      descricao = protecaoCaractereEspecial(cena.desc.substring(0, 90));
+    }
+
+    var classeEtiqueta = "cinza";
+    var textoEtiqueta = "Planejada";
+    if (cena.escrita) {
+      classeEtiqueta = "verde";
+      textoEtiqueta = "Escrita";
+    }
+    html += '<div class="cena" onclick="abrirCena(' + indiceCena + ')"><div><b>' + protecaoCaractereEspecial(cena.titulo) + '</b><small>' + descricao + '</small></div><span class="tag ' + classeEtiqueta + '">' + textoEtiqueta + '</span></div>';
+  }
+  html += '</div></div>';
+  pegarElemento("conteudo").innerHTML = html;
+}
+
+// Guarda a sinopse do capítulo e envia ao banco (chamada ao sair do campo).
+function salvarSinopse(textoSinopse) {
+  var plot = acharPlot(idPlotAberto);
+  plot.capitulos[capituloAberto].sinopse = textoSinopse;
+  salvarPlot(plot, false);
+}
+
+// Cria uma cena nova no capítulo aberto, salva no banco e abre a tela 7 para editá-la.
+function novaCena() {
+  var plot = acharPlot(idPlotAberto);
+  var cenas = plot.capitulos[capituloAberto].cenas;
+  cenas.push({ titulo: "Cena " + (cenas.length + 1), desc: "", escrita: false });
+  salvarPlot(plot, false);
+  abrirCena(cenas.length - 1);
+}
+
+// Tira o " (2)", " (3)"... do fim do nome, se tiver.  "Meu plot (2)" -> "Meu plot"
+// Anda de trás para frente (while) conferindo: termina com ")", antes vêm números, antes "(" e um espaço.
+function tirarNumeroDoFim(nome) {
+  var ultimaPosicao = nome.length - 1;
+  if (ultimaPosicao < 0 || nome[ultimaPosicao] != ")") {
+    return nome; // não termina com ")": nome fica igual
+  }
+  var posicaoLetra = ultimaPosicao - 1;
+  var quantidadeDigitos = 0;
+  while (posicaoLetra >= 0 && nome[posicaoLetra] >= "0" && nome[posicaoLetra] <= "9") {
+    posicaoLetra--;
+    quantidadeDigitos++;
+  }
+  if (quantidadeDigitos > 0 && posicaoLetra >= 1 && nome[posicaoLetra] == "(" && nome[posicaoLetra - 1] == " ") {
+    return nome.substring(0, posicaoLetra - 1); // corta tudo a partir do espaço
+  }
+  return nome;
+}
+
+// DUPLICAR: copia o plot e acha um nome livre testando (2), (3), (4)... até achar um que não existe.
+// A cópia é enviada ao banco como plot NOVO e só então aparece na tela 1.
+async function duplicar(idPlot) {
+  var plotOriginal = acharPlot(idPlot);
+  var plotCopia = copiarPlot(plotOriginal);
+  var nomeBase = tirarNumeroDoFim(plotOriginal.nome);
+  var numeroCopia = 2;
+  var nomeJaExiste = true;
+
+  while (nomeJaExiste) {
+    nomeJaExiste = false;
+    for (var indicePlot = 0; indicePlot < plots.length; indicePlot++) {
+      if (plots[indicePlot].nome == nomeBase + " (" + numeroCopia + ")") {
+        nomeJaExiste = true;
+      }
+    }
+    if (nomeJaExiste) {
+      numeroCopia++;
+    }
+  }
+
+  plotCopia.nome = nomeBase + " (" + numeroCopia + ")";
+  var salvouComSucesso = await salvarPlot(plotCopia, true);
+  if (salvouComSucesso) {
+    plots.push(plotCopia);
+    mostrarLista();
+  }
+}
+
+
+// ============================================================
+// 7. TELA 7 · EDIÇÃO DE CENA
+// ============================================================
+
+// Guarda qual cena foi clicada e desenha a tela.
+function abrirCena(indiceCena) {
+  cenaAberta = indiceCena;
+  mostrarCena();
+}
+
+// Mostra título, descrição e a caixinha "escrita".
+function mostrarCena() {
+  var plot = acharPlot(idPlotAberto);
+  var capitulo = plot.capitulos[capituloAberto];
+  var cena = capitulo.cenas[cenaAberta];
+
+  var marcada = "";
+  if (cena.escrita) {
+    marcada = " checked"; // caixinha já vem marcada
+  }
+
+  var html = '<span class="link" onclick="mostrarDetalhe()">‹ ' + protecaoCaractereEspecial(plot.nome) + '</span>';
+  html += '<h1>' + protecaoCaractereEspecial(cena.titulo) + '</h1><p class="sub">Capítulo ' + (capituloAberto + 1) + ' · ' + protecaoCaractereEspecial(capitulo.titulo) + '</p><div class="painel">';
+  html += '<label>Título da cena</label><input type="text" id="campoTituloCena" value="' + protecaoCaractereEspecial(cena.titulo) + '">';
+  html += '<label>Descrição da cena</label><textarea id="campoDescricaoCena">' + protecaoCaractereEspecial(cena.desc) + '</textarea>';
+  html += '<label><input type="checkbox" id="caixaCenaEscrita"' + marcada + '> Marcar como escrita</label>';
+  html += '<div class="rodape"><button class="btn sec" onclick="mostrarDetalhe()">Cancelar</button><span><button class="btn borda" onclick="excluirCena()">Excluir cena</button> <button class="btn" onclick="salvarCena()">Salvar</button></span></div></div>';
+  pegarElemento("conteudo").innerHTML = html;
+}
+
+// Lê os campos, guarda na cena, salva no banco e volta ao capítulo.
+// [FORA DAS LISTAS] .checked = true se a caixinha (checkbox) está marcada, false se não.
+function salvarCena() {
+  var plot = acharPlot(idPlotAberto);
+  var cena = plot.capitulos[capituloAberto].cenas[cenaAberta];
+  var tituloDigitado = pegarElemento("campoTituloCena").value;
+  if (tituloDigitado != "") {
+    cena.titulo = tituloDigitado; // título vazio não é aceito: mantém o antigo
+  }
+  cena.desc = pegarElemento("campoDescricaoCena").value;
+  cena.escrita = pegarElemento("caixaCenaEscrita").checked;
+  salvarPlot(plot, false);
+  mostrarDetalhe();
+}
+
+// Exclui a cena aberta.
+// [FORA DAS LISTAS] confirm("...") abre uma janelinha com OK e Cancelar: devolve true (OK) ou false.
+// Para remover, monta um vetor NOVO com todas as cenas, menos a da posição cenaAberta.
+function excluirCena() {
+  if (confirm("Excluir esta cena?")) {
+    var plot = acharPlot(idPlotAberto);
+    var cenasAntigas = plot.capitulos[capituloAberto].cenas;
+    var cenasNovas = [];
+    for (var indiceCena = 0; indiceCena < cenasAntigas.length; indiceCena++) {
+      if (indiceCena != cenaAberta) {
+        cenasNovas.push(cenasAntigas[indiceCena]);
+      }
+    }
+    plot.capitulos[capituloAberto].cenas = cenasNovas;
+    salvarPlot(plot, false);
+    mostrarDetalhe();
+  }
+}
+
+
+// ============================================================
+// 8. INÍCIO
+// Fica por último de propósito: quando roda, todas as funções acima já existem.
+// ============================================================
+
+// PRIMEIRA COISA QUE RODA quando a página abre: busca histórias e plots no banco
+// (await = espera chegar) e só depois desenha a tela 1.
+async function iniciar() {
+  historias = await carregarHistorias();
+  plots = await carregarPlots();
+  mostrarLista();
+}
+iniciar();
